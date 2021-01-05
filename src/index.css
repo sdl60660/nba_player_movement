@@ -12,6 +12,16 @@ code {
     monospace;
 }
 
-#player-map-wrapper {
+#content {
+  display: grid;
+  grid-template-columns: 20% 80%;
+}
+
+#viz-tile {
   position: sticky;
+  top: 0;
+}
+
+.step {
+  background-color: #b8b8b8;
 }

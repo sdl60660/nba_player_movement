@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "NBA Transactions",
+  "name": "Visualization of 2020-21 NBA Transactions",
   "icons": [
     {
       "src": "favicon.ico",

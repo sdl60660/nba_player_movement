@@ -26,7 +26,7 @@ const PlayerMapWrapper = ({ _geoData, parentElement="player-map" }) => {
 
     return (
         <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth }}>
-            <div ref={refElement} id={"player-map-wrapper"}>
+            <div ref={refElement} id={"viz-tile"}>
                 <PlayerMapControls />
             </div>
         </PlayerMapContext.Provider>

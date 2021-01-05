@@ -39,7 +39,7 @@ Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     // const map = new playerMap("#map-tile", allData[0]);
 
-    ReactDOM.render(<PlayerMapWrapper id={"player-map-wrapper"} _geoData={geoData}/>, document.getElementById('root'));
+    ReactDOM.render(<PlayerMapWrapper id={"viz-tile"} _geoData={geoData}/>, document.getElementById('viz-column'));
     // ReactDOM.render(<p/>, document.getElementById('root'));
 
 });
