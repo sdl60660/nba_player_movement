@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the PlayerMapWrapper element 1`] = `
+<div
+  id="player-map-wrapper"
+>
+  <PlayerMapControls />
+</div>
+`;

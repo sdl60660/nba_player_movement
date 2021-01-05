@@ -1,0 +1,11 @@
+Transaction types:
+* signed (regular, two-way, exhibit 10)
+* traded
+* waived
+* claimed
+* converted (two-way contract to regular contract)
+* announced retirement (generally doesn't include team name)
+
+To scrape:
+* https://www.basketball-reference.com/leagues/NBA_2021_transactions.html
+* or maybe: https://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=2020-10-11&EndDate=&PlayerMovementChkBx=yes&Submit=Search&start=25
