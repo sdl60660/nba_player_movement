@@ -1,11 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import "intersection-observer";
+import scrollama from "scrollama";
+
 import './index.css';
-// import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import PlayerMapWrapper from './components/PlayerMapWrapper'
 import { json } from 'd3-fetch';
+
+// instantiate the scrollama
+const scroller = scrollama();
+
+// setup the instance, pass callback functions
+scroller
+  .setup({
+    step: ".step",
+  })
+  .onStepEnter(({ element, index, direction }) => {
+    console.log({ element, index, direction })
+  })
+  .onStepExit(({ element, index, direction }) => {
+    console.log({ element, index, direction })
+  });
+
+// setup resize event
+window.addEventListener("resize", scroller.resize);
 
 
 // Begin loading datafiles
@@ -18,7 +39,7 @@ Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     // const map = new playerMap("#map-tile", allData[0]);
 
-    ReactDOM.render(<PlayerMapWrapper _geoData={geoData}/>, document.getElementById('root'));
+    ReactDOM.render(<PlayerMapWrapper id={"player-map-wrapper"} _geoData={geoData}/>, document.getElementById('root'));
     // ReactDOM.render(<p/>, document.getElementById('root'));
 
 });
