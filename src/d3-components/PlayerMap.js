@@ -51,8 +51,8 @@ class PlayerMap {
             .selectAll("path");
         
         this.teams = this.svg.append("g")
-            .attr("class", "team-treemaps")
-            .selectAll(".teams")
+            .attr("class", "teams");
+            // .selectAll(".team-group")
         
         this.mapPath = this.mapPath.data( geoJSON.features, d => d)
             .join(
@@ -74,52 +74,82 @@ class PlayerMap {
             treemapData.push({ weight: getRandomInt(10) })
         }
 
+        this.teamGroups = this.teams.selectAll("g")
+            .data(teamData, d => d.team_id)
+            .enter()
+            .append("g")
+                .attr("class", d => `team-group ${d.team_id}-group`);
+
         teamData.forEach((teamData) => {
+            const [xCenter, yCenter] = projection([teamData.longitude, teamData.latitude])
+            teamData.xCoordinate = xCenter;
+            teamData.yCoordinate = yCenter;
+
             console.log(teamData);
             this.addTeamTreemap({ treemapData, teamData, projection })
         })
-    }
+
+        const tick = () => {
+            this.teamGroups
+                .style("transform", d => {
+                    let dx = d.x - d.xCoordinate
+                    let dy = d.y - d.yCoordinate
+                    console.log(d.x, d.xCoordinate)
+                    return `translate(${dx}px, ${dy}px)`
+                })
+        }
+
+        const simulation = d3.forceSimulation()
+            .nodes(teamData)
+            .force('x', d3.forceX(d => d.xCoordinate).strength(1.0))
+            .force('y', d3.forceY(d => d.yCoordinate).strength(1.0))
+            .force("charge", d3.forceManyBody())
+            .force("collision", d3.forceCollide(55))
+            .on("tick", tick)
     
+    }
+
+    addTeamTreemap = ({ treemapData, teamData, projection }) => {
+
+        const treemapRadius = 50;
+        
+        const simulation = voronoiMapSimulation(treemapData)
+            // .prng(seedrandom('seed'))
+            .clip(getCircleCoordinates(teamData.xCoordinate, teamData.yCoordinate, treemapRadius, 30))
+            .stop()                                               
+
+        let state = simulation.state();
+
+        while (!state.ended) {
+            simulation.tick();
+            state = simulation.state();
+        }
+
+        const polygons = state.polygons;   
+        
+        let teamGroup = this.teams
+            .select(`.${teamData.team_id}-group`);
+        
+        let playerPolygons = teamGroup
+            .selectAll(".player-polygons")
+            .data(polygons)
+            .enter()
+                .append('path')
+                .attr("class", "player-polygons")
+                .attr('d', (d) => "M" + d + "z")
+                .style("fill", teamData.color_1)
+                .style("stroke", teamData.color_2)
+                .style("stroke-width", "3px");
+                // .style('fill', (d) =>  fillScale(d.site.originalObject));
+        
+    }
+
     updateMapColor = ({ opacity, mapColor }) => { 
         this.mapPath
             .transition()
             // .duration(300)
             .style("fill-opacity", opacity)
             .style("fill", mapColor);
-    }
-
-    addTeamTreemap = ({ treemapData, teamData, projection }) => {
-
-        const [xCenter, yCenter] = projection([teamData.longitude, teamData.latitude])
-        const treemapRadius = 50;
-        
-        const simulation = voronoiMapSimulation(treemapData)
-            // .prng(seedrandom('seed'))
-            // .weight((d) => weightScale(d))                          
-            // .clip([[0,0], [0, 200], [200, 200], [200, 0]])      // set the clipping polygon
-            .clip(getCircleCoordinates(xCenter, yCenter, treemapRadius, 30))
-            .stop()                                               
-
-        let state = simulation.state();                           // retrieve the simulation's state, i.e. {ended, polygons, iterationCount, convergenceRatio}
-
-        while (!state.ended) {                                    // manually launch each iteration until the simulation ends
-            simulation.tick();
-            state = simulation.state();
-        }
-
-        const polygons = state.polygons;                            // retrieve polygons, i.e. cells of the final Voronoï map
-        console.log(polygons)
-
-        this.teams.data(polygons)                                    // d3's join
-            .enter()                                                // create cells with appropriate shapes and colors
-            .append('path')
-            .attr("class", "teams")
-            .attr('d', (d) => "M" + d + "z")
-            .style("fill", teamData.color_1)
-            .style("stroke", teamData.color_2)
-            .style("stroke-width", "3px");
-            // .style('fill', (d) =>  fillScale(d.site.originalObject));
-        
     }
   
     resize = (width, height) => { /*...*/ }
