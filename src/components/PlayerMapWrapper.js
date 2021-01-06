@@ -2,29 +2,28 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as chromatic from "d3-scale-chromatic";
 
 import PlayerMapControls from './PlayerMapControls';
-import TreemapWrapper from './TreemapWrapper';
 import PlayerMap from '../d3-components/PlayerMap';
 import PlayerMapContext from '../context/playerMapContext';
 
 
-
 let vis;
 
-const PlayerMapWrapper = ({ _geoData, scroller, parentElement="player-map" }) => {
+const PlayerMapWrapper = ({ _geoData, _teamData, scroller, parentElement="player-map" }) => {
     // const colors = ["#f23d23", "#3434ff", "#67f402"];
     // const colors = d3.interpolate("red", "green", )(d3.randomUniform()())
     const colors = chromatic.schemeCategory10;
 
     const [mapColor, setMapColor] = useState('#0000ff');
     const [geoData, setGeoData] = useState(_geoData);
+    const [teamData, setTeamData] = useState(_teamData);
     const [width, setWidth] = useState(1400);
     const [height, setHeight] = useState(800);
     const [opacity, setOpacity] = useState(1.0);
 
     scroller
         .onStepEnter(({ element, index, direction }) => {
-            console.log({ element, index, direction });
-            console.log(colors[index]);
+            // console.log({ element, index, direction });
+            // console.log(colors[index]);
             setMapColor(() => {
                 return colors[index];
             })
@@ -36,11 +35,11 @@ const PlayerMapWrapper = ({ _geoData, scroller, parentElement="player-map" }) =>
     const refElement = useRef(null);
 
     useEffect(() => {
-        vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData });
+        vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData });
     }, []);
 
     useEffect(() => {
-        console.log("Effect triggered", mapColor, opacity)
+        // console.log("Effect triggered", mapColor, opacity)
         vis.updateMapColor({ mapColor, opacity })
     }, [mapColor, opacity]);
 

@@ -8,7 +8,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 import PlayerMapWrapper from './components/PlayerMapWrapper';
-import { json } from 'd3-fetch';
+import { json, csv } from 'd3-fetch';
 
 // instantiate the scrollama
 const scroller = scrollama();
@@ -20,34 +20,21 @@ scroller
 
 // let isMobile = window.matchMedia('(max-width: 700px)').matches;
 
-// const { opacity, setOpacity, mapColor, setMapColor } = useContext(PlayerMapContext);
-// const colors = ["#f23d23", "#3434ff", "#67f402"];
-
-// scroller
-//   .setup({
-//     step: ".step",
-//   })
-//   .onStepEnter(({ element, index, direction }) => {
-//     console.log({ element, index, direction });
-//     // setMapColor(colors[index]);
-//   })
-//   .onStepExit(({ element, index, direction }) => {
-//     // console.log({ element, index, direction })
-//   });
-
 // setup resize event
 window.addEventListener("resize", scroller.resize);
 
 // Begin loading datafiles
 const promises = [
-  json("data/us_states.json")
+  json("data/us_states.json"),
+  csv("data/team_data.csv")
 ];
 
 
 Promise.all(promises).then((allData) => {
     const geoData = allData[0];
+    const teamData = allData[1];
 
-    ReactDOM.render(<PlayerMapWrapper id={"viz-tile"} _geoData={geoData} scroller={scroller}/>, document.getElementById('viz-column'));
+    ReactDOM.render(<PlayerMapWrapper id={"viz-tile"} _geoData={geoData} _teamData={teamData} scroller={scroller}/>, document.getElementById('viz-column'));
 }).then(() => {
   // const { opacity, setOpacity, mapColor, setMapColor } = useContext(PlayerMapContext);
   // const colors = ["#f23d23", "#3434ff", "#67f402"];

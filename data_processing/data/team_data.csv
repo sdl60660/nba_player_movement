@@ -1,0 +1,31 @@
+﻿team_id,city,state,team_full_name,team_nickname,Latitude,Longitude
+CHA,Charlotte,NC,Charlotte Hornets,Hornets,35.26002,-80.804151
+CHI,Chicago,IL,Chicago Bulls,Bulls,41.88531,-87.62213
+DET,Detroit,MI,Detroit Pistons,Pistons,42.347021,-83.060184
+NYK,New York,NY,New York Knicks,Knicks,40.750422,-73.996328
+CLE,Cleveland,OH,Cleveland Cavaliers,Cavaliers,41.489381,-81.667486
+GSW,San Francisco,CA,Golden State Warriors,Warriors,37.776646,-122.417481
+MIN,Minneapolis,MN,Minnesota Timberwolves,Timberwolves,44.984577,-93.269097
+LAL,Los Angeles,CA,Los Angeles Lakers,Lakers,33.973951,-118.248405
+LAC,Los Angeles,CA,Los Angeles Clippers,Clippers,33.973951,-118.248405
+TOR,Ontario,CA,Toronto Raptors,Raptors,34.05936,-117.6203
+BOS,Boston,MA,Boston Celtics,Celtics,42.370567,-71.026964
+OKC,Oklahoma City,OK,Oklahoma City Thunder,Thunder,35.491608,-97.562817
+UTA,Salt Lake City,UT,Utah Jazz,Jazz,40.756095,-111.900719
+IND,Indianapolis,IN,Indiana Pacers,Pacers,39.775092,-86.13216
+ORL,Orlando,FL,Orlando Magic,Magic,28.545179,-81.373291
+PHI,Philadelphia,PA,Philadelphia 76ers,76ers,40.001811,-75.11787
+MIL,Milwaukee,WI,Milwaukee Bucks,Bucks,43.011264,-87.958409
+MIA,Miami,FL,Miami Heat,Heat,25.558428,-80.458168
+DEN,Denver,CO,Denver Nuggets,Nuggets,39.760189,-104.996553
+ATL,Atlanta,GA,Atlanta Hawks,Hawks,33.844371,-84.47405
+SAC,Sacramento,CA,Sacramento Kings,Kings,38.380456,-121.555406
+BRK,Brooklyn,NY,Brooklyn Nets,Nets,40.63122,-73.941542
+SAS,San Antonio,TX,San Antonio Spurs,Spurs,29.468413,-98.528889
+HOU,Houston,TX,Houston Rockets,Rockets,29.813142,-95.309789
+PHO,Phoenix,AZ,Phoenix Suns,Suns,33.703967,-112.351835
+MEM,Memphis,TN,Memphis Grizzlies,Grizzlies,35.169255,-89.990415
+DAL,Dallas,TX,Dallas Mavericks,Mavericks,32.781179,-96.790329
+NOP,New Orleans,LA,New Orleans Pelicans,Pelicans,29.958304,-90.077
+WAS,Washington,DC,Washington Wizards,Wizards,38.911936,-77.016719
+POR,Portland,OR,Portland Trailblazers,Trailblazers,45.507856,-122.690794

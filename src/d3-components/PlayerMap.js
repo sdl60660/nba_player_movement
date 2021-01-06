@@ -30,7 +30,7 @@ class PlayerMap {
         this.containerEl = containerEl;
         this.props = props;
 
-        const { width, height, mapColor, geoData } = props;
+        const { width, height, mapColor, geoData, teamData } = props;
         console.log(props);
 
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
@@ -68,7 +68,7 @@ class PlayerMap {
             );
       
       // init other vis elements like scales and axes here.
-        const sampleData = [
+        const treemapData = [
             { weight: getRandomInt(10) }, 
             { weight: getRandomInt(10) }, 
             { weight: getRandomInt(10) }, 
@@ -77,26 +77,30 @@ class PlayerMap {
             { weight: getRandomInt(10) }
         ]
 
-        this.addTeamTreemaps({ sampleData })
+        teamData.forEach((teamData) => {
+            console.log(teamData);
+            this.addTeamTreemap({ treemapData, teamData, projection })
+        })
     }
     
     updateMapColor = ({ opacity, mapColor }) => { 
         this.mapPath
-            // .transition()
+            .transition()
             // .duration(300)
             .style("fill-opacity", opacity)
             .style("fill", mapColor);
     }
 
-    addTeamTreemaps  = ({ sampleData }) => {
+    addTeamTreemap = ({ treemapData, teamData, projection }) => {
+
+        const [xCenter, yCenter] = projection([teamData.longitude, teamData.latitude])
+        const treemapRadius = 50;
         
-        const simulation = voronoiMapSimulation(sampleData)
-            // .initialPosition([100, 200])
+        const simulation = voronoiMapSimulation(treemapData)
             .prng(seedrandom('seed'))
             // .weight((d) => weightScale(d))                          
             // .clip([[0,0], [0, 200], [200, 200], [200, 0]])      // set the clipping polygon
-            .clip(getCircleCoordinates(200, 200, 75, 30))
-            // .initialPosition([1,1])
+            .clip(getCircleCoordinates(xCenter, yCenter, treemapRadius, 30))
             .stop()                                               
 
         let state = simulation.state();                           // retrieve the simulation's state, i.e. {ended, polygons, iterationCount, convergenceRatio}
@@ -114,23 +118,11 @@ class PlayerMap {
             .append('path')
             .attr("class", "teams")
             .attr('d', (d) => "M" + d + "z")
-            .style("fill", "red")
-            .style("stroke", "black")
+            .style("fill", teamData.color_1)
+            .style("stroke", teamData.color_2)
             .style("stroke-width", "3px");
             // .style('fill', (d) =>  fillScale(d.site.originalObject));
         
-        this.teams
-            // .attr("transform", (d) => 'translate(' + d.x + ' '+ d.y + ')')
-            .attr("transform", "translate(100px, 100px)");
-
-        // this.teams
-        //     .selectAll()
-        //     .data(teamData, d => d)
-        //     .join(
-        //         enter => enter.append("")
-        //             .attr("class", "team-treemap")
-                    
-        //     )
     }
   
     resize = (width, height) => { /*...*/ }

@@ -1,0 +1,31 @@
+﻿team_id,city,state,team_full_name,team_nickname,latitude,longitude,color_1,color_2
+ATL,Atlanta,GA,Atlanta Hawks,Hawks,33.844371,-84.47405,#E03A3E,#C1D32F
+BOS,Boston,MA,Boston Celtics,Celtics,42.370567,-71.026964,#007A33,#BA9653
+BRK,Brooklyn,NY,Brooklyn Nets,Nets,40.63122,-73.941542,#000000,#FFFFFF
+CHA,Charlotte,NC,Charlotte Hornets,Hornets,35.26002,-80.804151,#1D1160,#00788C
+CHI,Chicago,IL,Chicago Bulls,Bulls,41.88531,-87.62213,#CE1141,#000000
+CLE,Cleveland,OH,Cleveland Cavaliers,Cavaliers,41.489381,-81.667486,#860038,#041E42
+DAL,Dallas,TX,Dallas Mavericks,Mavericks,32.781179,-96.790329,#00538C,#002B5E
+DEN,Denver,CO,Denver Nuggets,Nuggets,39.760189,-104.996553,#0E2240,#FEC524
+DET,Detroit,MI,Detroit Pistons,Pistons,42.347021,-83.060184,#C8102E,#1D42BA
+GSW,San Francisco,CA,Golden State Warriors,Warriors,37.776646,-122.417481,#1D428A,#FFC72C
+HOU,Houston,TX,Houston Rockets,Rockets,29.813142,-95.309789,#CE1141,#000000
+IND,Indianapolis,IN,Indiana Pacers,Pacers,39.775092,-86.13216,#002D62,#FDBB30
+LAC,Los Angeles,CA,Los Angeles Clippers,Clippers,33.973951,-118.248405,#C8102E,#1D428A
+LAL,Los Angeles,CA,Los Angeles Lakers,Lakers,33.973951,-118.248405,#552583,#FDB927
+MEM,Memphis,TN,Memphis Grizzlies,Grizzlies,35.169255,-89.990415,#5D76A9,#12173F
+MIA,Miami,FL,Miami Heat,Heat,25.558428,-80.458168,#98002E,#F9A01B
+MIL,Milwaukee,WI,Milwaukee Bucks,Bucks,43.011264,-87.958409,#00471B,#EEE1C6
+MIN,Minneapolis,MN,Minnesota Timberwolves,Timberwolves,44.984577,-93.269097,#0C2340,#236192
+NOP,New Orleans,LA,New Orleans Pelicans,Pelicans,29.958304,-90.077,#0C2340,#C8102E
+NYK,New York,NY,New York Knicks,Knicks,40.750422,-73.996328,#006BB6,#F58426
+OKC,Oklahoma City,OK,Oklahoma City Thunder,Thunder,35.491608,-97.562817,#007AC1,#EF3B24
+ORL,Orlando,FL,Orlando Magic,Magic,28.545179,-81.373291,#0077C0,#C4CED4
+PHI,Philadelphia,PA,Philadelphia 76ers,76ers,40.001811,-75.11787,#006BB6,#ED174C
+PHO,Phoenix,AZ,Phoenix Suns,Suns,33.703967,-112.351835,#1D1160,#E56020
+POR,Portland,OR,Portland Trailblazers,Trailblazers,45.507856,-122.690794,#E03A3E,#000000
+SAC,Sacramento,CA,Sacramento Kings,Kings,38.380456,-121.555406,#5A2D81,#63727A
+SAS,San Antonio,TX,San Antonio Spurs,Spurs,29.468413,-98.528889,#C4CED4,#000000
+TOR,Ontario,ON,Toronto Raptors,Raptors,43.6532,-79.3832,#CE1141,#000000
+UTA,Salt Lake City,UT,Utah Jazz,Jazz,40.756095,-111.900719,#002B5C,#00471B
+WAS,Washington,DC,Washington Wizards,Wizards,38.911936,-77.016719,#002B5C,#E31837
