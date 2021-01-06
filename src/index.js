@@ -15,6 +15,7 @@ const scroller = scrollama();
 scroller
   .setup({
     step: ".step",
+    offset: 0.6
   })
 
 // const { opacity, setOpacity, mapColor, setMapColor } = useContext(PlayerMapContext);
