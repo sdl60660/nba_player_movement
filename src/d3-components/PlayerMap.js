@@ -67,15 +67,12 @@ class PlayerMap {
                 // exit => exit.remove()
             );
       
-      // init other vis elements like scales and axes here.
-        const treemapData = [
-            { weight: getRandomInt(10) }, 
-            { weight: getRandomInt(10) }, 
-            { weight: getRandomInt(10) }, 
-            { weight: getRandomInt(10) }, 
-            { weight: getRandomInt(10) },
-            { weight: getRandomInt(10) }
-        ]
+        // init other vis elements like scales and axes here.
+
+        let treemapData = [];
+        for (let i=0; i < 15; i++ ) {
+            treemapData.push({ weight: getRandomInt(10) })
+        }
 
         teamData.forEach((teamData) => {
             console.log(teamData);
@@ -97,7 +94,7 @@ class PlayerMap {
         const treemapRadius = 50;
         
         const simulation = voronoiMapSimulation(treemapData)
-            .prng(seedrandom('seed'))
+            // .prng(seedrandom('seed'))
             // .weight((d) => weightScale(d))                          
             // .clip([[0,0], [0, 200], [200, 200], [200, 0]])      // set the clipping polygon
             .clip(getCircleCoordinates(xCenter, yCenter, treemapRadius, 30))
