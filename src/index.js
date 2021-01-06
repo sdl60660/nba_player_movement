@@ -18,6 +18,8 @@ scroller
     offset: 0.6
   })
 
+// let isMobile = window.matchMedia('(max-width: 700px)').matches;
+
 // const { opacity, setOpacity, mapColor, setMapColor } = useContext(PlayerMapContext);
 // const colors = ["#f23d23", "#3434ff", "#67f402"];
 

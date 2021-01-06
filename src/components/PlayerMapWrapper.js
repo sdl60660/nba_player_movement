@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+import * as chromatic from "d3-scale-chromatic";
+
 import PlayerMapControls from './PlayerMapControls';
+import TreemapWrapper from './TreemapWrapper';
 import PlayerMap from '../d3-components/PlayerMap';
 import PlayerMapContext from '../context/playerMapContext';
+
 
 
 let vis;
 
 const PlayerMapWrapper = ({ _geoData, scroller, parentElement="player-map" }) => {
-    const colors = ["#f23d23", "#3434ff", "#67f402"];
+    // const colors = ["#f23d23", "#3434ff", "#67f402"];
+    // const colors = d3.interpolate("red", "green", )(d3.randomUniform()())
+    const colors = chromatic.schemeCategory10;
 
     const [mapColor, setMapColor] = useState('#0000ff');
     const [geoData, setGeoData] = useState(_geoData);
@@ -48,15 +54,3 @@ const PlayerMapWrapper = ({ _geoData, scroller, parentElement="player-map" }) =>
 }
 
 export { PlayerMapWrapper as default }
-
-
-// const svg = d3.select("#map-tile").append("svg")
-//     .attr("id", "map-svg")
-//     .attr("height", 300)
-//     .attr("width", 300)
-
-// const circle = svg.append("circle")
-//     .attr("cx", 12)
-//     .attr("cy", 232)
-//     .attr("r", 5)
-//     .style("fill", "red");

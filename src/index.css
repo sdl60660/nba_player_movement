@@ -39,4 +39,10 @@ code {
   background-color: rgba(184, 184, 184, 0.576);
   max-width: 40%;
   margin: auto;
+  height: 10vh;
+  margin-bottom: 100vh;
+}
+
+.phantom { 
+  opacity: 0;
 }
