@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PlayerMapControls from './PlayerMapControls';
 import PlayerMap from '../d3-components/PlayerMap';
 import PlayerMapContext from '../context/playerMapContext';
@@ -6,13 +6,26 @@ import PlayerMapContext from '../context/playerMapContext';
 
 let vis;
 
-const PlayerMapWrapper = ({ _geoData, parentElement="player-map" }) => {
+const PlayerMapWrapper = ({ _geoData, scroller, parentElement="player-map" }) => {
+    const colors = ["#f23d23", "#3434ff", "#67f402"];
 
     const [mapColor, setMapColor] = useState('#0000ff');
     const [geoData, setGeoData] = useState(_geoData);
     const [width, setWidth] = useState(1400);
     const [height, setHeight] = useState(800);
     const [opacity, setOpacity] = useState(1.0);
+
+    scroller
+        .onStepEnter(({ element, index, direction }) => {
+            console.log({ element, index, direction });
+            console.log(colors[index]);
+            setMapColor(() => {
+                return colors[index];
+            })
+        })
+        .onStepExit(({ element, index, direction }) => {
+            // console.log({ element, index, direction })
+        });
 
     const refElement = useRef(null);
 
@@ -21,6 +34,7 @@ const PlayerMapWrapper = ({ _geoData, parentElement="player-map" }) => {
     }, []);
 
     useEffect(() => {
+        console.log("Effect triggered", mapColor, opacity)
         vis.updateMapColor({ mapColor, opacity })
     }, [mapColor, opacity]);
 

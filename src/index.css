@@ -11,17 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+/* 
 #content {
   display: grid;
   grid-template-columns: 20% 80%;
+} */
+
+#scroll {
+  position: relative;
 }
 
-#viz-tile {
+#viz-column {
   position: sticky;
   top: 0;
 }
 
+#annotations {
+  position: relative;
+}
+
+/* #viz-tile {
+  position: sticky;
+  top: 0;
+} */
+
 .step {
-  background-color: #b8b8b8;
+  background-color: rgba(184, 184, 184, 0.576);
+  max-width: 40%;
+  margin: auto;
 }

@@ -1,6 +1,6 @@
 {
-  "short_name": "NBA Transactions",
-  "name": "Visualization of 2020-21 NBA Transactions",
+  "short_name": "NBA Player Movement Map",
+  "name": "Visualization of 2020-21 NBA Player Movement",
   "icons": [
     {
       "src": "favicon.ico",
