@@ -54,6 +54,43 @@ class PlayerMap {
         this.generateMap({ geoJSON, projection, mapColor });
 
         this.generateTeams({ teamData, playerData, projection });
+
+        setTimeout(() => {
+            let team = teamData[7];
+            const players = playerData
+                .filter((player) => player.team_id === team.team_id || player.player_id === "adamsst01")
+                .map((player) => ({ 
+                    weight: this.weightScale(player.salary),
+                    player_name: player.player,
+                    player_id: player.player_id,
+                    team: player.team_id,
+                    per: player.per
+                }))
+            
+            const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
+            team.radius = this.voronoiRadius(weightSum);
+            
+            this.addTeamTreemap({ teamData: team, players });
+        }, 5000)
+
+        setTimeout(() => {
+            let team = teamData[7];
+            const players = playerData
+                .filter((player) => player.team_id === team.team_id)
+                .slice(0, 10)
+                .map((player) => ({ 
+                    weight: this.weightScale(player.salary),
+                    player_name: player.player,
+                    player_id: player.player_id,
+                    team: player.team_id,
+                    per: player.per
+                }))
+            
+            const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
+            team.radius = this.voronoiRadius(weightSum);
+            
+            this.addTeamTreemap({ teamData: team, players });
+        }, 10000)
     
     }
 
@@ -128,7 +165,7 @@ class PlayerMap {
             const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
             teamData.radius = this.voronoiRadius(weightSum);
 
-            this.addTeamTreemap({ teamData, players, projection });
+            this.addTeamTreemap({ teamData, players });
         })
 
         const tick = () => {
@@ -155,14 +192,14 @@ class PlayerMap {
     
     }
 
-    addTeamTreemap = ({ teamData, players, projection }) => {
-
-        // const treemapRadius = 45;
-        console.log(players);
+    addTeamTreemap = ({ teamData, players }) => {
+        // console.log(players);
+        let xVal = teamData.x || teamData.xCoordinate;
+        let yVal = teamData.y || teamData.yCoordinate;
         
         const simulation = voronoiMapSimulation(players)
             .prng(seedrandom('randomsed'))
-            .clip(getCircleCoordinates(teamData.xCoordinate, teamData.yCoordinate, teamData.radius, 35))
+            .clip(getCircleCoordinates(xVal, yVal, teamData.radius, 35))
             .stop()                                               
 
         let state = simulation.state();
@@ -176,33 +213,76 @@ class PlayerMap {
 
         let playerPolygons = teamGroup
             .selectAll(".player-polygons")
-            .data(state.polygons)
-            .enter()
-                .append('path')
-                .attr("class", "player-polygons")
-                .attr('d', (d) => `M${d}z`)
-                .style("fill-opacity", 0.95)
-                .style("fill", d => teamData.color_1)
-                .style("stroke", teamData.color_2)
-                .style("stroke-width", "2px");
-                // .style('fill', (d) =>  fillScale(d.site.originalObject));
+            .data(state.polygons, d => d.site.originalObject.data.originalData.player_id)
+            .join(
+                enter => enter.append('path')
+                    .attr("class", d => `player-polygons ${teamData.team_id}-polygon`)
+                    .attr("id", d => `player-polygon-${d.site.originalObject.data.originalData.player_id}`)
+                    .attr('d', (d) => `M${d}z`)
+                    .style("fill-opacity", 0.95)
+                    .style("fill", d => teamData.color_1)
+                    .style("stroke", teamData.color_2)
+                    .style("stroke-width", "2px"),
+                update => {
+                    update
+                        .transition()
+                        .duration(2000)
+                        .attr('d', (d) => `M${d}z`)
+                    return update;
+                    },
+                exit => exit.remove()
+            )
         
         let playerImages = teamGroup
             .selectAll(".player-polygon-images")
-            .data(state.polygons)
-            .enter()
-                .append('path')
-                .attr("class", "player-polygon-images")
-                .attr('d', (d) => `M${d}z`)
-                .style("fill", d => {
-                    const player_id = d.site.originalObject.data.originalData.player_id;
-                    return `url(#${player_id}-photo)`
-                })
-                .style("stroke", teamData.color_2)
-                .style("stroke-width", "2px");
-                // .style('fill', (d) =>  fillScale(d.site.originalObject));
+            .data(state.polygons, d => d.site.originalObject.data.originalData.player_id)
+            .join(
+                enter => enter.append('path')
+                    .attr("class", d => `player-polygon-images ${teamData.team_id}-polygon-image`)
+                    .attr("id", d => `player-image-${d.site.originalObject.data.originalData.player_id}`)
+                    .attr('d', (d) => `M${d}z`)
+                    .style("fill", d => {
+                        const player_id = d.site.originalObject.data.originalData.player_id;
+                        return `url(#${player_id}-photo)`
+                    })
+                    .style("stroke", teamData.color_2)
+                    .style("stroke-width", "2px"),
+                update => {
+                    update
+                        .transition()
+                        .duration(2000)
+                        .attr('d', (d) => `M${d}z`);
+                    return update;
+                    },
+                exit => exit.remove() 
+            )
         
     }
+
+    // updateTeam = ({ teamData, players }) => {
+    //     const simulation = voronoiMapSimulation(players)
+    //         .prng(seedrandom('randomsed'))
+    //         .clip(getCircleCoordinates(teamData.x, teamData.y, teamData.radius, 35))
+    //         .stop()                                               
+
+    //     let state = simulation.state();
+    //     while (!state.ended) {
+    //         simulation.tick();
+    //         state = simulation.state();
+    //     }
+
+    //     let teamGroup = this.teams
+    //         .select(`.${teamData.team_id}-group`);
+        
+    //     let playerPolygons = teamGroup
+    //         .selectAll(".player-polygons")
+    //         .data()
+
+    //     let playerImages = teamGroup
+    //         .selectAll(".player-polygon-images")
+        
+
+    // }
 
     updateMapColor = ({ opacity, mapColor }) => { 
         this.mapPath
