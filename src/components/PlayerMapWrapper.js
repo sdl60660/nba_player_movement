@@ -18,7 +18,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, scroller, parentEl
     const [teamData, setTeamData] = useState(_teamData);
     const [playerData, setPlayerData] = useState(_playerData);
     const [width, setWidth] = useState(1400);
-    const [height, setHeight] = useState(800);
+    const [height, setHeight] = useState(850);
     const [opacity, setOpacity] = useState(1.0);
 
     scroller

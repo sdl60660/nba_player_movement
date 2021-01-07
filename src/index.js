@@ -34,7 +34,11 @@ const promises = [
 Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     const teamData = allData[1];
-    const playerData = allData[2];
+    let playerData = allData[2];
+
+    playerData.forEach(player => {
+      player.salary = +player.salary;
+    });
 
     ReactDOM.render(<PlayerMapWrapper
                       id={"viz-tile"}
