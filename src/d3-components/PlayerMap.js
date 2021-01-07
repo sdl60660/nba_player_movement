@@ -41,14 +41,23 @@ class PlayerMap {
         this.voronoiRadius = d3.scaleLinear()
             .domain([0, 350])
             .range([0, maxCircleRadius])
-        
-        console.log(this.weightScale(39219565))
-        console.log(this.voronoiRadius(this.weightScale(39219565)))
-
+ 
         this.svg = d3.select(containerEl)
             .append("svg")
             .attr("viewBox", [0, 0, width, height]);
 
+        this.initPlayerPhotos({ playerData, maxCircleRadius })
+        
+        const geoJSON = topojson.feature(geoData, geoData.objects.states);
+        const projection = d3.geoAlbersUsa()
+            .fitExtent([[0, 0], [width-20, height-20]], geoJSON);
+        this.generateMap({ geoJSON, projection, mapColor });
+
+        this.generateTeams({ teamData, playerData, projection });
+    
+    }
+
+    initPlayerPhotos = ({ playerData, maxCircleRadius }) => {
         const defs = this.svg.append('svg:defs');
         defs.selectAll(".player-photo")
             .data(playerData, d => d.player_id)
@@ -65,16 +74,6 @@ class PlayerMap {
                     .attr("width", d => Math.sqrt(d.salary / (159.12*maxCircleRadius)))
                     .attr("x", 0)
                     .attr("y", 0);
-
-
-        const geoJSON = topojson.feature(geoData, geoData.objects.states);
-
-        const projection = d3.geoAlbersUsa()
-            .fitExtent([[20, 20], [width-20, height-20]], geoJSON);
-
-        this.generateMap({ geoJSON, projection, mapColor })
-        this.generateTeams({ teamData, playerData, projection });
-    
     }
     
     generateMap = ({ geoJSON, projection, mapColor }) => {
