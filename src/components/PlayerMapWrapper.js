@@ -19,7 +19,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, scroller, parentEl
     const [playerData, setPlayerData] = useState(_playerData);
     const [width, setWidth] = useState(1400);
     const [height, setHeight] = useState(850);
-    const [opacity, setOpacity] = useState(1.0);
+    const [opacity, setOpacity] = useState(0.8);
 
     scroller
         .onStepEnter(({ element, index, direction }) => {
