@@ -2,6 +2,7 @@ import csv
 import shutil
 import requests
 from bs4 import BeautifulSoup
+import unidecode
 
 
 def process_player_row(row):
@@ -52,7 +53,7 @@ for row in rows:
 for player_id, player in player_dict.items():
     print(player_id)
     # image_url = f"https://www.basketball-reference.com/req/202101021/images/players/{player_id}.jpg"
-    formtted_player_name = player['player'].replace(' ', '-').replace('\'','')
+    formtted_player_name = unidecode.unidecode(player['player'].replace(' ', '-').replace('\'','').replace('.',''))
     image_url = f"https://www.2kratings.com/wp-content/uploads/{formtted_player_name}-2K-Rating.png"
 
     r = requests.get(image_url, stream=True)
