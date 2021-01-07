@@ -8,7 +8,7 @@ import PlayerMapContext from '../context/playerMapContext';
 
 let vis;
 
-const PlayerMapWrapper = ({ _geoData, _teamData, scroller, parentElement="player-map" }) => {
+const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, scroller, parentElement="player-map" }) => {
     // const colors = ["#f23d23", "#3434ff", "#67f402"];
     // const colors = d3.interpolate("red", "green", )(d3.randomUniform()())
     const colors = chromatic.schemeCategory10;
@@ -16,6 +16,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, scroller, parentElement="player
     const [mapColor, setMapColor] = useState('#0000ff');
     const [geoData, setGeoData] = useState(_geoData);
     const [teamData, setTeamData] = useState(_teamData);
+    const [playerData, setPlayerData] = useState(_playerData);
     const [width, setWidth] = useState(1400);
     const [height, setHeight] = useState(800);
     const [opacity, setOpacity] = useState(1.0);
@@ -35,7 +36,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, scroller, parentElement="player
     const refElement = useRef(null);
 
     useEffect(() => {
-        vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData });
+        vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData, playerData });
     }, []);
 
     useEffect(() => {

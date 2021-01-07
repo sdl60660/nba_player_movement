@@ -26,32 +26,25 @@ window.addEventListener("resize", scroller.resize);
 // Begin loading datafiles
 const promises = [
   json("data/us_states.json"),
-  csv("data/team_data.csv")
+  csv("data/team_data.csv"),
+  csv("data/players.csv")
 ];
 
 
 Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     const teamData = allData[1];
+    const playerData = allData[2];
 
-    ReactDOM.render(<PlayerMapWrapper id={"viz-tile"} _geoData={geoData} _teamData={teamData} scroller={scroller}/>, document.getElementById('viz-column'));
-}).then(() => {
-  // const { opacity, setOpacity, mapColor, setMapColor } = useContext(PlayerMapContext);
-  // const colors = ["#f23d23", "#3434ff", "#67f402"];
-
-  // scroller
-  //   .setup({
-  //     step: ".step",
-  //   })
-  //   .onStepEnter(({ element, index, direction }) => {
-  //     console.log({ element, index, direction });
-  //     setMapColor(colors[index]);
-  //   })
-  //   .onStepExit(({ element, index, direction }) => {
-  //     // console.log({ element, index, direction })
-  //   });
-});
-
+    ReactDOM.render(<PlayerMapWrapper
+                      id={"viz-tile"}
+                      _geoData={geoData}
+                      _teamData={teamData}
+                      _playerData={playerData}
+                      scroller={scroller}
+                    />,
+                    document.getElementById('viz-column'));
+    });
 
 
 // If you want to start measuring performance in your app, pass a function

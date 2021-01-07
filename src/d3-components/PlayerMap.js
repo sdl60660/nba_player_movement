@@ -30,29 +30,40 @@ class PlayerMap {
         this.containerEl = containerEl;
         this.props = props;
 
-        const { width, height, mapColor, geoData, teamData } = props;
+        const { width, height, mapColor, geoData, teamData, playerData } = props;
         console.log(props);
 
+        this.svg = d3.select(containerEl)
+            .append("svg")
+            .attr("viewBox", [0, 0, width, height]);
+
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
-        geoJSON.features = geoJSON.features.filter(d => !["Alaska", "Hawaii"].includes(d.properties.NAME));
 
         const projection = d3.geoAlbersUsa()
             .fitExtent([[20, 20], [width-20, height-20]], geoJSON);
 
+        this.weightScale = d3.scaleLinear()
+                            .domain(d3.extent(playerData, (d) => d.vorp))
+                            .range([1,100])
+        
+        this.voronoiRadius = d3.scaleLinear()
+                            .domain([0, 350])
+                            .range([0, 50])
+
+        this.generateMap({ geoJSON, projection, mapColor })
+        this.generateTeams({ teamData, playerData, projection });
+    
+    }
+    
+    generateMap = ({ geoJSON, projection, mapColor }) => {
+        geoJSON.features = geoJSON.features.filter(d => !["Alaska", "Hawaii"].includes(d.properties.NAME));
+
         let path = d3.geoPath()
             .projection(projection);
-        
-        this.svg = d3.select(containerEl)
-            .append("svg")
-            .attr("viewBox", [0, 0, width, height]);
                 
         this.mapPath = this.svg.append("g")
             .attr("class", "background-map")
             .selectAll("path");
-        
-        this.teams = this.svg.append("g")
-            .attr("class", "teams");
-            // .selectAll(".team-group")
         
         this.mapPath = this.mapPath.data( geoJSON.features, d => d)
             .join(
@@ -66,9 +77,12 @@ class PlayerMap {
 
                 // exit => exit.remove()
             );
+    }
+    
+    generateTeams = ({ teamData, playerData, projection }) => {
+        this.teams = this.svg.append("g")
+            .attr("class", "teams");
       
-        // init other vis elements like scales and axes here.
-
         let treemapData = [];
         for (let i=0; i < 15; i++ ) {
             treemapData.push({ weight: getRandomInt(10) })
@@ -85,8 +99,20 @@ class PlayerMap {
             teamData.xCoordinate = xCenter;
             teamData.yCoordinate = yCenter;
 
-            console.log(teamData);
-            this.addTeamTreemap({ treemapData, teamData, projection })
+            const players = playerData
+                .filter((player) => player.team_id === teamData.team_id)
+                .map((player) => ({ 
+                    weight: this.weightScale(player.vorp),
+                    player_name: player.player,
+                    player_id: player.player_id,
+                    team: player.team_id,
+                    per: player.per
+                }))
+            
+            const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
+            teamData.radius = this.voronoiRadius(weightSum);
+
+            this.addTeamTreemap({ treemapData, teamData, players, projection });
         })
 
         const tick = () => {
@@ -94,7 +120,6 @@ class PlayerMap {
                 .style("transform", d => {
                     let dx = d.x - d.xCoordinate
                     let dy = d.y - d.yCoordinate
-                    console.log(d.x, d.xCoordinate)
                     return `translate(${dx}px, ${dy}px)`
                 })
         }
@@ -104,35 +129,38 @@ class PlayerMap {
             .force('x', d3.forceX(d => d.xCoordinate).strength(1.0))
             .force('y', d3.forceY(d => d.yCoordinate).strength(1.0))
             .force("charge", d3.forceManyBody())
-            .force("collision", d3.forceCollide(55))
+            .force("collision", d3.forceCollide(52))
             .on("tick", tick)
+            // .stop()
+        
+        for (let i =0; i < 500; i++) {
+            simulation.tick();
+        };
     
     }
 
-    addTeamTreemap = ({ treemapData, teamData, projection }) => {
+    addTeamTreemap = ({ treemapData, teamData, players, projection }) => {
 
-        const treemapRadius = 50;
+        // const treemapRadius = 45;
+        console.log(players);
         
-        const simulation = voronoiMapSimulation(treemapData)
+        const simulation = voronoiMapSimulation(players)
             // .prng(seedrandom('seed'))
-            .clip(getCircleCoordinates(teamData.xCoordinate, teamData.yCoordinate, treemapRadius, 30))
+            .clip(getCircleCoordinates(teamData.xCoordinate, teamData.yCoordinate, teamData.radius, 35))
             .stop()                                               
 
         let state = simulation.state();
-
         while (!state.ended) {
             simulation.tick();
             state = simulation.state();
         }
-
-        const polygons = state.polygons;   
         
         let teamGroup = this.teams
             .select(`.${teamData.team_id}-group`);
         
         let playerPolygons = teamGroup
             .selectAll(".player-polygons")
-            .data(polygons)
+            .data(state.polygons)
             .enter()
                 .append('path')
                 .attr("class", "player-polygons")
