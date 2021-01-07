@@ -83,11 +83,6 @@ class PlayerMap {
         this.teams = this.svg.append("g")
             .attr("class", "teams");
       
-        let treemapData = [];
-        for (let i=0; i < 15; i++ ) {
-            treemapData.push({ weight: getRandomInt(10) })
-        }
-
         this.teamGroups = this.teams.selectAll("g")
             .data(teamData, d => d.team_id)
             .enter()
@@ -112,7 +107,7 @@ class PlayerMap {
             const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
             teamData.radius = this.voronoiRadius(weightSum);
 
-            this.addTeamTreemap({ treemapData, teamData, players, projection });
+            this.addTeamTreemap({ teamData, players, projection });
         })
 
         const tick = () => {
@@ -129,7 +124,7 @@ class PlayerMap {
             .force('x', d3.forceX(d => d.xCoordinate).strength(1.0))
             .force('y', d3.forceY(d => d.yCoordinate).strength(1.0))
             .force("charge", d3.forceManyBody())
-            .force("collision", d3.forceCollide(52))
+            .force("collision", d3.forceCollide(d => d.radius + 4))
             .on("tick", tick)
             // .stop()
         
@@ -139,7 +134,7 @@ class PlayerMap {
     
     }
 
-    addTeamTreemap = ({ treemapData, teamData, players, projection }) => {
+    addTeamTreemap = ({ teamData, players, projection }) => {
 
         // const treemapRadius = 45;
         console.log(players);
