@@ -47,7 +47,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, scroller, parentEl
     return (
         <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth }}>
             <div ref={refElement} id={"viz-tile"}>
-                <PlayerMapControls />
+                {/* <PlayerMapControls /> */}
             </div>
         </PlayerMapContext.Provider>
     )

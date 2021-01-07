@@ -140,7 +140,7 @@ class PlayerMap {
         console.log(players);
         
         const simulation = voronoiMapSimulation(players)
-            // .prng(seedrandom('seed'))
+            .prng(seedrandom('randomseed'))
             .clip(getCircleCoordinates(teamData.xCoordinate, teamData.yCoordinate, teamData.radius, 35))
             .stop()                                               
 
@@ -159,10 +159,10 @@ class PlayerMap {
             .enter()
                 .append('path')
                 .attr("class", "player-polygons")
-                .attr('d', (d) => "M" + d + "z")
+                .attr('d', (d) => `M${d}z`)
                 .style("fill", teamData.color_1)
                 .style("stroke", teamData.color_2)
-                .style("stroke-width", "3px");
+                .style("stroke-width", "2px");
                 // .style('fill', (d) =>  fillScale(d.site.originalObject));
         
     }
