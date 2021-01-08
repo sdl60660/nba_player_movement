@@ -271,25 +271,29 @@ class PlayerMap {
                         // })
                                         
                     update
+                        .transition()
                         .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4);
                     
-                    update.transition()
-                        .duration(4000)
+                    update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                        .transition()
+                        .duration(3000)
                         // .style("fill", team.color_1)
                         // .style("fill", "blue")
                         .attr('d', (d) => `M${d.join('L')}z`)
                         .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        .on("end", () => {
-                            update
-                                .style('opacity', 1.0);
-                        })
                         // .attr('d', d => {
                         //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
                         //     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
                         //     return path
                         // })
+                    
+                    update
+                        .transition()
+                        .delay(3000)
+                        .style('opacity', 1.0);
                         
+
                     return update;
                     }
                 // exit => exit.remove()
@@ -332,16 +336,19 @@ class PlayerMap {
                         // })
                     
                     update
+                        .transition()
                         .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4);
                     
-                    update.transition()
-                        .duration(4000)
+                    update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                        .transition()
+                        .duration(3000)
                         .attr('d', (d) => `M${d.join('L')}z`)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        .on("end", () => {
-                            update
-                                .style('opacity', 1.0);
-                        })
+                    
+                    update
+                        .transition()
+                        .delay(3000)
+                        .style('opacity', 1.0);
                         // .attr('d', d => {
                         //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
                         //     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
