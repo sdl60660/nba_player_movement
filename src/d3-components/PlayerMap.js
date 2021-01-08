@@ -256,46 +256,23 @@ class PlayerMap {
                     .style("fill-opacity", 0.95)
                     .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
                     .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                    // .style("fill", d => team.color_1)
-                    // .style("stroke", team.color_2)
                     .style("stroke-width", "2px"),
-                update => {
-                    // update
-                        // .transition()
-                        // .duration(2000)
-                        // .attr('d', (d) => `M${d}z`)
-                        // .attr('d', d => {
-                        //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                        //     const path = generateCirclePath(d.site.x, d.site.y, radius);
-                        //     return path
-                        // })
-                                        
+                update => {     
                     update
                         .transition()
-                        .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4);
-                    
+                        .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4)
+                        .delay(3000)
+                        .style('opacity', 1.0)
+
                     update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                         .transition()
                         .duration(3000)
-                        // .style("fill", team.color_1)
-                        // .style("fill", "blue")
                         .attr('d', (d) => `M${d.join('L')}z`)
                         .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        // .attr('d', d => {
-                        //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                        //     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
-                        //     return path
-                        // })
-                    
-                    update
-                        .transition()
-                        .delay(3000)
-                        .style('opacity', 1.0);
-                        
 
                     return update;
-                    }
+                }
                 // exit => exit.remove()
             )
         
@@ -304,7 +281,6 @@ class PlayerMap {
             .data(polygons, d => d.site.originalObject.data.originalData.player_id)
             .join(
                 enter => { 
-                    // enter.select(d => `${d.team}-group`)
                     return enter
                         .append('path')
                         .attr("class", d => `player-polygon-images ${d.site.originalObject.data.originalData.team.team_id}-polygon-image`)
@@ -319,44 +295,20 @@ class PlayerMap {
                     // return enter;
                 },
                 update => {
-                    // update
-                        // .transition()
-                        // .duration(2000)
-                        // .attr('d', (d) => {
-                        //     const path = `M${d}z`;
-                        //     console.log(d);
-                        //     return path;
-                        // })
-                        // .attr('d', d => `M${d}z`)
-                        // .attr('d', d => {
-                        //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                        //     const path = generateCirclePath(d.site.x, d.site.y, radius);
-                        //     console.log(path);
-                        //     return path
-                        // })
-                    
                     update
                         .transition()
-                        .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4);
-                    
+                        .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4)
+                        .delay(3000)
+                        .style('opacity', 1.0);
+
                     update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                         .transition()
                         .duration(3000)
                         .attr('d', (d) => `M${d.join('L')}z`)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                    
-                    update
-                        .transition()
-                        .delay(3000)
-                        .style('opacity', 1.0);
-                        // .attr('d', d => {
-                        //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                        //     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
-                        //     return path
-                        // })
 
                     return update;
-                    }
+                }
                 // exit => exit.remove() 
             )        
     }
@@ -374,3 +326,20 @@ class PlayerMap {
   }
   
   export default PlayerMap;
+
+
+// update
+// .transition()
+// .duration(2000)
+// .attr('d', (d) => `M${d}z`)
+// .attr('d', d => {
+//     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+//     const path = generateCirclePath(d.site.x, d.site.y, radius);
+//     return path
+// })
+
+// .attr('d', d => {
+//     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+//     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
+//     return path
+// })
