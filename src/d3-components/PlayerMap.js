@@ -85,12 +85,19 @@ class PlayerMap {
 
 
         setTimeout(() => {
-            console.log(this.playerData[12].team.team_id, this.playerData[35].team.team_id)
+            let newTeams = ["BOS", "MIA", "DET", "CHI"];
+            let affectedTeams = [...newTeams]
+            Array(12, 35, 102, 121).forEach((index, i) => {
+                console.log(index)
+                let oldTeam = this.updateTeam(this.playerData[index].player_id, newTeams[i])
+                affectedTeams = affectedTeams.concat(oldTeam)
+            })
+            affectedTeams = [...new Set(affectedTeams)];
+            
 
-            this.playerData[12].team = teamData.find((team) => team.team_id === "BOS");
-            this.playerData[35].team = teamData.find((team) => team.team_id === "MIA");
-
-            let affectedTeams = ["MIL", "WAS", "BOS", "MIA"];
+            // this.playerData[12].team = teamData.find((team) => team.team_id === "BOS");
+            // this.playerData[35].team = teamData.find((team) => team.team_id === "MIA");
+            // let affectedTeams = ["MIL", "WAS", "BOS", "MIA"];
 
             affectedTeams.forEach((team_id) => {
                 allPolygons = allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
@@ -100,12 +107,22 @@ class PlayerMap {
                 allPolygons = allPolygons.concat(polygons);
             })
     
-            this.generatePolygons(allPolygons);
+            this.generatePolygons(allPolygons, affectedTeams);
 
         }, 5000)
 
 
     }
+
+    updateTeam = ( playerId, newTeamId ) => {
+        const arrayIndex = this.playerData.findIndex(d => d.player_id === playerId);
+        let oldTeam = this.playerData[arrayIndex].team.team_id;
+        this.playerData[arrayIndex] = {
+            ...this.playerData[arrayIndex],
+            team: this.teamData.find(team => team.team_id === newTeamId)
+        };
+        return oldTeam;
+    };
 
     initPlayerPhotos = ({ playerData }) => {
         const defs = this.svg.append('svg:defs');
@@ -226,11 +243,7 @@ class PlayerMap {
         return state.polygons;
     }
 
-    generatePolygons = (polygons) => {
-        // let teamGroup = this.teams
-        //     .select(`.${team.team_id}-group`);
-
-        console.log(polygons)
+    generatePolygons = (polygons, affectedTeams = []) => {
 
         let playerPolygons = this.svg
             .selectAll(".player-polygons")
@@ -256,6 +269,9 @@ class PlayerMap {
                         //     const path = generateCirclePath(d.site.x, d.site.y, radius);
                         //     return path
                         // })
+                                        
+                    update
+                        .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4);
                     
                     update.transition()
                         .duration(4000)
@@ -264,11 +280,16 @@ class PlayerMap {
                         .attr('d', (d) => `M${d.join('L')}z`)
                         .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
+                        .on("end", () => {
+                            update
+                                .style('opacity', 1.0);
+                        })
                         // .attr('d', d => {
                         //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
                         //     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
                         //     return path
                         // })
+                        
                     return update;
                     }
                 // exit => exit.remove()
@@ -310,16 +331,23 @@ class PlayerMap {
                         //     return path
                         // })
                     
+                    update
+                        .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4);
+                    
                     update.transition()
                         .duration(4000)
                         .attr('d', (d) => `M${d.join('L')}z`)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        // .style("fill", "red")
+                        .on("end", () => {
+                            update
+                                .style('opacity', 1.0);
+                        })
                         // .attr('d', d => {
                         //     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
                         //     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
                         //     return path
                         // })
+
                     return update;
                     }
                 // exit => exit.remove() 
@@ -339,43 +367,3 @@ class PlayerMap {
   }
   
   export default PlayerMap;
-
-
-          // setTimeout(() => {
-        //     let team = teamData[7];
-        //     const players = playerData
-        //         .filter((player) => player.team_id === team.team_id || player.player_id === "adamsst01")
-        //         .map((player) => ({ 
-        //             weight: this.weightScale(player.salary),
-        //             player_name: player.player,
-        //             player_id: player.player_id,
-        //             team: player.team_id,
-        //             per: player.per,
-        //             salary: player.salary
-        //         }))
-            
-        //     const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
-        //     team.radius = this.voronoiRadius(weightSum);
-            
-        //     this.addTeamTreemap({ teamData: team, players });
-        // }, 5000)
-
-        // setTimeout(() => {
-        //     let team = teamData[7];
-        //     const players = playerData
-        //         .filter((player) => player.team_id === team.team_id)
-        //         .slice(0, 10)
-        //         .map((player) => ({ 
-        //             weight: this.weightScale(player.salary),
-        //             player_name: player.player,
-        //             player_id: player.player_id,
-        //             team: player.team_id,
-        //             per: player.per,
-        //             salary: player.salary
-        //         }))
-            
-        //     const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
-        //     team.radius = this.voronoiRadius(weightSum);
-            
-        //     this.addTeamTreemap({ teamData: team, players });
-        // }, 10000)
