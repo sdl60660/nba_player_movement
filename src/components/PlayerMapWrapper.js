@@ -20,7 +20,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const [playerData, setPlayerData] = useState(_playerData);
     const [width, setWidth] = useState(1300);
     const [height, setHeight] = useState(750);
-    const [opacity, setOpacity] = useState(0.6);
+    const [opacity, setOpacity] = useState(0.5);
 
     const colors = chromatic.schemeCategory10;
     const transactionDates = Object.keys(transactionData);
@@ -74,7 +74,12 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 debug: true
             })
             .onStepEnter(({ element, index, direction }) => {
-                onStepEnter({ element, index, direction })
+                try {
+                    onStepEnter({ element, index, direction })
+                }
+                catch (e) {
+                    console.log(e);
+                }
             })
             .onStepExit((response) => {
                 // { element, index, direction }

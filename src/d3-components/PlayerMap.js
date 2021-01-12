@@ -83,7 +83,7 @@ class PlayerMap {
         
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
         const projection = d3.geoAlbersUsa()
-            .fitExtent([[0, 20], [width-50, height-50]], geoJSON);
+            .fitExtent([[0, 30], [width-50, height-50]], geoJSON);
         this.generateMap({ geoJSON, projection, mapColor });
 
         this.generateTeamGroups({ projection });
@@ -191,7 +191,10 @@ class PlayerMap {
             .force('x', d3.forceX(d => d.xCoordinate).strength(1.0))
             .force('y', d3.forceY(d => d.yCoordinate).strength(1.0))
             .force("charge", d3.forceManyBody())
-            .force("collision", d3.forceCollide(d => d.radius + 4))
+            .force("collision", d3.forceCollide(d => {
+                console.log(d.team_id, d.radius)
+                return Math.max(d.radius, 50) + 6
+            }))
             .on("tick", tick)
             // .stop()
         
@@ -204,10 +207,13 @@ class PlayerMap {
     addTeamTreemap = ({ team, players }) => {
         let xVal = team.x || team.xCoordinate;
         let yVal = team.y || team.yCoordinate;
+
+        const weightSum = players.map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
+        const radius = this.voronoiRadius(weightSum);
         
         const simulation = voronoiMapSimulation(players)
             .prng(seedrandom('randomsed'))
-            .clip(getCircleCoordinates(xVal, yVal, team.radius, 35))
+            .clip(getCircleCoordinates(xVal, yVal, radius, 35))
             .initialPosition((d) => {
                 const polygon = this.svg.select(`#player-polygon-${d.player_id}`)
                 return polygon.nodes().length > 0 ?
@@ -271,15 +277,29 @@ class PlayerMap {
 
                     update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                         .raise()
+                        .attr('d', (d,i,n) => {
+                            const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                            
+                            let existingPath = d3.select(n[i]).attr('d');
+                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                            d3.select(n[i])
+                                .attr('startX', existingCenter[0])
+                                .attr('startY', existingCenter[1])
+
+                            const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
+                            return path
+                        })
                         .transition("re-position")
                         .duration(playerTravelTransitionTime)
                         .attr('transform', (d,i,n) => {
                             const newCenter = d[0];
-                            let existingPath = d3.select(n[i]).attr('d');
-                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+                            let startX = d3.select(n[i]).attr('startX');
+                            let startY = d3.select(n[i]).attr('startY');
+                            // const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
 
-                            const dx = newCenter[0] - existingCenter[0];
-                            const dy = newCenter[1] - existingCenter[1];  
+                            const dx = newCenter[0] - startX;
+                            const dy = newCenter[1] - startY;  
 
                             return `translate(${dx},${dy})`
                         })
@@ -333,15 +353,29 @@ class PlayerMap {
                         .style('opacity', 1.0);
 
                     update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                        .attr('d', (d,i,n) => {
+                            const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                            
+                            let existingPath = d3.select(n[i]).attr('d');
+                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                            d3.select(n[i])
+                                .attr('startX', existingCenter[0])
+                                .attr('startY', existingCenter[1])
+
+                            const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
+                            return path
+                        })
                         .transition("re-position")
                         .duration(playerTravelTransitionTime)
                         .attr('transform', (d,i,n) => {
                             const newCenter = d[0];
-                            let existingPath = d3.select(n[i]).attr('d');
-                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+                            let startX = d3.select(n[i]).attr('startX');
+                            let startY = d3.select(n[i]).attr('startY');
+                            // const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
 
-                            const dx = newCenter[0] - existingCenter[0];
-                            const dy = newCenter[1] - existingCenter[1];  
+                            const dx = newCenter[0] - startX;
+                            const dy = newCenter[1] - startY;  
 
                             return `translate(${dx},${dy})`
                         })

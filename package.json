@@ -15,6 +15,7 @@
     "d3-interpolate": "^2.0.1",
     "d3-request": "^1.0.6",
     "d3-scale-chromatic": "^2.0.0",
+    "d3-tip": "^0.9.1",
     "d3-voronoi-map": "^2.1.0",
     "d3-voronoi-treemap": "^1.1.1",
     "hbs": "^4.1.1",

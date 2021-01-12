@@ -70,5 +70,9 @@ code {
 }
 
 .transaction-card__transaction-item {
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
+  background-color: white;
+  padding: .5rem .4rem;
+  border: 1px solid black;
+  border-radius: 3px;
 }
