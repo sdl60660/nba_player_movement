@@ -309,6 +309,15 @@ class PlayerMap {
                     return update;
                 },
                 exit => exit
+                    .attr('d', (d,i,n) => {
+                        const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                        
+                        let existingPath = d3.select(n[i]).attr('d');
+                        const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                        const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
+                        return path
+                    })
                     .transition()
                     .delay(playerTravelTransitionTime/2)
                     .duration(playerTravelTransitionTime/2)
@@ -382,6 +391,15 @@ class PlayerMap {
                     return update;
                 },
                 exit => exit
+                    .attr('d', (d,i,n) => {
+                        const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                        
+                        let existingPath = d3.select(n[i]).attr('d');
+                        const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                        const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
+                        return path
+                    })
                     .transition()
                     .delay(playerTravelTransitionTime/2)
                     .duration(playerTravelTransitionTime/2)
