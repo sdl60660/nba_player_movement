@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react';
+import scrollama from 'scrollama';
 import * as chromatic from "d3-scale-chromatic";
 
 import PlayerMapControls from './PlayerMapControls';
 import PlayerMap from '../d3-components/PlayerMap';
 import PlayerMapContext from '../context/playerMapContext';
+import TransactionCard from './TransactionCard';
 
 import transactionReducer from '../reducers/transactionReducer';
 
 
 let vis;
 
-const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, scroller, parentElement="player-map" }) => {
-    // const colors = ["#f23d23", "#3434ff", "#67f402"];
-    // const colors = d3.interpolate("red", "green", )(d3.randomUniform()())
+const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData }) => {
     const colors = chromatic.schemeCategory10;
 
     const [mapColor, setMapColor] = useState(chromatic.schemeCategory10[0]);
@@ -23,22 +23,28 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, scroller, parentEl
     const [height, setHeight] = useState(750);
     const [opacity, setOpacity] = useState(0.6);
 
-    scroller
-        .onStepEnter(({ element, index, direction }) => {
-            // console.log({ element, index, direction });
-            // console.log(colors[index]);
-            setMapColor(() => {
-                return colors[index];
-            })
+    const onStepEnter = ({ element, index, direction }) => {
+        console.log({ element, index, direction });
+        setMapColor(() => {
+            return colors[index];
         })
-        .onStepExit(({ element, index, direction }) => {
-            // console.log({ element, index, direction })
-        });
+    }
 
     const refElement = useRef(null);
+    let scroller = scrollama();
 
     useEffect(() => {
         vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData, playerData });
+        scroller
+            .setup({
+                step: ".step",
+            })
+            .onStepEnter(({ element, index, direction }) => {
+                onStepEnter({ element, index, direction })
+            })
+            .onStepExit((response) => {
+                // { element, index, direction }
+            });
     }, []);
 
     useEffect(() => {
@@ -52,11 +58,28 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, scroller, parentEl
     // }, [playerData]);
 
     return (
-        <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth }}>
-            <div ref={refElement} id={"viz-tile"}>
-                {/* <PlayerMapControls /> */}
-            </div>
-        </PlayerMapContext.Provider>
+        <section id={"scroll"}>
+          <div id={"viz-column"}>
+            <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth }}>
+                <div ref={refElement} id={"viz-tile"}>
+                    {/* <PlayerMapControls /> */}
+                </div>
+            </PlayerMapContext.Provider>
+          </div>
+          <div className={"text-column"} id={"annotations"}>
+                { Object.entries(transactionData).map(
+                    (transactionDateData, i) =>
+                        <TransactionCard 
+                            className={"step"}
+                            key={i}
+                            transactionDate={transactionDateData[0]}
+                            transactions={transactionDateData[1]}
+                        />
+                    )
+                }
+                <div key={"phantom-end"} className={"step phantom"} />
+          </div>
+      </section>
     )
 }
 

@@ -133,7 +133,8 @@ for date in transaction_dates[::-1]:
         transaction_dict = {
             "type": transaction_type,
             "date": formatted_date,
-            "players": player_data
+            "players": player_data,
+            "text": transaction_text
         }
 
         for player in player_data:
@@ -141,6 +142,7 @@ for date in transaction_dates[::-1]:
 
         all_transactions.append(transaction_dict)
         
+all_transactions.sort(key=lambda x: datetime.strptime(x['date'], "%Y-%m-%d"))
 
 with open('../data/transactions.json', 'w') as f:
     json.dump(all_transactions, f)

@@ -2,26 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import "intersection-observer";
-import scrollama from "scrollama";
 
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import { groupBy } from 'lodash';
 
 import PlayerMapWrapper from './components/PlayerMapWrapper';
 import { json, csv } from 'd3-fetch';
 
-// instantiate the scrollama
-const scroller = scrollama();
-scroller
-  .setup({
-    step: ".step",
-    offset: 0.6
-  })
 
-// let isMobile = window.matchMedia('(max-width: 700px)').matches;
+let isMobile = window.matchMedia('(max-width: 700px)').matches;
 
 // setup resize event
-window.addEventListener("resize", scroller.resize);
+// window.addEventListener("resize", scroller.resize);
 
 // Begin loading datafiles
 const promises = [
@@ -36,7 +29,9 @@ Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     const teamData = allData[1];
     let playerData = allData[2];
-    let transactionData = allData[3];
+    let transactionData = groupBy(allData[3], d => d.date);
+    console.log(Object.keys(transactionData)[0]);
+    
 
     playerData.forEach(player => {
       player["2021_salary"] = +player["2021_salary"];
@@ -47,16 +42,21 @@ Promise.all(promises).then((allData) => {
 
     playerData = playerData.filter(x => x.salary !== undefined);
 
-    ReactDOM.render(<PlayerMapWrapper
-                      id={"viz-tile"}
-                      _geoData={geoData}
-                      _teamData={teamData}
-                      _playerData={playerData}
-                      scroller={scroller}
-                    />,
-                    document.getElementById('viz-column'));
+    ReactDOM.render(
+          <PlayerMapWrapper
+            id={"viz-tile"}
+            _geoData={geoData}
+            _teamData={teamData}
+            _playerData={playerData}
+            transactionData={transactionData}
+          />,
+      document.getElementById('content'));
     });
 
+
+// <div class="step">Hello 1</div>
+// <div class="step">Hello 2</div>
+// <div class="step">Hello 3</div>
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
