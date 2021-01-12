@@ -3,6 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  background-color: #f3f3f3;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -31,12 +32,16 @@ code {
 }
 
 .transaction-card {
-  background-color: rgba(184, 184, 184, 0.576);
+  background-color: rgba(184, 184, 184, 0.676);
   max-width: 40%;
   margin: auto;
   /* height: 10vh; */
   padding: 3rem;
   margin-bottom: 100vh;
+}
+
+.transaction-card > ul {
+  font-size: 0.85rem;
 }
 
 .phantom { 

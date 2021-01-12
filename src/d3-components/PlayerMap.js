@@ -232,18 +232,9 @@ class PlayerMap {
     }
 
     generatePolygons = (polygons, affectedTeams = [], affectedPlayers = []) => {
-        const playerTravelTransitionTime = 3000;
+        const playerTravelTransitionTime = 1800;
 
         polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
-        // polygons.forEach((polygon) => {
-        //     let pathCenter = polygon[0];
-        //     polygon.slice(1).forEach((coordinate) => {
-        //         coordinate[0] -= pathCenter[0];
-        //         coordinate[1] -= pathCenter[1];
-        //         console.log(coordinate);
-        //     })
-        //     console.log(polygon);
-        // })
 
         affectedPlayers.forEach((playerId) => {
             this.svg.select(`#player-polygon-${playerId}`).raise();
@@ -292,18 +283,6 @@ class PlayerMap {
 
                             return `translate(${dx},${dy})`
                         })
-                        // .attr('d', (d,i,n) => {
-                        //     const newCoordinate = d[0];
-                        //     let existingPath = d3.select(n[i]).attr('d');
-                        //     const firstCoordinate = existingPath.indexOf('L');
-
-                        //     existingPath = existingPath.slice(firstCoordinate)
-
-                        //     const newPath = `M${newCoordinate}${existingPath.slice(firstCoordinate)}`
-                        //     console.log(newPath);
-                        //     return newPath;
-                        //     // return `M${d.join('L')}z`
-                        // })
                         .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
                     
@@ -343,7 +322,6 @@ class PlayerMap {
                         })
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
                         .style("stroke-width", "2px")
-                    // return enter;
                 },
                 update => {
                     update
@@ -353,27 +331,10 @@ class PlayerMap {
                         .transition("return-opacity")
                         .delay(playerTravelTransitionTime)
                         .style('opacity', 1.0);
-                    
-                    // update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                    //     .attr('d', d => {
-                    //             const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                    //             const path = generateCirclePath(d.site.x, d.site.y, radius);
-                    //             return path
-                    //         })
 
                     update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                         .transition("re-position")
                         .duration(playerTravelTransitionTime)
-                        // .attr('d', (d,i,n) => {
-                        //     const newCoordinate = d[0];
-                        //     const existingPath = d3.select(n[i]).attr('d');
-                        //     const firstCoordinate = existingPath.indexOf('L');
-
-                        //     const newPath = `M${newCoordinate}${existingPath.slice(firstCoordinate)}`
-                        //     console.log(newPath);
-                        //     return newPath;
-                        //     // return `M${d.join('L')}z`
-                        // })
                         .attr('transform', (d,i,n) => {
                             const newCenter = d[0];
                             let existingPath = d3.select(n[i]).attr('d');
@@ -415,7 +376,6 @@ class PlayerMap {
 
     runTransactions = (playerData, affectedTeams, affectedPlayers) => {
         affectedTeams.forEach((team_id) => {
-            // console.log("Team Polygon Update", team_id)
             this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
 
             let team = this.teamData.find((t) => t.team_id === team_id)
