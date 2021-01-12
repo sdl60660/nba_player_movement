@@ -8,6 +8,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media (max-width: 900px) {
+  html { font-size: 14px; }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -25,31 +29,46 @@ code {
 #viz-column {
   position: sticky;
   top: 0;
+  padding-left: 15vw;
 }
 
 #annotations {
   position: relative;
-}
-
-.transaction-card {
-  background-color: rgba(184, 184, 184, 0.676);
-  max-width: 40%;
-  margin: auto;
-  /* height: 10vh; */
-  padding: 3rem;
-  margin-bottom: 100vh;
-}
-
-.transaction-card > ul {
-  font-size: 0.85rem;
+  max-width: 20vw;
 }
 
 .phantom { 
   opacity: 0;
 }
 
+.transaction-card {
+  background-color: rgba(184, 184, 184, 0.676);
+  border-left: 2px solid rgb(32, 32, 32);
+  font-size: 0.9rem;
+  margin: 0 0 100vh 0.5rem;
+  padding: 2rem 0.6rem;
+
+  /* max-width: 40%; */
+  /* margin: auto; */
+  /* height: 10vh; */
+}
+
+.transaction-card__transaction-list {
+  font-size: 0.85rem;
+  list-style-type: none;
+  padding-left: 0.5rem;
+  margin-top: 1rem;
+}
+
 .transaction-card__date-header {
-  padding: 0.5rem;
   background-color: white;
   border-radius: 3px;
+  font-weight: bold;
+  margin: auto;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.transaction-card__transaction-item {
+  margin-bottom: 0.3rem;
 }

@@ -10,9 +10,6 @@ import { groupBy } from 'lodash';
 import PlayerMapWrapper from './components/PlayerMapWrapper';
 import { json, csv } from 'd3-fetch';
 
-
-let isMobile = window.matchMedia('(max-width: 700px)').matches;
-
 // setup resize event
 // window.addEventListener("resize", scroller.resize);
 

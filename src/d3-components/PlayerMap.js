@@ -83,7 +83,7 @@ class PlayerMap {
         
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
         const projection = d3.geoAlbersUsa()
-            .fitExtent([[30, 30], [width-50, height-50]], geoJSON);
+            .fitExtent([[0, 20], [width-50, height-50]], geoJSON);
         this.generateMap({ geoJSON, projection, mapColor });
 
         this.generateTeamGroups({ projection });

@@ -79,6 +79,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
             .onStepExit((response) => {
                 // { element, index, direction }
             });
+        window.addEventListener("resize", scroller.resize);
     }, []);
 
     useEffect(() => {
