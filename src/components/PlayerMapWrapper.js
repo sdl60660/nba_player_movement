@@ -37,7 +37,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData, playerData });
         scroller
             .setup({
-                step: ".step",
+                step: ".transaction-card",
             })
             .onStepEnter(({ element, index, direction }) => {
                 onStepEnter({ element, index, direction })
@@ -70,7 +70,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 { Object.entries(transactionData).map(
                     (transactionDateData, i) =>
                         <TransactionCard 
-                            className={"step"}
+                            className={"transaction-card"}
                             key={i}
                             transactionDate={transactionDateData[0]}
                             transactions={transactionDateData[1]}

@@ -1,22 +1,6010 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders the PlayerMapWrapper element 1`] = `
-<ContextProvider
-  value={
-    Object {
-      "mapColor": "#0000ff",
-      "opacity": 1,
-      "setHeight": [Function],
-      "setMapColor": [Function],
-      "setOpacity": [Function],
-      "setWidth": [Function],
-    }
-  }
+<section
+  id="scroll"
 >
   <div
-    id="player-map-wrapper"
+    id="viz-column"
   >
-    <PlayerMapControls />
+    <ContextProvider
+      value={
+        Object {
+          "mapColor": "#1f77b4",
+          "opacity": 0.6,
+          "setHeight": [Function],
+          "setMapColor": [Function],
+          "setOpacity": [Function],
+          "setWidth": [Function],
+        }
+      }
+    >
+      <div
+        id="viz-tile"
+      />
+    </ContextProvider>
   </div>
-</ContextProvider>
+  <div
+    className="text-column"
+    id="annotations"
+  >
+    <TransactionCard
+      className="step"
+      key="0"
+      transactionDate="0"
+      transactions={
+        Object {
+          "date": "2020-11-16",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "okekech01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed Chuma Okeke to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="1"
+      transactionDate="1"
+      transactions={
+        Object {
+          "date": "2020-11-16",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "naderab01",
+              "to_team": "PHO",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "paulch01",
+              "to_team": "PHO",
+            },
+            Object {
+              "from_team": "PHO",
+              "player_id": "jeromty01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "PHO",
+              "player_id": "lecquja01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "PHO",
+              "player_id": "oubreke01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "PHO",
+              "player_id": "rubiori01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder traded Abdel Nader and Chris Paul to the Phoenix Suns for Ty Jerome, Jalen Lecque, Kelly Oubre Jr., Ricky Rubio and a 2022 1st round draft pick.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="2"
+      transactionDate="2"
+      transactions={
+        Object {
+          "date": "2020-11-18",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "azubuud01",
+              "to_team": "UTA",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "leesa01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The New York Knicks traded a 2020 1st round draft pick (Udoka Azubuike was later selected) and a 2020 2nd round draft pick (Saben Lee was later selected) to the Utah Jazz for Ante Tomic and a 2020 1st round draft pick (Leandro Bolmaro was later selected).",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="3"
+      transactionDate="3"
+      transactions={
+        Object {
+          "date": "2020-11-18",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "greenda02",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "mcdanja02",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "schrode01",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers traded Danny Green and Jaden McDaniels to the Oklahoma City Thunder for Dennis Schroder.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="4"
+      transactionDate="4"
+      transactions={
+        Object {
+          "date": "2020-11-18",
+          "players": Array [
+            Object {
+              "from_team": "DAL",
+              "player_id": "curryse01",
+              "to_team": "PHI",
+            },
+            Object {
+              "from_team": "PHI",
+              "player_id": "richajo01",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "The Dallas Mavericks traded Seth Curry to the Philadelphia 76ers for Tyler Bey and Josh Richardson. Philadelphia also received a trade exception from Dallas.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="5"
+      transactionDate="5"
+      transactions={
+        Object {
+          "date": "2020-11-18",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "bradlto01",
+              "to_team": "DET",
+            },
+            Object {
+              "from_team": "UTA",
+              "player_id": "leesa01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons traded cash to the Utah Jazz for Tony Bradley and Saben Lee.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="6"
+      transactionDate="6"
+      transactions={
+        Object {
+          "date": "2020-11-18",
+          "players": Array [],
+          "text": "The Cleveland Cavaliers traded Ilkan Karaman to the Milwaukee Bucks for a 2025 2nd round draft pick. 2025 2nd-rd pick is MIL's own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="7"
+      transactionDate="7"
+      transactions={
+        Object {
+          "date": "2020-11-18",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "nworajo01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks traded a 2026 2nd round draft pick and a future 2nd round draft pick to the Orlando Magic for a 2020 2nd round draft pick (Jordan Nwora was later selected). 2026 2nd-rd pick is MIL own 2nd-rd pick will be either 2022, 2023, or 2024 IND pick",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="8"
+      transactionDate="8"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "richani01",
+              "to_team": "CHO",
+            },
+          ],
+          "text": "The Charlotte Hornets traded a 2024 2nd round draft pick to the New Orleans Pelicans for Nick Richards. 2024 2nd -rd pick is CHO's own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="9"
+      transactionDate="9"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hugheel01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The New Orleans Pelicans traded Elijah Hughes to the Utah Jazz for cash and a 2022 2nd round draft pick. 2022 2nd-rd pick is UTA's own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="10"
+      transactionDate="10"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "woodaro01",
+              "to_team": "PHO",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "tillmxa01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "In a 3-team trade, the Memphis Grizzlies traded Robert Woodard and a 2022 2nd round draft pick to the Phoenix Suns; and  the Sacramento Kings traded Xavier Tillman Sr. to the Memphis Grizzlies.",
+          "type": "n-team trade",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="11"
+      transactionDate="11"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "WAS",
+              "player_id": "schofad01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder traded Cassius Winston and a 2024 2nd round draft pick to the Washington Wizards for Vit Krejci and Admiral Schofield. 2024 2nd-rd pick is MEM own, Washington also received a trade exception from Oklahoma City.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="12"
+      transactionDate="12"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "NYK",
+              "player_id": "paytoel01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The New York Knicks waived Elfrid Payton.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="13"
+      transactionDate="13"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "oturuda01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers traded Mathias Lessort and a 2023 2nd round draft pick to the Minnesota Timberwolves for Daniel Oturu. 2023 2nd-rd pick is DET's own.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="14"
+      transactionDate="14"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "BOS",
+              "player_id": "poirivi01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Boston Celtics traded Vincent Poirier and cash to the Oklahoma City Thunder for a 2021 2nd round draft pick. 2021 2nd-rd pick (OKC own) is top 55 protected, Boston also received a trade exception from Oklahoma City.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="15"
+      transactionDate="15"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "MIL",
+              "player_id": "ilyaser01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Milwaukee Bucks waived Ersan Ilyasova.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="16"
+      transactionDate="16"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "cookqu01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Los Angeles Lakers waived Quinn Cook.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="17"
+      transactionDate="17"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "pelleno01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Philadelphia 76ers waived Norvel Pelle.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="18"
+      transactionDate="18"
+      transactions={
+        Object {
+          "date": "2020-11-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "beysa01",
+              "to_team": "DET",
+            },
+            Object {
+              "from_team": "BRK",
+              "player_id": "musadz01",
+              "to_team": "DET",
+            },
+            Object {
+              "from_team": "DET",
+              "player_id": "brownbr01",
+              "to_team": "BRK",
+            },
+            Object {
+              "from_team": "DET",
+              "player_id": "kennalu01",
+              "to_team": "LAC",
+            },
+            Object {
+              "from_team": "DET",
+              "player_id": "pattoju01",
+              "to_team": "LAC",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "perryre01",
+              "to_team": "BRK",
+            },
+            Object {
+              "from_team": "LAC",
+              "player_id": "shamela01",
+              "to_team": "BRK",
+            },
+            Object {
+              "from_team": "LAC",
+              "player_id": "mcgruro01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "In a 3-team trade, the Brooklyn Nets traded Saddiq Bey, Jaylen Hands, Dzanan Musa and a 2021 2nd round draft pick to the Detroit Pistons; the Brooklyn Nets traded Jay Scrubb to the Los Angeles Clippers; the Detroit Pistons traded Bruce Brown to the Brooklyn Nets; the Detroit Pistons traded Luke Kennard, Justin Patton, a 2023 2nd round draft pick, a 2024 2nd round draft pick, a 2025 2nd round draft pick and a 2026 2nd round draft pick to the Los Angeles Clippers; the Los Angeles Clippers traded Reggie Perry and Landry Shamet to the Brooklyn Nets; and  the Los Angeles Clippers traded Rodney McGruder and cash to the Detroit Pistons. 2023 2nd-rd pick is POR own 2024 2nd-rd pick is DET's own 2025 2nd-rd pick is DET's own 2026 2nd-rd pick is DET's own 2021 2nd-rd pick is TOR own",
+          "type": "n-team trade",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="19"
+      transactionDate="19"
+      transactions={
+        Object {
+          "date": "2020-11-20",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "shayoma01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Philadelphia 76ers waived Marial Shayok.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="20"
+      transactionDate="20"
+      transactions={
+        Object {
+          "date": "2020-11-20",
+          "players": Array [
+            Object {
+              "from_team": "GSW",
+              "player_id": "bowmaky01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Golden State Warriors waived Ky Bowman.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="21"
+      transactionDate="21"
+      transactions={
+        Object {
+          "date": "2020-11-20",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "banede01",
+              "to_team": "MEM",
+            },
+            Object {
+              "from_team": "BOS",
+              "player_id": "kanteen01",
+              "to_team": "POR",
+            },
+            Object {
+              "from_team": "POR",
+              "player_id": "hezonma01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "In a 3-team trade, the Boston Celtics traded Desmond Bane to the Memphis Grizzlies; the Boston Celtics traded Enes Kanter to the Portland Trail Blazers; the Memphis Grizzlies traded a 2023 2nd round draft pick and a 2025 2nd round draft pick to the Boston Celtics; the Memphis Grizzlies traded cash to the Portland Trail Blazers; and  the Portland Trail Blazers traded Mario Hezonja to the Memphis Grizzlies. 2023 2nd-rd pick is more favorable of HOU and less favorable of MEM and DAL picks 2025 2nd-rd pick is MEM own",
+          "type": "n-team trade",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="22"
+      transactionDate="22"
+      transactions={
+        Object {
+          "date": "2020-11-20",
+          "players": Array [
+            Object {
+              "from_team": "MIN",
+              "player_id": "johnsja01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "pokusal01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "mcdanja02",
+              "to_team": "MIN",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "rubiori01",
+              "to_team": "MIN",
+            },
+          ],
+          "text": "The Minnesota Timberwolves traded James Johnson, Aleksej Pokusevski and a 2024 2nd round draft pick to the Oklahoma City Thunder for Jaden McDaniels and Ricky Rubio. 2024 2nd-rd pick is MIN own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="23"
+      transactionDate="23"
+      transactions={
+        Object {
+          "date": "2020-11-20",
+          "players": Array [
+            Object {
+              "from_team": "ATL",
+              "player_id": "dedmode01",
+              "to_team": "DET",
+            },
+            Object {
+              "from_team": "DET",
+              "player_id": "snellto01",
+              "to_team": "ATL",
+            },
+            Object {
+              "from_team": "DET",
+              "player_id": "thomakh01",
+              "to_team": "ATL",
+            },
+          ],
+          "text": "The Atlanta Hawks traded Dewayne Dedmon to the Detroit Pistons for Tony Snell and Khyri Thomas.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="24"
+      transactionDate="24"
+      transactions={
+        Object {
+          "date": "2020-11-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "netora01",
+              "to_team": "WAS",
+            },
+          ],
+          "text": "The Washington Wizards signed Raul Neto as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="25"
+      transactionDate="25"
+      transactions={
+        Object {
+          "date": "2020-11-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "willipa01",
+              "to_team": "CHI",
+            },
+          ],
+          "text": "The Chicago Bulls signed Patrick Williams to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="26"
+      transactionDate="26"
+      transactions={
+        Object {
+          "date": "2020-11-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "howardw01",
+              "to_team": "PHI",
+            },
+          ],
+          "text": "The Philadelphia 76ers signed Dwight Howard as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="27"
+      transactionDate="27"
+      transactions={
+        Object {
+          "date": "2020-11-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "okorois01",
+              "to_team": "CLE",
+            },
+          ],
+          "text": "The Cleveland Cavaliers signed Isaac Okoro to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="28"
+      transactionDate="28"
+      transactions={
+        Object {
+          "date": "2020-11-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "anthoco01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed Cole Anthony to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="29"
+      transactionDate="29"
+      transactions={
+        Object {
+          "date": "2020-11-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "valende01",
+              "to_team": "CHI",
+            },
+          ],
+          "text": "The Chicago Bulls signed Denzel Valentine.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="30"
+      transactionDate="30"
+      transactions={
+        Object {
+          "date": "2020-11-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "anthoca01",
+              "to_team": "POR",
+            },
+          ],
+          "text": "The Portland Trail Blazers signed Carmelo Anthony to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="31"
+      transactionDate="31"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "MEM",
+              "player_id": "portejo01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "The Memphis Grizzlies signed Jontay Porter to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="32"
+      transactionDate="32"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "meltode01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "The Memphis Grizzlies signed De'Anthony Melton to a multi-year contract. Signed 4-yr/$35M contract 11/22/20",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="33"
+      transactionDate="33"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "MIL",
+              "player_id": "lopezro01",
+              "to_team": "WAS",
+            },
+          ],
+          "text": "The Washington Wizards signed Robin Lopez as a free agent. Signed 1-yr/$7.3M contract 11/22/20",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="34"
+      transactionDate="34"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "DEN",
+              "player_id": "bateske01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Denver Nuggets waived Keita Bates-Diop.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="35"
+      transactionDate="35"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "leoname01",
+              "to_team": "MIA",
+            },
+          ],
+          "text": "The Miami Heat signed Meyers Leonard to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="36"
+      transactionDate="36"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "burksal01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The New York Knicks signed Alec Burks as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="37"
+      transactionDate="37"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bertada01",
+              "to_team": "WAS",
+            },
+          ],
+          "text": "The Washington Wizards signed Dāvis Bertāns to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="38"
+      transactionDate="38"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "konchjo01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "The Memphis Grizzlies signed John Konchar to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="39"
+      transactionDate="39"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jonesde02",
+              "to_team": "POR",
+            },
+          ],
+          "text": "The Portland Trail Blazers signed Derrick Jones Jr. as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="40"
+      transactionDate="40"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "HOU",
+              "player_id": "covinro01",
+              "to_team": "POR",
+            },
+            Object {
+              "from_team": "POR",
+              "player_id": "arizatr01",
+              "to_team": "HOU",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "stewais01",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets traded Robert Covington to the Portland Trail Blazers for Trevor Ariza, Isaiah Stewart and a 2021 1st round draft pick. Portland also received a trade exception. 2021 1rst-rd pick is lottery protected",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="41"
+      transactionDate="41"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "oubreke01",
+              "to_team": "GSW",
+            },
+          ],
+          "text": "The Golden State Warriors traded a 2021 1st round draft pick and a 2021 2nd round draft pick to the Oklahoma City Thunder for Kelly Oubre Jr.. 2021 2nd-rd pick is DEN own, Golden State also received a trade exception. 2021 1st-rd pick (GSW own) is top 20 protected, will turn into 2021 2nd-rd pick (MIN own) if it does not convey",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="42"
+      transactionDate="42"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "dragigo01",
+              "to_team": "MIA",
+            },
+          ],
+          "text": "The Miami Heat signed Goran Dragic to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="43"
+      transactionDate="43"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "MIL",
+              "player_id": "matthwe02",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Wesley Matthews as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="44"
+      transactionDate="44"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "POR",
+              "player_id": "hoodro01",
+              "to_team": "POR",
+            },
+          ],
+          "text": "The Portland Trail Blazers signed Rodney Hood to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="45"
+      transactionDate="45"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "holidju01",
+              "to_team": "IND",
+            },
+          ],
+          "text": "The Indiana Pacers signed Justin Holiday to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="46"
+      transactionDate="46"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "SAS",
+              "player_id": "metuch01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The San Antonio Spurs waived Chimezie Metu.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="47"
+      transactionDate="47"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "ATL",
+              "player_id": "thomakh01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Atlanta Hawks waived Khyri Thomas.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="48"
+      transactionDate="48"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "davised01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The Utah Jazz traded Ed Davis, a 2023 2nd round draft pick and a 2023 2nd round draft pick to the New York Knicks. 2023 2nd-rd pick is UTA own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="49"
+      transactionDate="49"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "harremo01",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Montrezl Harrell as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="50"
+      transactionDate="50"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "DEN",
+              "player_id": "grantje01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed Jerami Grant.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="51"
+      transactionDate="51"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "DEN",
+              "player_id": "grantje01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Denver Nuggets traded Jerami Grant and Nikola Radičević to the Detroit Pistons for cash. Denver also received a trade exception.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="52"
+      transactionDate="52"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "caldwke01",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Kentavious Caldwell-Pope to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="53"
+      transactionDate="53"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "gilesha01",
+              "to_team": "POR",
+            },
+          ],
+          "text": "The Portland Trail Blazers signed Harry Giles as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="54"
+      transactionDate="54"
+      transactions={
+        Object {
+          "date": "2020-11-22",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "ellebcj01",
+              "to_team": "POR",
+            },
+          ],
+          "text": "The Portland Trail Blazers signed CJ Elleby to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="55"
+      transactionDate="55"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "belljo01",
+              "to_team": "LAL",
+            },
+            Object {
+              "from_team": "CLE",
+              "player_id": "mckinal01",
+              "to_team": "LAL",
+            },
+            Object {
+              "from_team": "LAL",
+              "player_id": "mcgeeja01",
+              "to_team": "CLE",
+            },
+          ],
+          "text": "The Cleveland Cavaliers traded Jordan Bell and Alfonzo McKinnie to the Los Angeles Lakers for JaVale McGee and a 2026 2nd round draft pick. 2026 2nd-rd pick is LAL own Los Angeles also received a trade exception.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="56"
+      transactionDate="56"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "eubandr01",
+              "to_team": "SAS",
+            },
+          ],
+          "text": "The San Antonio Spurs signed Drew Eubanks to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="57"
+      transactionDate="57"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "rondora01",
+              "to_team": "ATL",
+            },
+          ],
+          "text": "The Atlanta Hawks signed Rajon Rondo as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="58"
+      transactionDate="58"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "morrima02",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Markieff Morris.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="59"
+      transactionDate="59"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "carteje01",
+              "to_team": "PHO",
+            },
+          ],
+          "text": "The Phoenix Suns signed Jevon Carter to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="60"
+      transactionDate="60"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "greenje02",
+              "to_team": "BRK",
+            },
+          ],
+          "text": "The Brooklyn Nets signed Jeff Green as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="61"
+      transactionDate="61"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "clarkjo01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Jordan Clarkson to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="62"
+      transactionDate="62"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "DET",
+              "player_id": "bradlto01",
+              "to_team": "PHI",
+            },
+            Object {
+              "from_team": "PHI",
+              "player_id": "smithzh01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons traded Tony Bradley to the Philadelphia 76ers for Zhaire Smith.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="63"
+      transactionDate="63"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "harklma01",
+              "to_team": "MIA",
+            },
+          ],
+          "text": "The Miami Heat signed Maurice Harkless as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="64"
+      transactionDate="64"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "clarkga01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed Gary Clark to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="65"
+      transactionDate="65"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "toppiob01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The New York Knicks signed Obi Toppin to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="66"
+      transactionDate="66"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "harrijo01",
+              "to_team": "BRK",
+            },
+          ],
+          "text": "The Brooklyn Nets signed Joe Harris to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="67"
+      transactionDate="67"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "PHO",
+              "player_id": "okoboel01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Phoenix Suns waived Elie Okobo.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="68"
+      transactionDate="68"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "mitchdo01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Donovan Mitchell to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="69"
+      transactionDate="69"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "wanambr01",
+              "to_team": "GSW",
+            },
+          ],
+          "text": "The Golden State Warriors signed Brad Wanamaker as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="70"
+      transactionDate="70"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bazemke01",
+              "to_team": "GSW",
+            },
+          ],
+          "text": "The Golden State Warriors signed Kent Bazemore as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="71"
+      transactionDate="71"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "connapa01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed Pat Connaughton to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="72"
+      transactionDate="72"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "MIL",
+              "player_id": "nworajo01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed Jordan Nwora to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="73"
+      transactionDate="73"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "cheatzy01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Zylan Cheatham to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="74"
+      transactionDate="74"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "grayjo01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Joshia Gray to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="75"
+      transactionDate="75"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "willike04",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Kenrich Williams to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="76"
+      transactionDate="76"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hamptrj01",
+              "to_team": "DEN",
+            },
+            Object {
+              "from_team": "MIL",
+              "player_id": "bledser01",
+              "to_team": "NOP",
+            },
+            Object {
+              "from_team": "MIL",
+              "player_id": "hillge01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "NOP",
+              "player_id": "holidjr01",
+              "to_team": "MIL",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "merrisa01",
+              "to_team": "MIL",
+            },
+            Object {
+              "from_team": "NOP",
+              "player_id": "cheatzy01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "NOP",
+              "player_id": "grayjo01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "NOP",
+              "player_id": "milleda01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "NOP",
+              "player_id": "willike04",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "adamsst01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "In a 4-team trade, the Denver Nuggets traded a 2023 1st round draft pick to the Oklahoma City Thunder; the Milwaukee Bucks traded R.J. Hampton to the Denver Nuggets; the Milwaukee Bucks traded Eric Bledsoe, a 2024 1st round draft pick, a 2025 1st round draft pick, a 2026 1st round draft pick and a 2027 1st round draft pick to the New Orleans Pelicans; the Milwaukee Bucks traded George Hill to the Oklahoma City Thunder; the New Orleans Pelicans traded Jrue Holiday and Sam Merrill to the Milwaukee Bucks; the New Orleans Pelicans traded Zylan Cheatham, Joshia Gray, Darius Miller, Kenrich Williams, a 2023 2nd round draft pick and a 2024 2nd round draft pick to the Oklahoma City Thunder; and  the Oklahoma City Thunder traded Steven Adams to the New Orleans Pelicans. New Orleans acquires right to swap 2024 1st-rd pick with Milwaukee 2025 1st-rd pick is MIL own New Orleans acquires right to swap 2026 1st-rd pick with Milwaukee 2027 1st-rd pick is MIL own 2023 1st-rd pick (DEN own) is top-14 protected 2023 2nd-rd pick is WAS own 2024 2nd-rd pick is CHO own",
+          "type": "n-team trade",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="77"
+      transactionDate="77"
+      transactions={
+        Object {
+          "date": "2020-11-23",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "bradlav01",
+              "to_team": "MIA",
+            },
+          ],
+          "text": "The Miami Heat signed Avery Bradley as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="78"
+      transactionDate="78"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "gasolma01",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Marc Gasol as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="79"
+      transactionDate="79"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "azubuud01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Udoka Azubuike to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="80"
+      transactionDate="80"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "cartemi01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed Michael Carter-Williams to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="81"
+      transactionDate="81"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bacondw01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed Dwayne Bacon as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="82"
+      transactionDate="82"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "hugheel01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Elijah Hughes to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="83"
+      transactionDate="83"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "poeltja01",
+              "to_team": "SAS",
+            },
+          ],
+          "text": "The San Antonio Spurs signed Jakob Pöltl to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="84"
+      transactionDate="84"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "woodch01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Christian Wood to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="85"
+      transactionDate="85"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "DET",
+              "player_id": "woodch01",
+              "to_team": "HOU",
+            },
+            Object {
+              "from_team": "HOU",
+              "player_id": "arizatr01",
+              "to_team": "DET",
+            },
+            Object {
+              "from_team": "HOU",
+              "player_id": "stewais01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons traded Christian Wood, a 2021 1st round draft pick and a 2021 2nd round draft pick to the Houston Rockets for Trevor Ariza, Isaiah Stewart, cash and a 2027 2nd round draft pick. 2021 1st-rd pick (DET own) is top-16 protected and if it does not convey becomes 2022 top-16 protected, then 2023 top-18 protected, then 2024 top-18 protected, then 2025 top-13 protected, then 2026 top-11 protected, then 2027 top-9 protected, then 2027 2n 2021 2nd-rd pick is LAL own 2027 2nd-rd pick is HOU own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="86"
+      transactionDate="86"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "DET",
+              "player_id": "dedmode01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Detroit Pistons waived Dewayne Dedmon.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="87"
+      transactionDate="87"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "pritcpa01",
+              "to_team": "BOS",
+            },
+          ],
+          "text": "The Boston Celtics signed Payton Pritchard to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="88"
+      transactionDate="88"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "nesmiaa01",
+              "to_team": "BOS",
+            },
+          ],
+          "text": "The Boston Celtics signed Aaron Nesmith to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="89"
+      transactionDate="89"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "okongon01",
+              "to_team": "ATL",
+            },
+          ],
+          "text": "The Atlanta Hawks signed Onyeka Okongwu to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="90"
+      transactionDate="90"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "vanvlfr01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed Fred VanVleet to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="91"
+      transactionDate="91"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "baynear01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed Aron Baynes as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="92"
+      transactionDate="92"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bogdabo01",
+              "to_team": "ATL",
+            },
+          ],
+          "text": "The Atlanta Hawks signed Bogdan Bogdanovic as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="93"
+      transactionDate="93"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "MIN",
+              "player_id": "evansja02",
+              "to_team": "NYK",
+            },
+            Object {
+              "from_team": "MIN",
+              "player_id": "spellom01",
+              "to_team": "NYK",
+            },
+            Object {
+              "from_team": "NYK",
+              "player_id": "davised01",
+              "to_team": "MIN",
+            },
+          ],
+          "text": "The Minnesota Timberwolves traded Jacob Evans, Omari Spellman and a 2026 2nd round draft pick to the New York Knicks for Ed Davis. 2026 2nd-rd pick is MIN own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="94"
+      transactionDate="94"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "favorde01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Derrick Favors as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="95"
+      transactionDate="95"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "gallida01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder signed Danilo Gallinari to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="96"
+      transactionDate="96"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "gallida01",
+              "to_team": "ATL",
+            },
+          ],
+          "text": "The Atlanta Hawks traded a 2025 2nd round draft pick to the Oklahoma City Thunder for Danilo Gallinari and cash. 2025 2nd-rd pick is ATL own, Oklahoma City also received a trade exception",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="97"
+      transactionDate="97"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hernawi01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Willy Hernangómez as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="98"
+      transactionDate="98"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "SAC",
+              "player_id": "foxde01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed De'Aaron Fox to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="99"
+      transactionDate="99"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "dotsoda01",
+              "to_team": "CLE",
+            },
+          ],
+          "text": "The Cleveland Cavaliers signed Damyean Dotson as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="100"
+      transactionDate="100"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "forbebr01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed Bryn Forbes as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="101"
+      transactionDate="101"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "NYK",
+              "player_id": "portibo01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed Bobby Portis as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="102"
+      transactionDate="102"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "dellama01",
+              "to_team": "CLE",
+            },
+          ],
+          "text": "The Cleveland Cavaliers signed Matthew Dellavedova.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="103"
+      transactionDate="103"
+      transactions={
+        Object {
+          "date": "2020-11-24",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "smithja04",
+              "to_team": "PHO",
+            },
+          ],
+          "text": "The Phoenix Suns signed Jalen Smith to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="104"
+      transactionDate="104"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "MEM",
+              "player_id": "banede01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "The Memphis Grizzlies signed Desmond Bane to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="105"
+      transactionDate="105"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "achiupr01",
+              "to_team": "MIA",
+            },
+          ],
+          "text": "The Miami Heat signed Precious Achiuwa to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="106"
+      transactionDate="106"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "noelne01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The New York Knicks signed Nerlens Noel as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="107"
+      transactionDate="107"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "ORL",
+              "player_id": "ennisja01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed James Ennis.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="108"
+      transactionDate="108"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "martike04",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets traded cash and a 2021 2nd round draft pick to the Sacramento Kings for Kenyon Martin Jr.. 2021 2nd-rd pick is LAL own",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="109"
+      transactionDate="109"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bouchch01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed Chris Boucher to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="110"
+      transactionDate="110"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bembrde01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed DeAndre' Bembry as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="111"
+      transactionDate="111"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "lenal01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed Alex Len as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="112"
+      transactionDate="112"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hillso01",
+              "to_team": "ATL",
+            },
+          ],
+          "text": "The Atlanta Hawks signed Solomon Hill as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="113"
+      transactionDate="113"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "LAC",
+              "player_id": "pattoju01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Los Angeles Clippers waived Justin Patton.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="114"
+      transactionDate="114"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "belljo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Los Angeles Lakers waived Jordan Bell.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="115"
+      transactionDate="115"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "BOS",
+              "player_id": "tatumja01",
+              "to_team": "BOS",
+            },
+          ],
+          "text": "The Boston Celtics signed Jayson Tatum to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="116"
+      transactionDate="116"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "IND",
+              "player_id": "leaftj01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "lecquja01",
+              "to_team": "IND",
+            },
+          ],
+          "text": "The Indiana Pacers traded T.J. Leaf and a 2027 2nd round draft pick to the Oklahoma City Thunder for Jalen Lecque. Indiana also received a trade exception 2027 2nd-rd pick is IND own, Oklahoma City also received a trade exception",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="117"
+      transactionDate="117"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "morrima03",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Marcus Morris to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="118"
+      transactionDate="118"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "pattepa01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Patrick Patterson.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="119"
+      transactionDate="119"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "brownst02",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed Sterling Brown as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="120"
+      transactionDate="120"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "craigto01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed Torrey Craig as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="121"
+      transactionDate="121"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "tateja01",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed Jae'Sean Tate to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="122"
+      transactionDate="122"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "ibakase01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Serge Ibaka as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="123"
+      transactionDate="123"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "beaslma01",
+              "to_team": "MIN",
+            },
+          ],
+          "text": "The Minnesota Timberwolves signed Malik Beasley to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="124"
+      transactionDate="124"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "augusdj01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed D.J. Augustin as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="125"
+      transactionDate="125"
+      transactions={
+        Object {
+          "date": "2020-11-25",
+          "players": Array [
+            Object {
+              "from_team": "HOU",
+              "player_id": "riverau01",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed Austin rivers to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="126"
+      transactionDate="126"
+      transactions={
+        Object {
+          "date": "2020-11-26",
+          "players": Array [
+            Object {
+              "from_team": "TOR",
+              "player_id": "hernade01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Toronto Raptors waived Dewan Hernandez.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="127"
+      transactionDate="127"
+      transactions={
+        Object {
+          "date": "2020-11-26",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "ellenhe01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed Henry Ellenson to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="128"
+      transactionDate="128"
+      transactions={
+        Object {
+          "date": "2020-11-26",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "wisemja01",
+              "to_team": "GSW",
+            },
+          ],
+          "text": "The Golden State Warriors signed James Wiseman to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="129"
+      transactionDate="129"
+      transactions={
+        Object {
+          "date": "2020-11-26",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "flynnma01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed Malachi Flynn to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="130"
+      transactionDate="130"
+      transactions={
+        Object {
+          "date": "2020-11-26",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "halibty01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed Tyrese Haliburton to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="131"
+      transactionDate="131"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "cabocbr01",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed Bruno Caboclo.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="132"
+      transactionDate="132"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "johnsty01",
+              "to_team": "BRK",
+            },
+          ],
+          "text": "The Brooklyn Nets signed Tyler Johnson.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="133"
+      transactionDate="133"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "HOU",
+              "player_id": "riverau01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The Houston Rockets traded Tadija Dragicevic, Axel Hervelle, Sergio Llull and Austin Rivers to the New York Knicks for Issuf Sanon. Houston also received a player exception",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="134"
+      transactionDate="134"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "norveza01",
+              "to_team": "CHI",
+            },
+          ],
+          "text": "The Chicago Bulls signed Zach Norvell as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="135"
+      transactionDate="135"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "anderju01",
+              "to_team": "PHI",
+            },
+          ],
+          "text": "The Philadelphia 76ers signed Justin Anderson to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="136"
+      transactionDate="136"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jonestr01",
+              "to_team": "SAS",
+            },
+          ],
+          "text": "The San Antonio Spurs signed Tre Jones to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="137"
+      transactionDate="137"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "tuckera01",
+              "to_team": "CLE",
+            },
+          ],
+          "text": "The Cleveland Cavaliers traded cash to the Utah Jazz for Rayjon Tucker and a 2027 2nd round draft pick. 2027 2nd-rd pick is UTA own Utah also received a trade exception",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="138"
+      transactionDate="138"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "whiteha01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed Hassan Whiteside as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="139"
+      transactionDate="139"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "DAL",
+              "player_id": "wrighde01",
+              "to_team": "DET",
+            },
+            Object {
+              "from_team": "DAL",
+              "player_id": "jacksju01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "DET",
+              "player_id": "arizatr01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "johnsja01",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "In a 3-team trade, the Dallas Mavericks traded Delon Wright to the Detroit Pistons; the Dallas Mavericks traded Justin Jackson, a 2023 2nd round draft pick and a 2026 2nd round draft pick to the Oklahoma City Thunder; the Detroit Pistons traded Trevor Ariza to the Oklahoma City Thunder; and  the Oklahoma City Thunder traded James Johnson to the Dallas Mavericks. 2023 2nd-rd pick is more favorable of DAL or MIA own 2026 2nd-rd pick is DAL own",
+          "type": "n-team trade",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="140"
+      transactionDate="140"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "joeis01",
+              "to_team": "PHI",
+            },
+          ],
+          "text": "The Philadelphia 76ers signed Isaiah Joe to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="141"
+      transactionDate="141"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "broekry01",
+              "to_team": "PHI",
+            },
+          ],
+          "text": "The Philadelphia 76ers signed Ryan Broekhoff.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="142"
+      transactionDate="142"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "waltode01",
+              "to_team": "PHI",
+            },
+          ],
+          "text": "The Philadelphia 76ers signed Derrick Walton Jr..",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="143"
+      transactionDate="143"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "vonleno01",
+              "to_team": "CHI",
+            },
+          ],
+          "text": "The Chicago Bulls signed Noah Vonleh as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="144"
+      transactionDate="144"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hernaju01",
+              "to_team": "MIN",
+            },
+          ],
+          "text": "The Minnesota Timberwolves signed Juan Hernangomez to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="145"
+      transactionDate="145"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "BRK",
+              "player_id": "templga01",
+              "to_team": "CHI",
+            },
+          ],
+          "text": "The Chicago Bulls signed Garrett Temple as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="146"
+      transactionDate="146"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "vassede01",
+              "to_team": "SAS",
+            },
+          ],
+          "text": "The San Antonio Spurs signed Devin Vassell to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="147"
+      transactionDate="147"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "metuch01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed Chimezie Metu to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="148"
+      transactionDate="148"
+      transactions={
+        Object {
+          "date": "2020-11-27",
+          "players": Array [
+            Object {
+              "from_team": "LAC",
+              "player_id": "oturuda01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Daniel Oturu to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="149"
+      transactionDate="149"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "dunnkr01",
+              "to_team": "ATL",
+            },
+          ],
+          "text": "The Atlanta Hawks signed Kris Dunn as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="150"
+      transactionDate="150"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "quickim01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The New York Knicks signed Immanuel Quickley to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="151"
+      transactionDate="151"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "MIA",
+              "player_id": "adebaba01",
+              "to_team": "MIA",
+            },
+          ],
+          "text": "The Miami Heat signed Bam Adebayo to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="152"
+      transactionDate="152"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jeffrda01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed DaQuan Jeffries to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="153"
+      transactionDate="153"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "crowdja01",
+              "to_team": "PHO",
+            },
+          ],
+          "text": "The Phoenix Suns signed Jae Crowder as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="154"
+      transactionDate="154"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "gallola01",
+              "to_team": "PHO",
+            },
+          ],
+          "text": "The Phoenix Suns signed Langston Galloway as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="155"
+      transactionDate="155"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jonesda03",
+              "to_team": "PHO",
+            },
+          ],
+          "text": "The Phoenix Suns signed Damian Jones as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="156"
+      transactionDate="156"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "MEM",
+              "player_id": "tillmxa01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "The Memphis Grizzlies signed Xavier Tillman Sr. to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="157"
+      transactionDate="157"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hasleud01",
+              "to_team": "MIA",
+            },
+          ],
+          "text": "The Miami Heat signed Udonis Haslem.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="158"
+      transactionDate="158"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "CLE",
+              "player_id": "tuckera01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Cleveland Cavaliers waived Rayjon Tucker.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="159"
+      transactionDate="159"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "mooreet01",
+              "to_team": "PHO",
+            },
+          ],
+          "text": "The Phoenix Suns signed E'Twaun Moore as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="160"
+      transactionDate="160"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "saricda01",
+              "to_team": "PHO",
+            },
+          ],
+          "text": "The Phoenix Suns signed Dario Saric to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="161"
+      transactionDate="161"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "brissos01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed Oshae Brisset to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="162"
+      transactionDate="162"
+      transactions={
+        Object {
+          "date": "2020-11-28",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "ingrabr01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Brandon Ingram to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="163"
+      transactionDate="163"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "BOS",
+              "player_id": "haywago01",
+              "to_team": "BOS",
+            },
+          ],
+          "text": "The Boston Celtics signed Gordon Hayward to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="164"
+      transactionDate="164"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "CHO",
+              "player_id": "batumni01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Charlotte Hornets waived Nicolas Batum.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="165"
+      transactionDate="165"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "BOS",
+              "player_id": "haywago01",
+              "to_team": "CHO",
+            },
+          ],
+          "text": "The Boston Celtics traded Gordon Hayward, a 2023 2nd round draft pick and a 2024 2nd round draft pick to the Charlotte Hornets for a 2022 2nd round draft pick. 2023 2nd-rd pick is BOS own 2024 2nd-rd pick is BOS own 2022 2nd-rd pick (CHO own) is protected, Boston also received a trade exception",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="166"
+      transactionDate="166"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "paytoel01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The New York Knicks signed Elfrid Payton.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="167"
+      transactionDate="167"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "sampsja02",
+              "to_team": "IND",
+            },
+          ],
+          "text": "The Indiana Pacers signed JaKarr Sampson.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="168"
+      transactionDate="168"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "MIN",
+              "player_id": "mcdanja02",
+              "to_team": "MIN",
+            },
+          ],
+          "text": "The Minnesota Timberwolves signed Jaden McDaniels to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="169"
+      transactionDate="169"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "edwaran01",
+              "to_team": "MIN",
+            },
+          ],
+          "text": "The Minnesota Timberwolves signed Anthony Edwards to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="170"
+      transactionDate="170"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "cookty01",
+              "to_team": "MIN",
+            },
+          ],
+          "text": "The Minnesota Timberwolves signed Tyler Cook.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="171"
+      transactionDate="171"
+      transactions={
+        Object {
+          "date": "2020-11-29",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "martike03",
+              "to_team": "IND",
+            },
+          ],
+          "text": "The Indiana Pacers signed Kelan Martin as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="172"
+      transactionDate="172"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "lewiski01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Kira Lewis Jr. to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="173"
+      transactionDate="173"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "gabriwe01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Wenyen Gabriel to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="174"
+      transactionDate="174"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "harteis01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed Isaiah Hartenstein as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="175"
+      transactionDate="175"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "teaguje01",
+              "to_team": "BOS",
+            },
+          ],
+          "text": "The Boston Celtics signed Jeff Teague as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="176"
+      transactionDate="176"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "gillan01",
+              "to_team": "WAS",
+            },
+          ],
+          "text": "The Washington Wizards signed Anthony Gill to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="177"
+      transactionDate="177"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "thomptr01",
+              "to_team": "BOS",
+            },
+          ],
+          "text": "The Boston Celtics signed Tristan Thompson as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="178"
+      transactionDate="178"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "thornsi01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Sindarius Thornwell.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="179"
+      transactionDate="179"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "PHO",
+              "player_id": "kaminfr01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed Frank Kaminsky.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="180"
+      transactionDate="180"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "greenjo02",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "The Dallas Mavericks signed Josh Green to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="181"
+      transactionDate="181"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "DET",
+              "player_id": "smithzh01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Detroit Pistons waived Zhaire Smith.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="182"
+      transactionDate="182"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hayeski01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Killian Hayes to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="183"
+      transactionDate="183"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "DET",
+              "player_id": "beysa01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Saddiq Bey to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="184"
+      transactionDate="184"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "DET",
+              "player_id": "stewais01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Isaiah Stewart to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="185"
+      transactionDate="185"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "ballla01",
+              "to_team": "CHO",
+            },
+          ],
+          "text": "The Charlotte Hornets signed LaMelo Ball to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="186"
+      transactionDate="186"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "careyve01",
+              "to_team": "CHO",
+            },
+          ],
+          "text": "The Charlotte Hornets signed Vernon Carey Jr. to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="187"
+      transactionDate="187"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "biyombi01",
+              "to_team": "CHO",
+            },
+          ],
+          "text": "The Charlotte Hornets signed Bismack Biyombo.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="188"
+      transactionDate="188"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "greenge01",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed Gerald Green.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="189"
+      transactionDate="189"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "HOU",
+              "player_id": "martike04",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed Kenyon Martin Jr. to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="190"
+      transactionDate="190"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "grantje02",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed Jerian Grant as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="191"
+      transactionDate="191"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "LAC",
+              "player_id": "greenja01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed JaMychal Green as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="192"
+      transactionDate="192"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bowmaky01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Ky Bowman.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="193"
+      transactionDate="193"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "MIL",
+              "player_id": "merrisa01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed Sam Merrill to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="194"
+      transactionDate="194"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "DEN",
+              "player_id": "hamptrj01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed R.J. Hampton to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="195"
+      transactionDate="195"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "PHO",
+              "player_id": "woodaro01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed Robert Woodard to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="196"
+      transactionDate="196"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "couside01",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets signed DeMarcus Cousins.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="197"
+      transactionDate="197"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "campafa01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed Facundo Campazzo to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="198"
+      transactionDate="198"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "nnajize01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed Zeke Nnaji to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="199"
+      transactionDate="199"
+      transactions={
+        Object {
+          "date": "2020-11-30",
+          "players": Array [
+            Object {
+              "from_team": "CHO",
+              "player_id": "richani01",
+              "to_team": "CHO",
+            },
+          ],
+          "text": "The Charlotte Hornets signed Nick Richards.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="200"
+      transactionDate="200"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "bareajo01",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "The Dallas Mavericks signed J.J. Barea.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="201"
+      transactionDate="201"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "burketr01",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "The Dallas Mavericks signed Trey Burke to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="202"
+      transactionDate="202"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "DAL",
+              "player_id": "caulewi01",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "The Dallas Mavericks signed Willie Cauley-Stein to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="203"
+      transactionDate="203"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "iwundwe01",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "The Dallas Mavericks signed Wesley Iwundu as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="204"
+      transactionDate="204"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "pokusal01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder signed Aleksej Pokusevski to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="205"
+      transactionDate="205"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "plumlma01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Mason Plumlee as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="206"
+      transactionDate="206"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "uthofja01",
+              "to_team": "NOP",
+            },
+          ],
+          "text": "The New Orleans Pelicans signed Jarrod Uthoff.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="207"
+      transactionDate="207"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "sirvyde01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Deividas Sirvydis to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="208"
+      transactionDate="208"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "grayjo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived Josh Gray.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="209"
+      transactionDate="209"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "okafoja01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Jahlil Okafor as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="210"
+      transactionDate="210"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "dudleja01",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Jared Dudley.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="211"
+      transactionDate="211"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "batumni01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Nicolas Batum as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="212"
+      transactionDate="212"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "NYK",
+              "player_id": "ellinwa01",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Wayne Ellington as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="213"
+      transactionDate="213"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jacksre01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Reggie Jackson.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="214"
+      transactionDate="214"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "LAC",
+              "player_id": "noahjo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Los Angeles Clippers waived Joakim Noah.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="215"
+      transactionDate="215"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "terryty01",
+              "to_team": "DAL",
+            },
+          ],
+          "text": "The Dallas Mavericks signed Tyrell Terry to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="216"
+      transactionDate="216"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jacksjo02",
+              "to_team": "DET",
+            },
+          ],
+          "text": "The Detroit Pistons signed Josh Jackson as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="217"
+      transactionDate="217"
+      transactions={
+        Object {
+          "date": "2020-12-01",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "avdijde01",
+              "to_team": "WAS",
+            },
+          ],
+          "text": "The Washington Wizards signed Deni Avdija to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="218"
+      transactionDate="218"
+      transactions={
+        Object {
+          "date": "2020-12-02",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "cheatzy01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived Zylan Cheatham.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="219"
+      transactionDate="219"
+      transactions={
+        Object {
+          "date": "2020-12-02",
+          "players": Array [
+            Object {
+              "from_team": "HOU",
+              "player_id": "westbru01",
+              "to_team": "WAS",
+            },
+            Object {
+              "from_team": "WAS",
+              "player_id": "walljo01",
+              "to_team": "HOU",
+            },
+          ],
+          "text": "The Houston Rockets traded Russell Westbrook to the Washington Wizards for John Wall and a 2023 1st round draft pick. 2023 1st-rd pick (WAS own) is lottery protected, Houston also received a trade exception",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="220"
+      transactionDate="220"
+      transactions={
+        Object {
+          "date": "2020-12-02",
+          "players": Array [
+            Object {
+              "from_team": "PHI",
+              "player_id": "robingl02",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed Glenn Robinson as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="221"
+      transactionDate="221"
+      transactions={
+        Object {
+          "date": "2020-12-02",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "millspa01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed Paul Millsap.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="222"
+      transactionDate="222"
+      transactions={
+        Object {
+          "date": "2020-12-02",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "maxeyty01",
+              "to_team": "PHI",
+            },
+          ],
+          "text": "The Philadelphia 76ers signed Tyrese Maxey to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="223"
+      transactionDate="223"
+      transactions={
+        Object {
+          "date": "2020-12-03",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "davisan02",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Anthony Davis to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="224"
+      transactionDate="224"
+      transactions={
+        Object {
+          "date": "2020-12-03",
+          "players": Array [
+            Object {
+              "from_team": "ORL",
+              "player_id": "frazime01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder signed Melvin Frazier as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="225"
+      transactionDate="225"
+      transactions={
+        Object {
+          "date": "2020-12-03",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "ramseja01",
+              "to_team": "SAC",
+            },
+          ],
+          "text": "The Sacramento Kings signed Jahmi'us Ramsey to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="226"
+      transactionDate="226"
+      transactions={
+        Object {
+          "date": "2020-12-04",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jacksfr01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder signed Frank Jackson as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="227"
+      transactionDate="227"
+      transactions={
+        Object {
+          "date": "2020-12-04",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "jeffeam01",
+              "to_team": "BOS",
+            },
+          ],
+          "text": "The Boston Celtics signed Amile Jefferson as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="228"
+      transactionDate="228"
+      transactions={
+        Object {
+          "date": "2020-12-05",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "frazime01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived Melvin Frazier.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="229"
+      transactionDate="229"
+      transactions={
+        Object {
+          "date": "2020-12-06",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hoardja01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived Jaylen Hoard.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="230"
+      transactionDate="230"
+      transactions={
+        Object {
+          "date": "2020-12-07",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "robinju01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Philadelphia 76ers waived Justin Robinson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="231"
+      transactionDate="231"
+      transactions={
+        Object {
+          "date": "2020-12-08",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "fergute01",
+              "to_team": "PHI",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "greenda02",
+              "to_team": "PHI",
+            },
+            Object {
+              "from_team": "OKC",
+              "player_id": "poirivi01",
+              "to_team": "PHI",
+            },
+            Object {
+              "from_team": "PHI",
+              "player_id": "horfoal01",
+              "to_team": "OKC",
+            },
+            Object {
+              "from_team": "FA",
+              "player_id": "maledth01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder traded Terrance Ferguson, Danny Green and Vincent Poirier to the Philadelphia 76ers for Al Horford, Théo Maledon, Vasilije Micić and a 2025 1st round draft pick. 2025 1st-rd pick (PHI own) is top-6 protected Philadelphia also received a trade exception from Oklahoma City.",
+          "type": "traded",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="232"
+      transactionDate="232"
+      transactions={
+        Object {
+          "date": "2020-12-09",
+          "players": Array [
+            Object {
+              "from_team": "NYK",
+              "player_id": "evansja02",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The New York Knicks waived Jacob Evans.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="233"
+      transactionDate="233"
+      transactions={
+        Object {
+          "date": "2020-12-09",
+          "players": Array [
+            Object {
+              "from_team": "DEN",
+              "player_id": "morrimo01",
+              "to_team": "DEN",
+            },
+          ],
+          "text": "The Denver Nuggets signed Monte Morris to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="234"
+      transactionDate="234"
+      transactions={
+        Object {
+          "date": "2020-12-09",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "maledth01",
+              "to_team": "OKC",
+            },
+          ],
+          "text": "The Oklahoma City Thunder signed Théo Maledon to a multi-year contract.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="235"
+      transactionDate="235"
+      transactions={
+        Object {
+          "date": "2020-12-09",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "harrish01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Shaquille Harrison as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="236"
+      transactionDate="236"
+      transactions={
+        Object {
+          "date": "2020-12-10",
+          "players": Array [
+            Object {
+              "from_team": "LAC",
+              "player_id": "georgpa01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Paul George to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="237"
+      transactionDate="237"
+      transactions={
+        Object {
+          "date": "2020-12-10",
+          "players": Array [
+            Object {
+              "from_team": "DAL",
+              "player_id": "bareajo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Dallas Mavericks waived J.J. Barea.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="238"
+      transactionDate="238"
+      transactions={
+        Object {
+          "date": "2020-12-11",
+          "players": Array [
+            Object {
+              "from_team": "MEM",
+              "player_id": "hezonma01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Memphis Grizzlies waived Mario Hezonja.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="239"
+      transactionDate="239"
+      transactions={
+        Object {
+          "date": "2020-12-11",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "labissk01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The New York Knicks waived Skal Labissière.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="240"
+      transactionDate="240"
+      transactions={
+        Object {
+          "date": "2020-12-12",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "thomakh01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The San Antonio Spurs waived Khyri Thomas.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="241"
+      transactionDate="241"
+      transactions={
+        Object {
+          "date": "2020-12-14",
+          "players": Array [
+            Object {
+              "from_team": "CHI",
+              "player_id": "vonleno01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Chicago Bulls waived Noah Vonleh.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="242"
+      transactionDate="242"
+      transactions={
+        Object {
+          "date": "2020-12-14",
+          "players": Array [
+            Object {
+              "from_team": "LAC",
+              "player_id": "bowmaky01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Los Angeles Clippers waived Ky Bowman.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="243"
+      transactionDate="243"
+      transactions={
+        Object {
+          "date": "2020-12-14",
+          "players": Array [
+            Object {
+              "from_team": "PHI",
+              "player_id": "broekry01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Philadelphia 76ers waived Ryan Broekhoff.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="244"
+      transactionDate="244"
+      transactions={
+        Object {
+          "date": "2020-12-14",
+          "players": Array [
+            Object {
+              "from_team": "PHI",
+              "player_id": "waltode01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Philadelphia 76ers waived Derrick Walton Jr..",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="245"
+      transactionDate="245"
+      transactions={
+        Object {
+          "date": "2020-12-15",
+          "players": Array [
+            Object {
+              "from_team": "MEM",
+              "player_id": "gudurma01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Memphis Grizzlies waived Marko Guduric.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="246"
+      transactionDate="246"
+      transactions={
+        Object {
+          "date": "2020-12-15",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "willini01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Utah Jazz waived Nigel Williams-Goss.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="247"
+      transactionDate="247"
+      transactions={
+        Object {
+          "date": "2020-12-15",
+          "players": Array [
+            Object {
+              "from_team": "MIL",
+              "player_id": "antetgi01",
+              "to_team": "MIL",
+            },
+          ],
+          "text": "The Milwaukee Bucks signed Giannis Antetokounmpo to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="248"
+      transactionDate="248"
+      transactions={
+        Object {
+          "date": "2020-12-16",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "smithzh01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Memphis Grizzlies waived Zhaire Smith.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="249"
+      transactionDate="249"
+      transactions={
+        Object {
+          "date": "2020-12-16",
+          "players": Array [
+            Object {
+              "from_team": "HOU",
+              "player_id": "grantje02",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Houston Rockets waived Jerian Grant.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="250"
+      transactionDate="250"
+      transactions={
+        Object {
+          "date": "2020-12-17",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "pattoju01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Milwaukee Bucks waived Justin Patton.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="251"
+      transactionDate="251"
+      transactions={
+        Object {
+          "date": "2020-12-18",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "millema01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Utah Jazz waived Malcolm Miller.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="252"
+      transactionDate="252"
+      transactions={
+        Object {
+          "date": "2020-12-18",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "tuckera01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Los Angeles Clippers waived Rayjon Tucker.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="253"
+      transactionDate="253"
+      transactions={
+        Object {
+          "date": "2020-12-18",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "leaftj01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived T.J. Leaf.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="254"
+      transactionDate="254"
+      transactions={
+        Object {
+          "date": "2020-12-18",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "schofad01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived Admiral Schofield.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="255"
+      transactionDate="255"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "ferreyo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Utah Jazz waived Yogi Ferrell.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="256"
+      transactionDate="256"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "cheatzy01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Minnesota Timberwolves waived Zylan Cheatham.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="257"
+      transactionDate="257"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "belljo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Washington Wizards waived Jordan Bell.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="258"
+      transactionDate="258"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "masonfr01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Philadelphia 76ers waived Frank Mason.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="259"
+      transactionDate="259"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "grayjo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Indiana Pacers waived Josh Gray.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="260"
+      transactionDate="260"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "wrighju02",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The New Orleans Pelicans waived Justin Wright-Foreman.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="261"
+      transactionDate="261"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "randlch01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived Chasson Randle.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="262"
+      transactionDate="262"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "pelleno01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Cleveland Cavaliers waived Norvel Pelle.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="263"
+      transactionDate="263"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "reavejo02",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Houston Rockets waived Josh Reaves.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="264"
+      transactionDate="264"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "TOR",
+              "player_id": "brissos01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Toronto Raptors waived Oshae Brisset.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="265"
+      transactionDate="265"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "TOR",
+              "player_id": "ellenhe01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Toronto Raptors waived Henry Ellenson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="266"
+      transactionDate="266"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "johnsal02",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Toronto Raptors waived Alize Johnson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="267"
+      transactionDate="267"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "hernade01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Toronto Raptors waived Dewan Hernandez.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="268"
+      transactionDate="268"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "BOS",
+              "player_id": "jeffeam01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Boston Celtics waived Amile Jefferson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="269"
+      transactionDate="269"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "chiozch01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Brooklyn Nets waived Chris Chiozza.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="270"
+      transactionDate="270"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "okoboel01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Brooklyn Nets waived Elie Okobo.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="271"
+      transactionDate="271"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "CHI",
+              "player_id": "norveza01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Chicago Bulls waived Zach Norvell.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="272"
+      transactionDate="272"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "leeco01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Dallas Mavericks waived Courtney Lee.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="273"
+      transactionDate="273"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "GSW",
+              "player_id": "toscaju01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Golden State Warriors waived Juan Toscano-Anderson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="274"
+      transactionDate="274"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "HOU",
+              "player_id": "greenge01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Houston Rockets waived Gerald Green.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="275"
+      transactionDate="275"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "mitrona01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Indiana Pacers waived Naz Mitrou-Long.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="276"
+      transactionDate="276"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "johnsbj01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Miami Heat waived B.J. Johnson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="277"
+      transactionDate="277"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "grahatr01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Milwaukee Bucks waived Treveon Graham.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="278"
+      transactionDate="278"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "brownch02",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Minnesota Timberwolves waived Charlie Brown Jr..",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="279"
+      transactionDate="279"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "MIN",
+              "player_id": "cookty01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Minnesota Timberwolves waived Tyler Cook.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="280"
+      transactionDate="280"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "holliro01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Minnesota Timberwolves waived Rondae Hollis-Jefferson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="281"
+      transactionDate="281"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "NOP",
+              "player_id": "uthofja01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The New Orleans Pelicans waived Jarrod Uthoff.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="282"
+      transactionDate="282"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "kiddgmi01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The New York Knicks waived Michael Kidd-Gilchrist.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="283"
+      transactionDate="283"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "PHI",
+              "player_id": "anderju01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Philadelphia 76ers waived Justin Anderson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="284"
+      transactionDate="284"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "motlejo01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Phoenix Suns waived Johnathan Motley.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="285"
+      transactionDate="285"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "SAC",
+              "player_id": "kaminfr01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Sacramento Kings waived Frank Kaminsky.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="286"
+      transactionDate="286"
+      transactions={
+        Object {
+          "date": "2020-12-19",
+          "players": Array [
+            Object {
+              "from_team": "SAS",
+              "player_id": "zellety01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The San Antonio Spurs waived Tyler Zeller.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="287"
+      transactionDate="287"
+      transactions={
+        Object {
+          "date": "2020-12-20",
+          "players": Array [
+            Object {
+              "from_team": "UTA",
+              "player_id": "goberru01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Rudy Gobert to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="288"
+      transactionDate="288"
+      transactions={
+        Object {
+          "date": "2020-12-20",
+          "players": Array [
+            Object {
+              "from_team": "LAL",
+              "player_id": "kuzmaky01",
+              "to_team": "LAL",
+            },
+          ],
+          "text": "The Los Angeles Lakers signed Kyle Kuzma to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="289"
+      transactionDate="289"
+      transactions={
+        Object {
+          "date": "2020-12-20",
+          "players": Array [
+            Object {
+              "from_team": "DET",
+              "player_id": "musadz01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Detroit Pistons waived Dzanan Musa.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="290"
+      transactionDate="290"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "SAC",
+              "player_id": "metuch01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Sacramento Kings waived Chimezie Metu.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="291"
+      transactionDate="291"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "OKC",
+              "player_id": "jacksfr01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The Oklahoma City Thunder waived Frank Jackson.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="292"
+      transactionDate="292"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "ORL",
+              "player_id": "isaacjo01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed Jonathan Isaac to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="293"
+      transactionDate="293"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "ORL",
+              "player_id": "fultzma01",
+              "to_team": "ORL",
+            },
+          ],
+          "text": "The Orlando Magic signed Markelle Fultz to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="294"
+      transactionDate="294"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "TOR",
+              "player_id": "anunoog01",
+              "to_team": "TOR",
+            },
+          ],
+          "text": "The Toronto Raptors signed OG Anunoby to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="295"
+      transactionDate="295"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "LAC",
+              "player_id": "kennalu01",
+              "to_team": "LAC",
+            },
+          ],
+          "text": "The Los Angeles Clippers signed Luke Kennard to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="296"
+      transactionDate="296"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "SAS",
+              "player_id": "whitede01",
+              "to_team": "SAS",
+            },
+          ],
+          "text": "The San Antonio Spurs signed Derrick White to a contract extension.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="297"
+      transactionDate="297"
+      transactions={
+        Object {
+          "date": "2020-12-21",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "morgaju01",
+              "to_team": "UTA",
+            },
+          ],
+          "text": "The Utah Jazz signed Juwan Morgan.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="298"
+      transactionDate="298"
+      transactions={
+        Object {
+          "date": "2021-01-04",
+          "players": Array [
+            Object {
+              "from_team": "FA",
+              "player_id": "fraziti01",
+              "to_team": "MEM",
+            },
+          ],
+          "text": "The Memphis Grizzlies signed Tim Frazier.",
+          "type": "signed",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="299"
+      transactionDate="299"
+      transactions={
+        Object {
+          "date": "2021-01-07",
+          "players": Array [
+            Object {
+              "from_team": "NYK",
+              "player_id": "spellom01",
+              "to_team": "FA",
+            },
+          ],
+          "text": "The New York Knicks waived Omari Spellman.",
+          "type": "waived",
+        }
+      }
+    />
+    <TransactionCard
+      className="step"
+      key="300"
+      transactionDate="300"
+      transactions={
+        Object {
+          "date": "2021-01-07",
+          "players": Array [
+            Object {
+              "from_team": "NYK",
+              "player_id": "gibsota01",
+              "to_team": "NYK",
+            },
+          ],
+          "text": "The New York Knicks signed Taj Gibson as a free agent.",
+          "type": "signed",
+        }
+      }
+    />
+    <div
+      className="step phantom"
+      key="phantom-end"
+    />
+  </div>
+</section>
 `;
