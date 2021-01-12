@@ -19,6 +19,7 @@
     "d3-voronoi-treemap": "^1.1.1",
     "hbs": "^4.1.1",
     "intersection-observer": "^0.12.0",
+    "lodash": "^4.17.20",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",

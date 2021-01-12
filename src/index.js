@@ -27,7 +27,8 @@ window.addEventListener("resize", scroller.resize);
 const promises = [
   json("data/us_states.json"),
   csv("data/team_data.csv"),
-  csv("data/players.csv")
+  csv("data/players_start.csv"),
+  json("data/transactions.json")
 ];
 
 
@@ -35,10 +36,16 @@ Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     const teamData = allData[1];
     let playerData = allData[2];
+    let transactionData = allData[3];
 
     playerData.forEach(player => {
-      player.salary = +player.salary;
+      player["2021_salary"] = +player["2021_salary"];
+      player["2020_salary"] = +player["2020_salary"];
+
+      player.salary = player["2021_salary"] ||  player["2020_salary"];
     });
+
+    playerData = playerData.filter(x => x.salary !== undefined);
 
     ReactDOM.render(<PlayerMapWrapper
                       id={"viz-tile"}

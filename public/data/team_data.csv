@@ -29,3 +29,5 @@ SAS,San Antonio,TX,San Antonio Spurs,Spurs,29.468413,-98.528889,#C4CED4,#000000
 TOR,Ontario,ON,Toronto Raptors,Raptors,43.6532,-79.3832,#CE1141,#000000
 UTA,Salt Lake City,UT,Utah Jazz,Jazz,40.756095,-111.900719,#002B5C,#00471B
 WAS,Washington,DC,Washington Wizards,Wizards,38.911936,-77.016719,#002B5C,#E31837
+FA,,,Free Agent,Free Agent,,,#D3D3D3,#000000
+RET,,,Retired,Retired,,,#D3D3D3,#000000
