@@ -111,7 +111,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                         />
                     )
                 }
-                <div key={"phantom-end"} className={"step phantom"} />
+                <div key={"phantom-end"} className={"transaction-card phantom"} />
           </div>
       </section>
     )

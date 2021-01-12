@@ -235,6 +235,15 @@ class PlayerMap {
         const playerTravelTransitionTime = 3000;
 
         polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
+        // polygons.forEach((polygon) => {
+        //     let pathCenter = polygon[0];
+        //     polygon.slice(1).forEach((coordinate) => {
+        //         coordinate[0] -= pathCenter[0];
+        //         coordinate[1] -= pathCenter[1];
+        //         console.log(coordinate);
+        //     })
+        //     console.log(polygon);
+        // })
 
         affectedPlayers.forEach((playerId) => {
             this.svg.select(`#player-polygon-${playerId}`).raise();
@@ -273,13 +282,37 @@ class PlayerMap {
                         .raise()
                         .transition("re-position")
                         .duration(playerTravelTransitionTime)
-                        .attr('d', (d) => `M${d.join('L')}z`)
+                        .attr('transform', (d,i,n) => {
+                            const newCenter = d[0];
+                            let existingPath = d3.select(n[i]).attr('d');
+                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                            const dx = newCenter[0] - existingCenter[0];
+                            const dy = newCenter[1] - existingCenter[1];  
+
+                            return `translate(${dx},${dy})`
+                        })
+                        // .attr('d', (d,i,n) => {
+                        //     const newCoordinate = d[0];
+                        //     let existingPath = d3.select(n[i]).attr('d');
+                        //     const firstCoordinate = existingPath.indexOf('L');
+
+                        //     existingPath = existingPath.slice(firstCoordinate)
+
+                        //     const newPath = `M${newCoordinate}${existingPath.slice(firstCoordinate)}`
+                        //     console.log(newPath);
+                        //     return newPath;
+                        //     // return `M${d.join('L')}z`
+                        // })
                         .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
                     
                     update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                        .transition("re-shuffle")
+                        .transition("remove-translation")
                         .delay(playerTravelTransitionTime)
+                        .duration(0)
+                        .attr("transform", "translate(0,0)")
+                        .transition("re-shuffle")
                         .attr('d', (d) => `M${d.join('L')}z`)
                         // .style("opacity", 1.0)
 
@@ -331,12 +364,34 @@ class PlayerMap {
                     update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                         .transition("re-position")
                         .duration(playerTravelTransitionTime)
-                        .attr('d', (d) => `M${d.join('L')}z`)
+                        // .attr('d', (d,i,n) => {
+                        //     const newCoordinate = d[0];
+                        //     const existingPath = d3.select(n[i]).attr('d');
+                        //     const firstCoordinate = existingPath.indexOf('L');
+
+                        //     const newPath = `M${newCoordinate}${existingPath.slice(firstCoordinate)}`
+                        //     console.log(newPath);
+                        //     return newPath;
+                        //     // return `M${d.join('L')}z`
+                        // })
+                        .attr('transform', (d,i,n) => {
+                            const newCenter = d[0];
+                            let existingPath = d3.select(n[i]).attr('d');
+                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                            const dx = newCenter[0] - existingCenter[0];
+                            const dy = newCenter[1] - existingCenter[1];  
+
+                            return `translate(${dx},${dy})`
+                        })
                         .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
                     
                     update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                        .transition("re-shuffle")
+                        .transition("remove-translation")
                         .delay(playerTravelTransitionTime)
+                        .duration(0)
+                        .attr("transform", "translate(0,0)")
+                        .transition("re-shuffle")
                         .attr('d', (d) => `M${d.join('L')}z`)
 
                     return update;
