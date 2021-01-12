@@ -46,6 +46,24 @@ class PlayerMap {
         // console.log(props);
         this.attribute = "salary";
 
+        this.polygonSets = [
+            {
+                class: "player-polygons",
+                suffix: "polygon",
+                fillAccessor: (d) => {
+                    return d.site.originalObject.data.originalData.team.color_1;
+                }
+            },
+            {
+                class: "player-polygon-images",
+                suffix: "polygon-image",
+                fillAccessor: (d) => {
+                    const player_id = d.site.originalObject.data.originalData.player_id;
+                    return `url(#${player_id}-photo)`;
+                }
+            }
+        ];
+
         this.maxWeight = 100;
         this.weightScale = d3.scaleLinear()
             .domain(d3.extent(playerData, (d) => d[this.attribute]))
@@ -247,165 +265,86 @@ class PlayerMap {
             this.svg.select(`#player-image-${playerId}`).raise();
         })
 
-        let playerPolygons = this.svg
-            .selectAll(".player-polygons")
-            .data(polygons, d => d.site.originalObject.data.originalData.player_id)
-            .join(
-                enter => enter.append('path')
-                    .attr("class", d => `player-polygons ${d.site.originalObject.data.originalData.team.team_id}-polygon`)
-                    .attr("id", d => `player-polygon-${d.site.originalObject.data.originalData.player_id}`)
-                    .attr('d', (d) => `M${d.join('L')}z`)
-                    .style("fill-opacity", 0.95)
-                    .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
-                    .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                    .style("stroke-width", "2px"),
-                update => {     
-                    update
-                        .style('opacity', d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id) ? 1.0 : 0.3)
-                        .transition("return-opacity")
-                        .delay(playerTravelTransitionTime)
-                        .style('opacity', 1.0)
-                    
-                    update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                        .raise()
+        this.polygonSets.forEach((polygonAttributes) => {
+            let playerPolygons = this.svg
+                .selectAll(`.${polygonAttributes.class}`)
+                .data(polygons, d => d.site.originalObject.data.originalData.player_id)
+                .join(
+                    enter => enter.append('path')
+                        .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                        .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
+                        .attr('d', (d) => `M${d.join('L')}z`)
+                        .style("fill-opacity", 0.95)
+                        .style("fill", d => polygonAttributes.fillAccessor(d))
+                        .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
+                        .style("stroke-width", "2px"),
+
+                    update => {     
+                        update
+                            .style('opacity', d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id) ? 1.0 : 0.3)
+                            .transition("return-opacity")
+                            .delay(playerTravelTransitionTime)
+                            .style('opacity', 1.0)
+                        
+                        update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                            .raise()
+                            .attr('d', (d,i,n) => {
+                                const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                                
+                                let existingPath = d3.select(n[i]).attr('d');
+                                const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                                d3.select(n[i])
+                                    .attr('startX', existingCenter[0])
+                                    .attr('startY', existingCenter[1])
+
+                                const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
+                                return path
+                            })
+                            .transition("re-position")
+                            .duration(playerTravelTransitionTime)
+                            .attr('transform', (d,i,n) => {
+                                const newCenter = d[0];
+                                let startX = d3.select(n[i]).attr('startX');
+                                let startY = d3.select(n[i]).attr('startY');
+
+                                const dx = newCenter[0] - startX;
+                                const dy = newCenter[1] - startY;  
+
+                                return `translate(${dx},${dy})`
+                            })
+                            .style("fill", d => polygonAttributes.fillAccessor(d))
+                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
+                        
+                        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                            .transition("remove-translation")
+                            .delay(playerTravelTransitionTime)
+                            .duration(0)
+                            .attr("transform", "translate(0,0)")
+                            .transition("re-shuffle")
+                            .attr('d', (d) => `M${d.join('L')}z`)
+
+                        return update;
+                    },
+
+                    exit => exit
                         .attr('d', (d,i,n) => {
                             const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
                             
                             let existingPath = d3.select(n[i]).attr('d');
                             const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
 
-                            d3.select(n[i])
-                                .attr('startX', existingCenter[0])
-                                .attr('startY', existingCenter[1])
-
                             const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
                             return path
                         })
-                        .transition("re-position")
-                        .duration(playerTravelTransitionTime)
-                        .attr('transform', (d,i,n) => {
-                            const newCenter = d[0];
-                            let startX = d3.select(n[i]).attr('startX');
-                            let startY = d3.select(n[i]).attr('startY');
+                        .transition()
+                        .delay(playerTravelTransitionTime/2)
+                        .duration(playerTravelTransitionTime/2)
+                        .style("opacity", 0)
+                        .remove()
+                )
 
-                            const dx = newCenter[0] - startX;
-                            const dy = newCenter[1] - startY;  
-
-                            return `translate(${dx},${dy})`
-                        })
-                        .style("fill", d => d.site.originalObject.data.originalData.team.color_1)
-                        .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                    
-                    update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                        .transition("remove-translation")
-                        .delay(playerTravelTransitionTime)
-                        .duration(0)
-                        .attr("transform", "translate(0,0)")
-                        .transition("re-shuffle")
-                        .attr('d', (d) => `M${d.join('L')}z`)
-                        // .style("opacity", 1.0)
-
-
-                    return update;
-                },
-                exit => exit
-                    .attr('d', (d,i,n) => {
-                        const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                        
-                        let existingPath = d3.select(n[i]).attr('d');
-                        const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
-
-                        const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
-                        return path
-                    })
-                    .transition()
-                    .delay(playerTravelTransitionTime/2)
-                    .duration(playerTravelTransitionTime/2)
-                    .style("opacity", 0)
-                    .remove()
-            )
-        
-        let playerImages = this.svg
-            .selectAll(".player-polygon-images")
-            .data(polygons, d => d.site.originalObject.data.originalData.player_id)
-            .join(
-                enter => { 
-                    return enter
-                        .append('path')
-                        .attr("class", d => `player-polygon-images ${d.site.originalObject.data.originalData.team.team_id}-polygon-image`)
-                        .attr("id", d => `player-image-${d.site.originalObject.data.originalData.player_id}`)
-                        .attr('d', (d) => `M${d.join('L')}z`)
-                        .style("fill", d => {
-                            const player_id = d.site.originalObject.data.originalData.player_id;
-                            return `url(#${player_id}-photo)`
-                        })
-                        .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        .style("stroke-width", "2px")
-                },
-                update => {
-                    update
-                        // .transition()
-                        .style('opacity', d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id) ? 1.0 : 0.3)
-                        // .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4)
-                        .transition("return-opacity")
-                        .delay(playerTravelTransitionTime)
-                        .style('opacity', 1.0);
-
-                    update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                        .attr('d', (d,i,n) => {
-                            const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                            
-                            let existingPath = d3.select(n[i]).attr('d');
-                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
-
-                            d3.select(n[i])
-                                .attr('startX', existingCenter[0])
-                                .attr('startY', existingCenter[1])
-
-                            const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
-                            return path
-                        })
-                        .transition("re-position")
-                        .duration(playerTravelTransitionTime)
-                        .attr('transform', (d,i,n) => {
-                            const newCenter = d[0];
-                            let startX = d3.select(n[i]).attr('startX');
-                            let startY = d3.select(n[i]).attr('startY');
-                            // const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
-
-                            const dx = newCenter[0] - startX;
-                            const dy = newCenter[1] - startY;  
-
-                            return `translate(${dx},${dy})`
-                        })
-                        .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                    
-                    update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                        .transition("remove-translation")
-                        .delay(playerTravelTransitionTime)
-                        .duration(0)
-                        .attr("transform", "translate(0,0)")
-                        .transition("re-shuffle")
-                        .attr('d', (d) => `M${d.join('L')}z`)
-
-                    return update;
-                },
-                exit => exit
-                    .attr('d', (d,i,n) => {
-                        const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                        
-                        let existingPath = d3.select(n[i]).attr('d');
-                        const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
-
-                        const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
-                        return path
-                    })
-                    .transition()
-                    .delay(playerTravelTransitionTime/2)
-                    .duration(playerTravelTransitionTime/2)
-                    .style("opacity", 0)
-                    .remove()
-            )        
+        })     
     }
 
     updateMapColor = ({ opacity, mapColor }) => { 
