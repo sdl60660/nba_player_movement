@@ -26,7 +26,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const onStepEnter = ({ element, index, direction }) => {
         console.log({ element, index, direction });
         setMapColor(() => {
-            return colors[index];
+            return colors[index%10];
         })
     }
 
