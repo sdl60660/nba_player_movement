@@ -26,7 +26,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const transactionDates = Object.keys(transactionData);
     const playerDataIds = playerData.map((player) => player.player_id);
 
-    const onStepEnter = ({ element, index, direction }) => {
+    const processStepTransactions = ({ element, index, direction }) => {
         // console.log({ element, index, direction });
         let transactionDate = transactionDates[index];
         let transactions = transactionData[transactionDate];
@@ -58,9 +58,9 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
         console.log(allAffectedTeams, index);
         
-        setMapColor(() => {
-            return colors[index%10];
-        })
+        // setMapColor(() => {
+        //     return colors[index%10];
+        // })
     }
 
     const refElement = useRef(null);
@@ -74,15 +74,24 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 debug: true
             })
             .onStepEnter(({ element, index, direction }) => {
-                try {
-                    onStepEnter({ element, index, direction })
-                }
-                catch (e) {
-                    console.log(e);
+                if (direction === "down") {
+                    try {
+                        processStepTransactions({ element, index, direction })
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
                 }
             })
-            .onStepExit((response) => {
-                // { element, index, direction }
+            .onStepExit(({ element, index, direction }) => {
+                if (direction === "up") {
+                    try {
+                        processStepTransactions({ element, index, direction })
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
             });
         window.addEventListener("resize", scroller.resize);
     }, []);

@@ -261,20 +261,11 @@ class PlayerMap {
                     .style("stroke-width", "2px"),
                 update => {     
                     update
-                        // .transition()
-                        // .style('opacity', d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) ? 1.0 : 0.4)
                         .style('opacity', d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id) ? 1.0 : 0.3)
                         .transition("return-opacity")
                         .delay(playerTravelTransitionTime)
                         .style('opacity', 1.0)
                     
-                    // update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                    //     .attr('d', d => {
-                    //             const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                    //             const path = generateCirclePath(d.site.x, d.site.y, radius);
-                    //             return path
-                    //         })
-
                     update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                         .raise()
                         .attr('d', (d,i,n) => {
@@ -296,7 +287,6 @@ class PlayerMap {
                             const newCenter = d[0];
                             let startX = d3.select(n[i]).attr('startX');
                             let startY = d3.select(n[i]).attr('startY');
-                            // const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
 
                             const dx = newCenter[0] - startX;
                             const dy = newCenter[1] - startY;  
@@ -427,42 +417,3 @@ class PlayerMap {
   }
   
   export default PlayerMap;
-
-
-// update
-// .transition()
-// .duration(2000)
-// .attr('d', (d) => `M${d}z`)
-// .attr('d', d => {
-//     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-//     const path = generateCirclePath(d.site.x, d.site.y, radius);
-//     return path
-// })
-
-// .attr('d', d => {
-//     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-//     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
-//     return path
-// })
-
-// setTimeout(() => {
-//     let newTeams = ["BOS", "MIA", "DET", "CHI"];
-//     let affectedTeams = [...newTeams]
-//     let affectedPlayers = [];
-//     Array(12, 35, 102, 121).forEach((index, i) => {
-        
-//         const playerId = this.playerData[index].player_id;
-//         let oldTeam = this.updateTeam(playerId, newTeams[i])
-//         console.log(oldTeam)
-//         if (oldTeam !== 'FA' && oldTeam !== 'RET') {
-//             affectedTeams.push(oldTeam)
-//         }
-//         affectedPlayers.push(playerId)
-//     })
-//     affectedTeams = [...new Set(affectedTeams)];
-//     console.log('Affected Teams', affectedTeams)
-
-
-//     this.runTransactions(this.playerData, affectedTeams, affectedPlayers)
-
-// }, 5000)

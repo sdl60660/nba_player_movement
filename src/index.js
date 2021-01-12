@@ -61,11 +61,6 @@ Promise.all(promises).then((allData) => {
       document.getElementById('content'));
     });
 
-
-// <div class="step">Hello 1</div>
-// <div class="step">Hello 2</div>
-// <div class="step">Hello 3</div>
-
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
