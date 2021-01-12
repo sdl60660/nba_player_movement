@@ -38,11 +38,14 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
             transactions.forEach((transaction) => {
                 allAffectedTeams = allAffectedTeams.concat(transaction.affected_teams);
 
+                // Maintain correct ordering on transactions if running upwards, for things like sign-and-trades
+                const playerArray = direction === "down" ? transaction.players : transaction.players.reverse()
+
                 transaction.players.forEach((player) => {
-                    console.log(playerDataIds.indexOf(player.player_id));
                     allAffectedPlayers.push(player.player_id);
 
                     state[playerDataIds.indexOf(player.player_id)].team = teamData
+                        // Reverse transaction if running upwards
                         .find((team) => team.team_id === ( direction === "down" ? player.to_team : player.from_team));
                 })
             })
@@ -51,8 +54,9 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
         allAffectedTeams = [...new Set(allAffectedTeams.filter((team) => team !== "FA" && team !== "RET"))];
         allAffectedPlayers = [...new Set(allAffectedPlayers)];
-        console.log(playerData, allAffectedTeams, allAffectedPlayers);
         vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
+
+        console.log(allAffectedTeams, index);
         
         setMapColor(() => {
             return colors[index%10];

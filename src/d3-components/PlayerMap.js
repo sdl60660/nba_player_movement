@@ -96,28 +96,6 @@ class PlayerMap {
         })
 
         this.generatePolygons(this.allPolygons);
-
-        // setTimeout(() => {
-        //     let newTeams = ["BOS", "MIA", "DET", "CHI"];
-        //     let affectedTeams = [...newTeams]
-        //     let affectedPlayers = [];
-        //     Array(12, 35, 102, 121).forEach((index, i) => {
-                
-        //         const playerId = this.playerData[index].player_id;
-        //         let oldTeam = this.updateTeam(playerId, newTeams[i])
-        //         console.log(oldTeam)
-        //         if (oldTeam !== 'FA' && oldTeam !== 'RET') {
-        //             affectedTeams.push(oldTeam)
-        //         }
-        //         affectedPlayers.push(playerId)
-        //     })
-        //     affectedTeams = [...new Set(affectedTeams)];
-        //     console.log('Affected Teams', affectedTeams)
-
-
-        //     this.runTransactions(this.playerData, allPolygons, affectedTeams, affectedPlayers)
-
-        // }, 5000)
     }
 
     updateTeam = ( playerId, newTeamId ) => {
@@ -256,6 +234,8 @@ class PlayerMap {
     generatePolygons = (polygons, affectedTeams = [], affectedPlayers = []) => {
         const playerTravelTransitionTime = 3000;
 
+        polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
+
         affectedPlayers.forEach((playerId) => {
             this.svg.select(`#player-polygon-${playerId}`).raise();
             this.svg.select(`#player-image-${playerId}`).raise();
@@ -305,8 +285,13 @@ class PlayerMap {
 
 
                     return update;
-                }
-                // exit => exit.remove()
+                },
+                exit => exit
+                    .transition()
+                    .delay(playerTravelTransitionTime/2)
+                    .duration(playerTravelTransitionTime/2)
+                    .style("opacity", 0)
+                    .remove()
             )
         
         let playerImages = this.svg
@@ -355,8 +340,13 @@ class PlayerMap {
                         .attr('d', (d) => `M${d.join('L')}z`)
 
                     return update;
-                }
-                // exit => exit.remove() 
+                },
+                exit => exit
+                    .transition()
+                    .delay(playerTravelTransitionTime/2)
+                    .duration(playerTravelTransitionTime/2)
+                    .style("opacity", 0)
+                    .remove()
             )        
     }
 
@@ -370,7 +360,7 @@ class PlayerMap {
 
     runTransactions = (playerData, affectedTeams, affectedPlayers) => {
         affectedTeams.forEach((team_id) => {
-            console.log("Team Polygon Update", team_id)
+            // console.log("Team Polygon Update", team_id)
             this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
 
             let team = this.teamData.find((t) => t.team_id === team_id)
@@ -380,7 +370,6 @@ class PlayerMap {
             this.allPolygons = this.allPolygons.concat(polygons);
         })
 
-        console.log("Generate Polygons")
         this.generatePolygons(this.allPolygons, affectedTeams, affectedPlayers);
     }
   
@@ -406,3 +395,25 @@ class PlayerMap {
 //     const path = generateCirclePath(d.site.x+20, d.site.y+20, radius);
 //     return path
 // })
+
+// setTimeout(() => {
+//     let newTeams = ["BOS", "MIA", "DET", "CHI"];
+//     let affectedTeams = [...newTeams]
+//     let affectedPlayers = [];
+//     Array(12, 35, 102, 121).forEach((index, i) => {
+        
+//         const playerId = this.playerData[index].player_id;
+//         let oldTeam = this.updateTeam(playerId, newTeams[i])
+//         console.log(oldTeam)
+//         if (oldTeam !== 'FA' && oldTeam !== 'RET') {
+//             affectedTeams.push(oldTeam)
+//         }
+//         affectedPlayers.push(playerId)
+//     })
+//     affectedTeams = [...new Set(affectedTeams)];
+//     console.log('Affected Teams', affectedTeams)
+
+
+//     this.runTransactions(this.playerData, affectedTeams, affectedPlayers)
+
+// }, 5000)
