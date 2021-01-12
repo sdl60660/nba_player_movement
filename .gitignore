@@ -23,6 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 
 config
+.eslintcache
 
 src/components/TreemapWrapper.js
 src/d3-components/TeamTreemap.js
+
