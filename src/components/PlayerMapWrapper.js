@@ -13,7 +13,6 @@ import transactionReducer from '../reducers/transactionReducer';
 let vis;
 
 const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData }) => {
-    const colors = chromatic.schemeCategory10;
 
     const [mapColor, setMapColor] = useState(chromatic.schemeCategory10[0]);
     const [geoData, setGeoData] = useState(_geoData);
@@ -23,8 +22,38 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const [height, setHeight] = useState(750);
     const [opacity, setOpacity] = useState(0.6);
 
+    const colors = chromatic.schemeCategory10;
+    const transactionDates = Object.keys(transactionData);
+    const playerDataIds = playerData.map((player) => player.player_id);
+
     const onStepEnter = ({ element, index, direction }) => {
-        console.log({ element, index, direction });
+        // console.log({ element, index, direction });
+        let transactionDate = transactionDates[index];
+        let transactions = transactionData[transactionDate];
+
+        let allAffectedTeams = [];
+        let allAffectedPlayers = [];
+        
+        setPlayerData((state) => {
+            transactions.forEach((transaction) => {
+                allAffectedTeams = allAffectedTeams.concat(transaction.affected_teams);
+
+                transaction.players.forEach((player) => {
+                    console.log(playerDataIds.indexOf(player.player_id));
+                    allAffectedPlayers.push(player.player_id);
+
+                    state[playerDataIds.indexOf(player.player_id)].team = teamData
+                        .find((team) => team.team_id === ( direction === "down" ? player.to_team : player.from_team));
+                })
+            })
+            return state;
+        })
+
+        allAffectedTeams = [...new Set(allAffectedTeams.filter((team) => team !== "FA" && team !== "RET"))];
+        allAffectedPlayers = [...new Set(allAffectedPlayers)];
+        console.log(playerData, allAffectedTeams, allAffectedPlayers);
+        vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
+        
         setMapColor(() => {
             return colors[index%10];
         })
@@ -34,10 +63,11 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     let scroller = scrollama();
 
     useEffect(() => {
-        vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData, playerData });
+        vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData, playerData, setPlayerData });
         scroller
             .setup({
                 step: ".transaction-card",
+                debug: true
             })
             .onStepEnter(({ element, index, direction }) => {
                 onStepEnter({ element, index, direction })

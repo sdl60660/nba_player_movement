@@ -41,6 +41,17 @@ Promise.all(promises).then((allData) => {
     });
 
     playerData = playerData.filter(x => x.salary !== undefined);
+    playerData = playerData.map((player) => ({ 
+      // weight: this.weightScale(player[this.attribute]),
+      player_name: player.player,
+      player_id: player.player_id,
+      team: teamData.find((team) => team.team_id === player.team_id),
+      per: player.per,
+      salary: player.salary,
+      vorp: player.vorp
+    }));
+
+    console.log(playerData)
 
     ReactDOM.render(
           <PlayerMapWrapper

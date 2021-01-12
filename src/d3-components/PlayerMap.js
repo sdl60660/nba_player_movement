@@ -42,7 +42,7 @@ class PlayerMap {
         this.containerEl = containerEl;
         this.props = props;
 
-        const { width, height, mapColor, geoData, teamData, playerData } = props;
+        const { width, height, mapColor, geoData, teamData, playerData, setPlayerData } = props;
         // console.log(props);
         this.attribute = "salary";
 
@@ -51,8 +51,8 @@ class PlayerMap {
             .domain(d3.extent(playerData, (d) => d[this.attribute]))
             .range([1, this.maxWeight]);
         
-        let signedPlayers = playerData.filter(d => d.team_id !== "FA" && d.team_id !== "RET")
-        let teamTotalWeights = Object.values(groupBy(signedPlayers, (d) => d.team_id))
+        let signedPlayers = playerData.filter(d => d.team.team_id !== "FA" && d.team.team_id !== "RET")
+        let teamTotalWeights = Object.values(groupBy(signedPlayers, (d) => d.team.team_id))
                             .map(array => {
                                 return array
                                     .map(d => this.weightScale(d[this.attribute]))
@@ -60,24 +60,17 @@ class PlayerMap {
                             })
                             
         this.maxTotalWeight = d3.max(teamTotalWeights);
-        // console.log(teamTotalWeights, this.maxTotalWeight);
         this.maxCircleRadius = 57;
 
         this.voronoiRadius = d3.scaleLinear()
             .domain([0, this.maxTotalWeight])
             .range([0, this.maxCircleRadius])
-        
-        // console.log(39219565, this.weightScale(39219565), this.voronoiRadius(this.weightScale(39219565)))
 
-        this.playerData = playerData.map((player) => ({ 
-            weight: this.weightScale(player[this.attribute]),
-            player_name: player.player,
-            player_id: player.player_id,
-            team: teamData.find((team) => team.team_id === player.team_id),
-            per: player.per,
-            salary: player["2021_salary"],
-            vorp: player.vorp
-        }));
+        this.playerData = playerData;
+        this.playerData.forEach((player) => {
+            player.weight = this.weightScale(player[this.attribute]);
+        });
+        setPlayerData(this.playerData);
 
         this.teamData = teamData;
         this.trueTeamData = teamData.filter(d => d.team_id !== 'FA' && d.team_id !== 'RET');
@@ -95,38 +88,36 @@ class PlayerMap {
 
         this.generateTeamGroups({ projection });
 
-        let allPolygons = [];
+        this.allPolygons = [];
         this.trueTeamData.forEach((team) => {
             let players = this.playerData.filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
             let polygons = this.addTeamTreemap({ team, players })
-            allPolygons = allPolygons.concat(polygons);
+            this.allPolygons = this.allPolygons.concat(polygons);
         })
 
-        this.generatePolygons(allPolygons);
+        this.generatePolygons(this.allPolygons);
 
-        setTimeout(() => {
-            let newTeams = ["BOS", "MIA", "DET", "CHI"];
-            let affectedTeams = [...newTeams]
-            let affectedPlayers = [];
-            Array(12, 35, 102, 121).forEach((index, i) => {
+        // setTimeout(() => {
+        //     let newTeams = ["BOS", "MIA", "DET", "CHI"];
+        //     let affectedTeams = [...newTeams]
+        //     let affectedPlayers = [];
+        //     Array(12, 35, 102, 121).forEach((index, i) => {
                 
-                const playerId = this.playerData[index].player_id;
-                let oldTeam = this.updateTeam(playerId, newTeams[i])
-                console.log(oldTeam)
-                if (oldTeam !== 'FA' && oldTeam !== 'RET') {
-                    affectedTeams.push(oldTeam)
-                }
-                affectedPlayers.push(playerId)
-            })
-            affectedTeams = [...new Set(affectedTeams)];
-            console.log('Affected Teams', affectedTeams)
+        //         const playerId = this.playerData[index].player_id;
+        //         let oldTeam = this.updateTeam(playerId, newTeams[i])
+        //         console.log(oldTeam)
+        //         if (oldTeam !== 'FA' && oldTeam !== 'RET') {
+        //             affectedTeams.push(oldTeam)
+        //         }
+        //         affectedPlayers.push(playerId)
+        //     })
+        //     affectedTeams = [...new Set(affectedTeams)];
+        //     console.log('Affected Teams', affectedTeams)
 
 
-            this.runTransactions(this.playerData, allPolygons, affectedTeams, affectedPlayers)
+        //     this.runTransactions(this.playerData, allPolygons, affectedTeams, affectedPlayers)
 
-        }, 5000)
-
-
+        // }, 5000)
     }
 
     updateTeam = ( playerId, newTeamId ) => {
@@ -189,8 +180,6 @@ class PlayerMap {
     generateTeamGroups = ({ projection }) => {
         this.teams = this.svg.append("g")
             .attr("class", "teams");
-        
-        
       
         this.teamGroups = this.teams.selectAll("g")
             .data(this.trueTeamData, d => d.team_id)
@@ -205,7 +194,7 @@ class PlayerMap {
 
             const players = this.playerData
                 .filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
-            const weightSum = players.map((x) => x.weight).reduce((a, b) => a + b, 0);
+            const weightSum = players.map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
             team.radius = this.voronoiRadius(weightSum);
             // this.addTeamTreemap({ teamData, players });
         })
@@ -379,20 +368,20 @@ class PlayerMap {
             .style("fill", mapColor);
     }
 
-    runTransactions = (playerData, allPolygons, affectedTeams, affectedPlayers) => {
+    runTransactions = (playerData, affectedTeams, affectedPlayers) => {
         affectedTeams.forEach((team_id) => {
             console.log("Team Polygon Update", team_id)
-            allPolygons = allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
+            this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
 
             let team = this.teamData.find((t) => t.team_id === team_id)
-            let players = this.playerData.filter((player) => player.team.team_id === team.team_id);
+            let players = playerData.filter((player) => player.team.team_id === team.team_id);
             
             let polygons = this.addTeamTreemap({ team, players })
-            allPolygons = allPolygons.concat(polygons);
+            this.allPolygons = this.allPolygons.concat(polygons);
         })
 
         console.log("Generate Polygons")
-        this.generatePolygons(allPolygons, affectedTeams, affectedPlayers);
+        this.generatePolygons(this.allPolygons, affectedTeams, affectedPlayers);
     }
   
     resize = (width, height) => { /*...*/ }

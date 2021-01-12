@@ -130,10 +130,15 @@ for date in transaction_dates[::-1]:
             transaction_type = "n-team trade"
             player_data = process_multi_team(transaction)
 
+        affected_teams = []
+        for player in player_data:
+            affected_teams += [player['from_team'], player['to_team']]
+
         transaction_dict = {
             "type": transaction_type,
             "date": formatted_date,
             "players": player_data,
+            "affected_teams": list(set(affected_teams)),
             "text": transaction_text
         }
 

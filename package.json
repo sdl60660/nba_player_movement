@@ -24,7 +24,6 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
-    "react-scrollama": "^2.2.15",
     "scrollama": "^2.2.1",
     "seedrandom": "^3.0.5",
     "topojson-client": "^3.1.0",
