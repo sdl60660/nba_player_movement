@@ -270,14 +270,32 @@ class PlayerMap {
                 .selectAll(`.${polygonAttributes.class}`)
                 .data(polygons, d => d.site.originalObject.data.originalData.player_id)
                 .join(
-                    enter => enter.append('path')
-                        .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
-                        .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
-                        .attr('d', (d) => `M${d.join('L')}z`)
-                        .style("fill-opacity", 0.95)
-                        .style("fill", d => polygonAttributes.fillAccessor(d))
-                        .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        .style("stroke-width", "2px"),
+                    enter => {
+                        enter
+                            .append('path')
+                            .raise()
+                            .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                            .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
+                            .style("fill-opacity", 0.95)
+                            .style("fill", d => polygonAttributes.fillAccessor(d))
+                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
+                            .style("stroke-width", "2px")
+                            .attr('d', (d) => {
+                                if (affectedPlayers.includes(d.site.originalObject.data.originalData.player_id)) {
+                                    const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                                    
+                                    return generateCirclePath(d[0][0], d[0][1], radius);
+                                    // return `M${d.join('L')}z`;
+                                }
+                                else {
+                                    return `M${d.join('L')}z`;
+                                }
+                            })
+                            .transition("initial-positioning")
+                            .delay(playerTravelTransitionTime)
+                            .duration(0)
+                            .attr("d", d => `M${d.join('L')}z`);
+                    },
 
                     update => {     
                         update

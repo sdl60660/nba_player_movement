@@ -71,7 +71,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         scroller
             .setup({
                 step: ".transaction-card",
-                debug: true
+                debug: false
             })
             .onStepEnter(({ element, index, direction }) => {
                 if (direction === "down") {
