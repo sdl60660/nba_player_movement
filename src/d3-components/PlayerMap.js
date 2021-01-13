@@ -1,11 +1,13 @@
-import * as d3 from "d3";
+import * as d3 from 'd3';
+import d3Tip from "d3-tip"
 import * as topojson from "topojson-client";
-import { voronoiMapSimulation } from 'd3-voronoi-map';
 import seedrandom from 'seedrandom';
 import { groupBy } from 'lodash';
+import { voronoiMapSimulation } from 'd3-voronoi-map';
 
 
 const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
+
 
 const generateCirclePath = (cx, cy, r) => {
   return "M" + cx + "," + cy + " " +
@@ -13,6 +15,7 @@ const generateCirclePath = (cx, cy, r) => {
          "a" + r + "," + r + " 0 1,0 " + r*2  + ",0 " +
          "a" + r + "," + r + " 0 1,0 " + -r*2 + ",0Z";
 };
+
 
 const getCircleCoordinates = (centerX, centerY, radius, sides) => {
     if (radius === 0) {
@@ -43,7 +46,13 @@ class PlayerMap {
         this.props = props;
 
         const { width, height, mapColor, geoData, teamData, playerData, setPlayerData } = props;
-        // console.log(props);
+
+        this.svg = d3.select(containerEl)
+            .append("svg")
+            .attr("viewBox", [0, 0, width, height]);
+        
+        this.initTooltip();
+
         this.attribute = "salary";
 
         this.polygonSets = [
@@ -92,10 +101,6 @@ class PlayerMap {
 
         this.teamData = teamData;
         this.trueTeamData = teamData.filter(d => d.team_id !== 'FA' && d.team_id !== 'RET');
- 
-        this.svg = d3.select(containerEl)
-            .append("svg")
-            .attr("viewBox", [0, 0, width, height]);
 
         this.initPlayerPhotos({ playerData })
         
@@ -115,6 +120,24 @@ class PlayerMap {
 
         this.generatePolygons(this.allPolygons);
     }
+
+    initTooltip = () => {
+        this.tip = d3Tip()
+            .attr('class', 'd3-tip')
+            .html((d) => {
+                const playerData = d.site.originalObject.data.originalData;
+                return (
+                    `<div class="d3-tip__grid">
+                        <div class="d3-tip__player-name">${playerData.player_name}</div>
+                        <div class="d3-tip__player-attr">Salary:</div><div class="d3-tip__player-attr">${d3.format("$,.0f")(playerData.salary)}</div>
+                        <div class="d3-tip__player-attr">VORP (2020):</div><div class="d3-tip__player-attr">${playerData.vorp}</div>
+                        <div class="d3-tip__player-attr">PER (2020):</div><div class="d3-tip__player-attr">${playerData.per}</div>
+                    </div>`
+                )
+            });
+            
+        this.svg.call(this.tip);
+    };
 
     updateTeam = ( playerId, newTeamId ) => {
         const arrayIndex = this.playerData.findIndex(d => d.player_id === playerId);
@@ -257,25 +280,33 @@ class PlayerMap {
 
     generatePolygons = (polygons, affectedTeams = [], affectedPlayers = []) => {
         const playerTravelTransitionTime = 1800;
+        const vis = this;
 
         polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
 
         affectedPlayers.forEach((playerId) => {
-            this.svg.select(`#player-polygon-${playerId}`).raise();
-            this.svg.select(`#player-image-${playerId}`).raise();
+            vis.svg.select(`#player-polygon-${playerId}`).raise();
+            vis.svg.select(`#player-image-${playerId}`).raise();
         })
 
-        this.polygonSets.forEach((polygonAttributes) => {
-            let playerPolygons = this.svg
+        vis.polygonSets.forEach((polygonAttributes) => {
+            let playerPolygons = vis.svg
                 .selectAll(`.${polygonAttributes.class}`)
                 .data(polygons, d => d.site.originalObject.data.originalData.player_id)
                 .join(
                     enter => {
                         enter
                             .append('path')
-                            .raise()
+                            // .raise()
                             .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
                             .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
+                            .on("mouseover", function(e ,d) {
+                                vis.tip.show(d, this);
+                                d3.select(".d3-tip").style("position", "fixed");
+                            })
+                            .on("mouseout", function(d) {
+                                vis.tip.hide(d, this);
+                            })
                             .style("fill-opacity", 0.95)
                             .style("fill", d => polygonAttributes.fillAccessor(d))
                             .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
@@ -348,16 +379,13 @@ class PlayerMap {
                     exit => exit
                         .attr('d', (d,i,n) => {
                             const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                            
-                            let existingPath = d3.select(n[i]).attr('d');
-                            const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
-
-                            const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
+                            const path = generateCirclePath(d[0][0], d[0][1], radius);
                             return path
                         })
                         .transition()
                         .delay(playerTravelTransitionTime/2)
                         .duration(playerTravelTransitionTime/2)
+                        .attr('d', (d,i,n) => generateCirclePath(d[0][0], d[0][1], 1))
                         .style("opacity", 0)
                         .remove()
                 )

@@ -43,9 +43,9 @@ Promise.all(promises).then((allData) => {
       player_name: player.player,
       player_id: player.player_id,
       team: teamData.find((team) => team.team_id === player.team_id),
-      per: player.per,
+      per: +player['2020_per'],
       salary: player.salary,
-      vorp: player.vorp
+      vorp: +player['2020_vorp']
     }));
 
     console.log(playerData)
