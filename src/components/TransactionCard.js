@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer, useRef } from 'react';
 import moment from 'moment';
 
 
-let isMobile = window.matchMedia('(max-width: 900px)').matches;
+let isMobile = window.matchMedia ? window.matchMedia('(max-width: 900px)').matches : false;
 
 const TransactionCard = ({ transactionDate, transactions, className }) => {
     const formattedDate = isMobile ? moment(transactionDate).format('ll') : moment(transactionDate).format('LL')

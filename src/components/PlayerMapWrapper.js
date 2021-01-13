@@ -57,10 +57,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
 
         console.log(allAffectedTeams, index);
-        
-        // setMapColor(() => {
-        //     return colors[index%10];
-        // })
     }
 
     const refElement = useRef(null);
@@ -74,23 +70,19 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 debug: false
             })
             .onStepEnter(({ element, index, direction }) => {
-                if (direction === "down") {
-                    try {
-                        processStepTransactions({ element, index, direction })
-                    }
-                    catch (e) {
-                        console.log(e);
-                    }
+                if (element.getAttribute("class").includes("phantom")) {
+                    return;
+                }
+                else if (direction === "down") {
+                    processStepTransactions({ element, index, direction })
                 }
             })
             .onStepExit(({ element, index, direction }) => {
-                if (direction === "up") {
-                    try {
-                        processStepTransactions({ element, index, direction })
-                    }
-                    catch (e) {
-                        console.log(e);
-                    }
+                if (element.getAttribute("class").includes("phantom")) {
+                    return;
+                }
+                else if (direction === "up") {
+                    processStepTransactions({ element, index, direction })
                 }
             });
         window.addEventListener("resize", scroller.resize);

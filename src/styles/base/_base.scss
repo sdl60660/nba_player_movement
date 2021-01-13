@@ -9,7 +9,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
   }
   
-  @media (max-width: 900px) {
+  @media (max-width: $mobile-breakpoint) {
     html { font-size: 14px; }
   }
   
@@ -17,14 +17,11 @@ body {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
   }
-  /* 
-  #content {
-    display: grid;
-    grid-template-columns: 20% 80%;
-  } */
   
   #scroll {
     position: relative;
+    // display: grid;
+    // grid-template-columns: 80% 20%;
   }
   
   #viz-column {
