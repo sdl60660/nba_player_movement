@@ -1,17 +1,21 @@
+// React
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import "intersection-observer";
+// Styles
+import './styles/styles.scss';
 
-import './index.css';
+// CRA
+import "intersection-observer";
 import reportWebVitals from './reportWebVitals';
+
+// Outside libraries
+import { json, csv } from 'd3-fetch';
 import { groupBy } from 'lodash';
 
+// Components
 import PlayerMapWrapper from './components/PlayerMapWrapper';
-import { json, csv } from 'd3-fetch';
 
-// setup resize event
-// window.addEventListener("resize", scroller.resize);
 
 // Begin loading datafiles
 const promises = [
@@ -21,7 +25,7 @@ const promises = [
   json("data/transactions.json")
 ];
 
-
+// Render React components (and inner d3 viz) on data load
 Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     const teamData = allData[1];
@@ -64,4 +68,4 @@ Promise.all(promises).then((allData) => {
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals(console.log);

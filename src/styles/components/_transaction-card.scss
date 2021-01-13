@@ -1,0 +1,36 @@
+
+.transaction-card {
+    background-color: rgba(184, 184, 184, 0.676);
+    border-left: 2px solid rgb(32, 32, 32);
+    font-size: $font-size-small;
+    margin: 0 0 100vh 0.5rem;
+    padding: 2rem 0.6rem;
+  
+    /* max-width: 40%; */
+    /* margin: auto; */
+    /* height: 10vh; */
+  }
+  
+  .transaction-card__transaction-list {
+    font-size: 0.8rem;
+    list-style-type: none;
+    padding-left: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .transaction-card__date-header {
+    background-color: white;
+    border-radius: 3px;
+    font-weight: bold;
+    margin: auto;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  
+  .transaction-card__transaction-item {
+    margin-bottom: 0.4rem;
+    background-color: white;
+    padding: .5rem .4rem;
+    border: 1px solid black;
+    border-radius: 3px;
+  }
