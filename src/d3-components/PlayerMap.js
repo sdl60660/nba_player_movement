@@ -2,19 +2,20 @@
 
 import * as d3 from 'd3';
 import d3Tip from "d3-tip"
+import { interpolatePath } from 'd3-interpolate-path';
 import * as topojson from "topojson-client";
 import seedrandom from 'seedrandom';
 import { groupBy } from 'lodash';
 import { voronoiMapSimulation } from 'd3-voronoi-map';
 
 
-const generateCirclePath = (cx, cy, r) => {
-  return "M" + cx + "," + cy + " " +
-         "m" + -r + ", 0 " +
-         "a" + r + "," + r + " 0 1,0 " + r*2  + ",0 " +
-         "a" + r + "," + r + " 0 1,0 " + -r*2 + ",0Z";
-};
 
+const getCirclePath = (center, radius) => {
+    console.log(center, radius)
+    const circleCoordinates = getCircleCoordinates(parseFloat(center[0]), parseFloat(center[1]), radius, 20);
+    return `M${circleCoordinates.join('L')}L${circleCoordinates[0]}z`;
+}
+  
 
 const getCircleCoordinates = (centerX, centerY, radius, sides) => {
     if (radius === 0) {
@@ -31,7 +32,7 @@ const getCircleCoordinates = (centerX, centerY, radius, sides) => {
         coordinates.push(coordinate)
     }
     
-    return coordinates;
+    return coordinates.reverse();
 }
 
 class PlayerMap {
@@ -160,7 +161,7 @@ class PlayerMap {
                 .attr("width", 1)
                 .attr("patternUnits", "objectBoundingBox")
                 .append("svg:image")
-                    .attr("xlink:href", d => `images/${d.player_id}.png`)
+                    .attr("xlink:href", d => `images/player_photos/${d.player_id}.png`)
                     // Found the ratio of salary to polygon area, per unit of circle radius range (~159), then took sqrt to get length of one side (width)
                     // (0.45462857 * this.maxTotalWeight)
                     // .attr("width", d => {
@@ -297,7 +298,7 @@ class PlayerMap {
                     enter => {
                         enter
                             .append('path')
-                            // .raise()
+                            .raise()
                             .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
                             .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
                             .on("mouseover", function(e ,d) {
@@ -322,9 +323,7 @@ class PlayerMap {
                             .attr('d', (d) => {
                                 if (affectedPlayers.includes(d.site.originalObject.data.originalData.player_id)) {
                                     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                                    
-                                    return generateCirclePath(d[0][0], d[0][1], radius);
-                                    // return `M${d.join('L')}z`;
+                                    return getCirclePath(d[0], radius);
                                 }
                                 else {
                                     return `M${d.join('L')}z`;
@@ -332,8 +331,13 @@ class PlayerMap {
                             })
                             .transition("initial-positioning")
                             .delay(playerTravelTransitionTime)
-                            .duration(0)
-                            .attr("d", d => `M${d.join('L')}z`);
+                            .duration(playerTravelTransitionTime / 3)
+                            .attrTween('d', (d,i,n) => {
+                                const previous = d3.select(n[i]).attr("d");
+                                const current = `M${d.join('L')}z`;
+
+                                return interpolatePath(previous, current);
+                            })
                     },
 
                     update => {     
@@ -354,21 +358,20 @@ class PlayerMap {
                                 d3.select(n[i])
                                     .attr('startX', existingCenter[0])
                                     .attr('startY', existingCenter[1])
+                                    .attr('radius', radius);
 
-                                const path = generateCirclePath(existingCenter[0], existingCenter[1], radius);
-                                return path
+                                return getCirclePath(existingCenter, radius);
                             })
                             .transition("re-position")
                             .duration(playerTravelTransitionTime)
-                            .attr('transform', (d,i,n) => {
-                                const newCenter = d[0];
-                                let startX = d3.select(n[i]).attr('startX');
-                                let startY = d3.select(n[i]).attr('startY');
+                            .attrTween('d', (d,i,n) => {
+                                const element = d3.select(n[i]);
+                                const radius = element.attr("radius");
 
-                                const dx = newCenter[0] - startX;
-                                const dy = newCenter[1] - startY;  
+                                const previous = element.attr("d");
+                                const current = getCirclePath(d[0], radius);
 
-                                return `translate(${dx},${dy})`
+                                return interpolatePath(previous, current);
                             })
                             .style("fill", d => polygonAttributes.fillAccessor(d))
                             .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
@@ -376,10 +379,15 @@ class PlayerMap {
                         update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                             .transition("remove-translation")
                             .delay(playerTravelTransitionTime)
-                            .duration(0)
+                            .duration(playerTravelTransitionTime / 3)
                             .attr("transform", "translate(0,0)")
                             .transition("re-shuffle")
-                            .attr('d', (d) => `M${d.join('L')}z`)
+                            .attrTween('d', (d,i,n) => {
+                                const previous = d3.select(n[i]).attr("d");
+                                const current = `M${d.join('L')}z`;
+
+                                return interpolatePath(previous, current);
+                            })
 
                         return update;
                     },
@@ -387,13 +395,12 @@ class PlayerMap {
                     exit => exit
                         .attr('d', (d,i,n) => {
                             const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                            const path = generateCirclePath(d[0][0], d[0][1], radius);
-                            return path
+                            return getCirclePath(d[0], radius);
                         })
                         .transition()
-                        .delay(playerTravelTransitionTime/2)
-                        .duration(playerTravelTransitionTime/2)
-                        .attr('d', (d,i,n) => generateCirclePath(d[0][0], d[0][1], 1))
+                        .delay(playerTravelTransitionTime)
+                        .duration(playerTravelTransitionTime / 3)
+                        .attr('d', (d,i,n) => getCirclePath(d[0], 1))
                         .style("opacity", 0)
                         .remove()
                 )

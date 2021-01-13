@@ -18,6 +18,7 @@ import { groupBy } from 'lodash';
 // Components
 import PlayerMapWrapper from './components/PlayerMapWrapper';
 import Header from './components/Header';
+import Loader from './components/Loader';
 import Intro from './components/Intro';
 import Footer from './components/Footer';
 
@@ -37,7 +38,7 @@ const formatPlayerData = (playerData, teamData) => {
     player_id: player.player_id,
     team: teamData.find((team) => team.team_id === player.team_id),
     per: player['2020_per'] === "" ? "-" : +player['2020_per'],
-    salary: player.salary,
+    salary: player.salary === 0 ? 1 : player.salary,
     vorp: player['2020_vorp'] === "" ? "-" : +player['2020_vorp']
   }));
   
@@ -58,25 +59,25 @@ Promise.all(promises).then((allData) => {
     const teamData = allData[1];
     let playerData = allData[2];
     let transactionData = groupBy(allData[3], d => d.date);
-    console.log(Object.keys(transactionData)[0]);
     
     playerData = formatPlayerData(playerData, teamData);
 
-    ReactDOM.render(
-          <div>
-            <Header />
-            <Intro />
-            <PlayerMapWrapper
-              id={"viz-tile"}
-              _geoData={geoData}
-              _teamData={teamData}
-              _playerData={playerData}
-              transactionData={transactionData}
-            />
-            <Footer githubLink={"https://github.com/sdl60660/nba_player_movement"} />
-          </div>,
-      document.getElementById('content'));
-    });
+    const jsx =
+      <div>
+        <Header />
+        <Intro />
+        <PlayerMapWrapper
+          id={"viz-tile"}
+          _geoData={geoData}
+          _teamData={teamData}
+          _playerData={playerData}
+          transactionData={transactionData}
+        />
+        <Footer githubLink={"https://github.com/sdl60660/nba_player_movement"} />
+      </div>
+
+    ReactDOM.render(jsx, document.getElementById("content"));
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
