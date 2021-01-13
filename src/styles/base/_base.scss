@@ -7,34 +7,12 @@ body {
     background-color: #f3f3f3;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-  
-  @media (max-width: $mobile-breakpoint) {
-    html { font-size: 14px; }
-  }
-  
-  code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
-  }
-  
-  #scroll {
-    position: relative;
-    // display: grid;
-    // grid-template-columns: 80% 20%;
-  }
-  
-  #viz-column {
-    position: sticky;
-    top: 0;
-    padding-left: 16vw;
-  }
-  
-  #annotations {
-    position: relative;
-    max-width: 20vw;
-  }
-  
-  .phantom { 
-    opacity: 0;
-  }
+}
+
+@media (max-width: $mobile-breakpoint) {
+  html { font-size: 14px; }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

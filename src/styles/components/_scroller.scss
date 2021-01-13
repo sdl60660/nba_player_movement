@@ -1,0 +1,21 @@
+
+#scroll {
+    position: relative;
+    // display: grid;
+    // grid-template-columns: 80% 20%;
+  }
+  
+#viz-column {
+    position: sticky;
+    top: 0;
+    padding-left: 16vw;
+}
+  
+#annotations {
+    position: relative;
+    max-width: 20vw;
+}
+  
+.phantom { 
+    opacity: 0;
+}

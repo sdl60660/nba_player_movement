@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useState, useEffect, useReducer, useRef } from 'react';
 import scrollama from 'scrollama';
 import * as chromatic from "d3-scale-chromatic";

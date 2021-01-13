@@ -1,3 +1,5 @@
+// @flow
+
 // React
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -15,6 +17,9 @@ import { groupBy } from 'lodash';
 
 // Components
 import PlayerMapWrapper from './components/PlayerMapWrapper';
+import Header from './components/Header';
+import Intro from './components/Intro';
+import Footer from './components/Footer';
 
 
 const formatPlayerData = (playerData, teamData) => {
@@ -58,13 +63,18 @@ Promise.all(promises).then((allData) => {
     playerData = formatPlayerData(playerData, teamData);
 
     ReactDOM.render(
-          <PlayerMapWrapper
-            id={"viz-tile"}
-            _geoData={geoData}
-            _teamData={teamData}
-            _playerData={playerData}
-            transactionData={transactionData}
-          />,
+          <div>
+            <Header />
+            <Intro />
+            <PlayerMapWrapper
+              id={"viz-tile"}
+              _geoData={geoData}
+              _teamData={teamData}
+              _playerData={playerData}
+              transactionData={transactionData}
+            />
+            <Footer githubLink={"https://github.com/sdl60660/nba_player_movement"} />
+          </div>,
       document.getElementById('content'));
     });
 

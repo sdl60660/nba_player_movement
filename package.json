@@ -18,6 +18,7 @@
     "d3-tip": "^0.9.1",
     "d3-voronoi-map": "^2.1.0",
     "d3-voronoi-treemap": "^1.1.1",
+    "flow-bin": "^0.142.0",
     "hbs": "^4.1.1",
     "intersection-observer": "^0.12.0",
     "lodash": "^4.17.20",
@@ -35,7 +36,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +58,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-flow": "^7.12.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "jest-enzyme": "^7.1.2"

@@ -1,12 +1,11 @@
+// @flow
+
 import * as d3 from 'd3';
 import d3Tip from "d3-tip"
 import * as topojson from "topojson-client";
 import seedrandom from 'seedrandom';
 import { groupBy } from 'lodash';
 import { voronoiMapSimulation } from 'd3-voronoi-map';
-
-
-const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
 
 const generateCirclePath = (cx, cy, r) => {
@@ -106,7 +105,7 @@ class PlayerMap {
         
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
         const projection = d3.geoAlbersUsa()
-            .fitExtent([[0, 30], [width-50, height-50]], geoJSON);
+            .fitExtent([[0, 30], [width-60, height-60]], geoJSON);
         this.generateMap({ geoJSON, projection, mapColor });
 
         this.generateTeamGroups({ projection });
@@ -289,8 +288,9 @@ class PlayerMap {
             vis.svg.select(`#player-image-${playerId}`).raise();
         })
 
+        // Create/update both sets of polygons (player image and fill)
         vis.polygonSets.forEach((polygonAttributes) => {
-            let playerPolygons = vis.svg
+            vis.svg
                 .selectAll(`.${polygonAttributes.class}`)
                 .data(polygons, d => d.site.originalObject.data.originalData.player_id)
                 .join(
@@ -302,7 +302,15 @@ class PlayerMap {
                             .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
                             .on("mouseover", function(e ,d) {
                                 vis.tip.show(d, this);
-                                d3.select(".d3-tip").style("position", "fixed");
+
+                                const tipElement = d3.select(".d3-tip");
+                                const top = this.getBoundingClientRect().top;
+                                const offset = tipElement.node().getBoundingClientRect().height;
+
+                                tipElement
+                                    .style("position", "fixed")
+                                    .style("top", `${top - offset}px`)
+
                             })
                             .on("mouseout", function(d) {
                                 vis.tip.hide(d, this);
@@ -396,7 +404,6 @@ class PlayerMap {
     updateMapColor = ({ opacity, mapColor }) => { 
         this.mapPath
             .transition()
-            // .duration(300)
             .style("fill-opacity", opacity)
             .style("fill", mapColor);
     }

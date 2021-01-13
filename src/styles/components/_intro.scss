@@ -1,0 +1,19 @@
+
+.intro-container {
+    max-width: 40rem;
+    margin: $m-size auto;
+    padding: 0 3rem;
+}
+
+.intro-container__title {
+    font-size: $font-size-large;
+    font-weight: bold;
+}
+
+.intro-container__row {
+    margin-bottom: $m-size;
+}
+
+.intro-container__row#title-row {
+    text-align: center;
+}
