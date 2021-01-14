@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useReducer, useRef } from 'react';
 import scrollama from 'scrollama';
+import * as d3 from 'd3';
 import * as chromatic from "d3-scale-chromatic";
 
 import PlayerMapControls from './PlayerMapControls';
@@ -28,13 +29,21 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const transactionDates = Object.keys(transactionData);
     const playerDataIds = playerData.map((player) => player.player_id);
 
+    let allAffectedTeams = [];
+    let allAffectedPlayers = [];
+    let polygonSelections = [];
+
+    let scrollDirection = "down";
+
     const processStepTransactions = ({ element, index, direction }) => {
+        d3.selectAll(".exit-polygon").remove();
+
         // console.log({ element, index, direction });
         let transactionDate = transactionDates[index];
         let transactions = transactionData[transactionDate];
 
-        let allAffectedTeams = [];
-        let allAffectedPlayers = [];
+        allAffectedTeams = [];
+        allAffectedPlayers = [];
         
         setPlayerData((state) => {
             transactions.forEach((transaction) => {
@@ -56,9 +65,15 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
         allAffectedTeams = [...new Set(allAffectedTeams.filter((team) => team !== "FA" && team !== "RET"))];
         allAffectedPlayers = [...new Set(allAffectedPlayers)];
-        vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
+        
+        polygonSelections = vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
 
-        console.log(allAffectedTeams, index);
+        console.log(allAffectedTeams, index, polygonSelections);
+    }
+
+    const processProgress = ({ element, index, progress, scrollDirection }) => {
+        // console.log(element, index, progress);
+        vis.updatePositions(allAffectedPlayers, allAffectedTeams, polygonSelections, progress, scrollDirection)
     }
 
     const refElement = useRef(null);
@@ -69,13 +84,17 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         scroller
             .setup({
                 step: ".transaction-card",
-                debug: false
+                debug: false,
+                progress: true,
+                threshold: 6
             })
             .onStepEnter(({ element, index, direction }) => {
+                scrollDirection = direction;
                 if (element.getAttribute("class").includes("phantom")) {
                     return;
                 }
-                else if (direction === "down") {
+                // else if (direction === "down") {
+                else {
                     processStepTransactions({ element, index, direction })
                 }
             })
@@ -84,8 +103,12 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                     return;
                 }
                 else if (direction === "up") {
-                    processStepTransactions({ element, index, direction })
+                    return;
+                    // processStepTransactions({ element, index, direction })
                 }
+            })
+            .onStepProgress(({ element, index, progress }) => {
+                processProgress({ element, index, progress, scrollDirection })
             });
         window.addEventListener("resize", scroller.resize);
     }, []);

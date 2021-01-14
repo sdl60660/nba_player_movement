@@ -14,6 +14,8 @@ import reportWebVitals from './reportWebVitals';
 // Outside libraries
 import { json, csv } from 'd3-fetch';
 import { groupBy } from 'lodash';
+import * as d3 from 'd3';
+
 
 // Components
 import PlayerMapWrapper from './components/PlayerMapWrapper';
@@ -22,6 +24,15 @@ import Loader from './components/Loader';
 import Intro from './components/Intro';
 import Footer from './components/Footer';
 
+
+const formatTeamData = (teamData) => {
+  teamData.forEach((team) => {
+    team.color_1 = d3.color(team.color_1);
+    team.color_2 = d3.color(team.color_2);
+  })
+
+  return teamData;
+}
 
 const formatPlayerData = (playerData, teamData) => {
   playerData.forEach(player => {
@@ -56,12 +67,10 @@ const promises = [
 // Render React components (and inner d3 viz) on data load
 Promise.all(promises).then((allData) => {
     const geoData = allData[0];
-    const teamData = allData[1];
-    let playerData = allData[2];
+    let teamData = formatTeamData(allData[1]);
+    let playerData = formatPlayerData(allData[2], teamData);
     let transactionData = groupBy(allData[3], d => d.date);
     
-    playerData = formatPlayerData(playerData, teamData);
-
     const jsx =
       <div>
         <Header />

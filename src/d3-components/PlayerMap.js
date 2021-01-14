@@ -9,13 +9,10 @@ import { groupBy } from 'lodash';
 import { voronoiMapSimulation } from 'd3-voronoi-map';
 
 
-
 const getCirclePath = (center, radius) => {
-    console.log(center, radius)
     const circleCoordinates = getCircleCoordinates(parseFloat(center[0]), parseFloat(center[1]), radius, 20);
     return `M${circleCoordinates.join('L')}L${circleCoordinates[0]}z`;
 }
-  
 
 const getCircleCoordinates = (centerX, centerY, radius, sides) => {
     if (radius === 0) {
@@ -39,12 +36,9 @@ class PlayerMap {
 
     containerEl;
     props;
-    svg; 
   
     constructor(containerEl, props) {
         this.containerEl = containerEl;
-        this.props = props;
-
         const { width, height, mapColor, geoData, teamData, playerData, setPlayerData } = props;
 
         this.svg = d3.select(containerEl)
@@ -289,17 +283,24 @@ class PlayerMap {
             vis.svg.select(`#player-image-${playerId}`).raise();
         })
 
+        let polygonSelections = []
+
         // Create/update both sets of polygons (player image and fill)
         vis.polygonSets.forEach((polygonAttributes) => {
-            vis.svg
+
+            let polygonSelection = vis.svg
                 .selectAll(`.${polygonAttributes.class}`)
-                .data(polygons, d => d.site.originalObject.data.originalData.player_id)
+                .data(polygons, d => d.site.originalObject.data.originalData.player_id);
+
+            polygonSelections.push(polygonSelection);
+
+            polygonSelection
                 .join(
                     enter => {
                         enter
                             .append('path')
                             .raise()
-                            .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                            .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix} enter-polygon`)
                             .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
                             .on("mouseover", function(e ,d) {
                                 vis.tip.show(d, this);
@@ -311,7 +312,6 @@ class PlayerMap {
                                 tipElement
                                     .style("position", "fixed")
                                     .style("top", `${top - offset}px`)
-
                             })
                             .on("mouseout", function(d) {
                                 vis.tip.hide(d, this);
@@ -329,23 +329,18 @@ class PlayerMap {
                                     return `M${d.join('L')}z`;
                                 }
                             })
-                            .transition("initial-positioning")
-                            .delay(playerTravelTransitionTime)
-                            .duration(playerTravelTransitionTime / 3)
-                            .attrTween('d', (d,i,n) => {
-                                const previous = d3.select(n[i]).attr("d");
-                                const current = `M${d.join('L')}z`;
-
-                                return interpolatePath(previous, current);
-                            })
                     },
 
-                    update => {     
+                    update => {  
                         update
-                            .style('opacity', d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id) ? 1.0 : 0.3)
-                            .transition("return-opacity")
-                            .delay(playerTravelTransitionTime)
-                            .style('opacity', 1.0)
+                            .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                        
+                        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                            .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
+
+                        update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                            .style("fill", d => polygonAttributes.fillAccessor(d))
+                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
                         
                         update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                             .raise()
@@ -354,58 +349,154 @@ class PlayerMap {
                                 
                                 let existingPath = d3.select(n[i]).attr('d');
                                 const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+                                const startPath = getCirclePath(existingCenter, radius);
 
                                 d3.select(n[i])
                                     .attr('startX', existingCenter[0])
                                     .attr('startY', existingCenter[1])
-                                    .attr('radius', radius);
+                                    .attr('radius', radius)
+                                    .attr('startPath', startPath);
 
-                                return getCirclePath(existingCenter, radius);
+                                return startPath;
                             })
-                            .transition("re-position")
-                            .duration(playerTravelTransitionTime)
-                            .attrTween('d', (d,i,n) => {
-                                const element = d3.select(n[i]);
-                                const radius = element.attr("radius");
-
-                                const previous = element.attr("d");
-                                const current = getCirclePath(d[0], radius);
-
-                                return interpolatePath(previous, current);
-                            })
-                            .style("fill", d => polygonAttributes.fillAccessor(d))
-                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        
-                        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                            .transition("remove-translation")
-                            .delay(playerTravelTransitionTime)
-                            .duration(playerTravelTransitionTime / 3)
-                            .attr("transform", "translate(0,0)")
-                            .transition("re-shuffle")
-                            .attrTween('d', (d,i,n) => {
-                                const previous = d3.select(n[i]).attr("d");
-                                const current = `M${d.join('L')}z`;
-
-                                return interpolatePath(previous, current);
-                            })
+                            .attr("originalFill", (d,i,n) => d3.select(n[i]).style("fill"))
+                            .attr("originalStroke", (d,i,n) => d3.select(n[i]).style("stroke"))
 
                         return update;
                     },
 
                     exit => exit
-                        .attr('d', (d,i,n) => {
-                            const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                            return getCirclePath(d[0], radius);
-                        })
-                        .transition()
-                        .delay(playerTravelTransitionTime)
-                        .duration(playerTravelTransitionTime / 3)
-                        .attr('d', (d,i,n) => getCirclePath(d[0], 1))
-                        .style("opacity", 0)
-                        .remove()
+                        .attr("class", d => `exit-polygon ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                        .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
                 )
+        })
+        
+        return polygonSelections;
+    }
 
-        })     
+    updatePositions = ( affectedPlayers, affectedTeams, polygonSelections, tweenPosition, direction ) => {
+        const traverseThreshold = 0.1;
+        const reshuffleThreshold = 0.9;
+
+        if (direction === "up") {
+            tweenPosition = 1 - tweenPosition;
+        }
+
+        polygonSelections.forEach((selection) => {
+            selection
+                .filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                .attr('d', (d,i,n) => {
+                    const element = d3.select(n[i]);
+                    const radius = element.attr("radius");
+
+                    const originalShape = element.attr("startPosition");
+                    const circleStart = element.attr("startPath");
+
+                    const positionFinal = getCirclePath(d[0], radius);
+                    const shapeFinal = `M${d.join('L')}z`;
+
+                    if (tweenPosition < traverseThreshold) {
+                        const stagePosition = tweenPosition / traverseThreshold;
+                        return interpolatePath(originalShape, circleStart)(stagePosition);
+                    }
+                    else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
+                        const stagePosition = (tweenPosition - traverseThreshold) / (1 - traverseThreshold);
+                        return interpolatePath(circleStart, positionFinal)(stagePosition);
+                    }
+                    else {
+                        const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                        return interpolatePath(positionFinal, shapeFinal)(stagePosition);
+                    }
+                })
+                .style("stroke", (d,i,n) => {
+                    const element = d3.select(n[i]);
+
+                    const originalColor = element.attr("originalStroke")
+                    const updatedColor = d.site.originalObject.data.originalData.team.color_2;
+
+                    return d3.interpolateRgb(originalColor, updatedColor)(tweenPosition);
+                })
+                .style("fill", (d,i,n)  => {
+                    const element = d3.select(n[i]);
+                    const originalColor = element.attr("originalFill")
+                    if (originalColor.startsWith("rgb")) {
+                        const updatedColor = d.site.originalObject.data.originalData.team.color_1;
+                        return d3.interpolateRgb(originalColor, updatedColor)(tweenPosition);
+                    }
+                    else {
+                        return originalColor;
+                    }
+                })
+
+            selection.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                .attr("d", (d,i,n) => {
+                    const element = d3.select(n[i]);
+                    const originalShape = element.attr("startPosition");
+                    const shapeFinal = `M${d.join('L')}z`;
+
+                    if (tweenPosition >= reshuffleThreshold) {
+                        const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                        return interpolatePath(originalShape, shapeFinal)(stagePosition);
+                    }
+                    else {
+                        return originalShape;
+                    }
+                })
+            
+            selection.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                .style("opacity", () => {
+                    if (tweenPosition >= reshuffleThreshold) {
+                        const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                        return d3.interpolateNumber(0.3, 1.0)(stagePosition)
+                    }
+                    else if (tweenPosition <= traverseThreshold) {
+                        const stagePosition = tweenPosition / traverseThreshold;
+                        return d3.interpolateNumber(1.0, 0.3)(stagePosition)
+                    }
+                    else {
+                        return 0.3
+                    }
+                    
+                });
+        })
+
+        d3.selectAll('.enter-polygon')
+            .attr('d', (d,i,n) => {
+                if (tweenPosition >= reshuffleThreshold) {
+                    const previous = d3.select(n[i]).attr("d");
+                    const current = `M${d.join('L')}z`;
+
+                    return interpolatePath(previous, current)(0.9);
+
+                }
+                else {
+                    return d3.select(n[i]).attr("d");
+                }
+            })
+        
+        d3.selectAll(".exit-polygon")
+            .attr('d', (d,i,n) => {
+                const element = d3.select(n[i]);
+
+                const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                
+                const startPosition = element.attr("startPosition");
+                const middlePosition = getCirclePath(d[0], radius);
+                const endPosition = getCirclePath(d[0], 1);
+
+                if (tweenPosition <= traverseThreshold) {
+                    const stagePosition = tweenPosition / traverseThreshold;
+                    return interpolatePath(startPosition, middlePosition)(stagePosition);
+                }
+                else if (tweenPosition >= reshuffleThreshold) {
+                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                    return interpolatePath(middlePosition, endPosition)(stagePosition);
+                }
+                else {
+                    return middlePosition;
+                }
+            })
+
     }
 
     updateMapColor = ({ opacity, mapColor }) => { 
@@ -426,7 +517,7 @@ class PlayerMap {
             this.allPolygons = this.allPolygons.concat(polygons);
         })
 
-        this.generatePolygons(this.allPolygons, affectedTeams, affectedPlayers);
+        return this.generatePolygons(this.allPolygons, affectedTeams, affectedPlayers);
     }
   
     resize = (width, height) => { /*...*/ }

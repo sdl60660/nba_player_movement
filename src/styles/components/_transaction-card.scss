@@ -1,14 +1,18 @@
 
 .transaction-card {
-    background-color: rgba(184, 184, 184, 0.676);
-    border-left: 2px solid rgb(32, 32, 32);
     font-size: $font-size-small;
-    margin: 0 0 100vh 0.5rem;
-    padding: 2rem 0.6rem;
+    margin: 0 0 10vh 0.5rem;
+    min-height: 90vh;
   
     /* max-width: 40%; */
     /* margin: auto; */
     /* height: 10vh; */
+  }
+
+  .transaction-card__visible-section {
+    border-left: 2px solid rgb(32, 32, 32);
+    background-color: rgba(184, 184, 184, 0.676);
+    padding: 2rem 0.6rem;
   }
   
   .transaction-card__transaction-list {

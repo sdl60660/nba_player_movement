@@ -9,14 +9,16 @@ const TransactionCard = ({ transactionDate, transactions, className }) => {
 
     return (
         <div className={className}>
-            <div className={"transaction-card__date-header"}>{formattedDate}</div>
-            <ul className={"transaction-card__transaction-list"}>
-                { transactions.map((transaction, i) => <li
-                                                        className={"transaction-card__transaction-item"}
-                                                        key={i}>{ transaction.text }
-                                                        </li> ) 
-                                                    }
-            </ul>
+            <div className={"transaction-card__visible-section"}>
+                <div className={"transaction-card__date-header"}>{formattedDate}</div>
+                <ul className={"transaction-card__transaction-list"}>
+                    { transactions.map((transaction, i) => <li
+                                                            className={"transaction-card__transaction-item"}
+                                                            key={i}>{ transaction.text }
+                                                            </li> ) 
+                                                        }
+                </ul>
+            </div>
         </div>
     )
 }
