@@ -250,10 +250,11 @@ class PlayerMap {
             .prng(seedrandom('randomsed'))
             .clip(getCircleCoordinates(xVal, yVal, radius, 35))
             .initialPosition((d) => {
-                const polygon = this.svg.select(`#player-polygon-${d.player_id}`)
-                return polygon.nodes().length > 0 ?
-                    [polygon.data()[0].site.x, polygon.data()[0].site.y] :
-                    [undefined, undefined]
+                // const polygon = this.svg.select(`#polygon-${d.player_id}`)
+                // return (polygon.nodes().length > 0 &&
+                //         polygon.data()[0].site.originalObject.data.originalData.team.team_id === d.team.team_id) ?
+                //     [polygon.data()[0].site.x, polygon.data()[0].site.y] :
+                return [undefined, undefined]
             })
             // .initialWeight((d) => {
             //     const polygon = this.svg.select(`#player-polygon-${d.player_id}`)
@@ -279,8 +280,8 @@ class PlayerMap {
         polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
 
         affectedPlayers.forEach((playerId) => {
-            vis.svg.select(`#player-polygon-${playerId}`).raise();
-            vis.svg.select(`#player-image-${playerId}`).raise();
+            vis.svg.select(`#polygon-${playerId}`).raise();
+            vis.svg.select(`#polygon-image-${playerId}`).raise();
         })
 
         let polygonSelections = []
@@ -346,6 +347,9 @@ class PlayerMap {
                         update
                             .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
                         
+                        update.filter(d => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                            .attr("d", d => `M${d.join('L')}z`)
+
                         update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                             .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
 
