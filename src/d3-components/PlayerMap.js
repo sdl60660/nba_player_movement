@@ -256,12 +256,6 @@ class PlayerMap {
                 //     [polygon.data()[0].site.x, polygon.data()[0].site.y] :
                 return [undefined, undefined]
             })
-            // .initialWeight((d) => {
-            //     const polygon = this.svg.select(`#player-polygon-${d.player_id}`)
-            //     return polygon.nodes().length > 0 ?
-            //         polygon.data()[0].site.weight :
-            //         undefined
-            // })
             .stop()                                               
 
         let state = simulation.state();
@@ -454,21 +448,21 @@ class PlayerMap {
                     }
                 })
             
-            selection.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                .style("opacity", () => {
-                    if (tweenPosition >= reshuffleThreshold) {
-                        const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
-                        return d3.interpolateNumber(0.3, 1.0)(stagePosition)
-                    }
-                    else if (tweenPosition <= traverseThreshold) {
-                        const stagePosition = tweenPosition / traverseThreshold;
-                        return d3.interpolateNumber(1.0, 0.3)(stagePosition)
-                    }
-                    else {
-                        return 0.3
-                    }
+            // selection.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+            //     .style("opacity", () => {
+            //         if (tweenPosition >= reshuffleThreshold) {
+            //             const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+            //             return d3.interpolateNumber(1.0, 1.0)(stagePosition)
+            //         }
+            //         else if (tweenPosition <= traverseThreshold) {
+            //             const stagePosition = tweenPosition / traverseThreshold;
+            //             return d3.interpolateNumber(1.0, 1.0)(stagePosition)
+            //         }
+            //         else {
+            //             return 1.0
+            //         }
                     
-                });
+            //     });
         })
 
         d3.selectAll('.enter-polygon')

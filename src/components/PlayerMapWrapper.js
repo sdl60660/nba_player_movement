@@ -75,36 +75,34 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         vis.updatePositions(allAffectedPlayers, allAffectedTeams, polygonSelections, progress, scrollDirection)
     }
 
-    // const setTransactionHoverEvent = () => {
-    //     d3.selectAll(".transaction-card__transaction-item")
-    //         .on("mouseover", function(e) {
-    //             const element = d3.select(this);
+    const setTransactionHoverEvent = () => {
+        d3.selectAll(".transaction-card__transaction-item")
+            .on("mouseover", function(e) {
+                const element = d3.select(this);
 
-    //             d3.selectAll(".transaction-card__transaction-item")
-    //                 .style("opacity", 0.3)
+                d3.selectAll(".transaction-card__transaction-item")
+                    .style("opacity", 0.3)
                 
-    //             element
-    //                 .style("opacity", 1.0)
+                element
+                    .style("opacity", 1.0)
 
-    //             d3.selectAll(`.player-polygon`)
-    //                 .attr("revertOpacity", function() { return d3.select(this).style("opacity") })
-    //                 .style("opacity", 0.3);
+                d3.selectAll(`.player-polygon`)
+                    .style("opacity", 0.3);
 
-    //             element.attr("class").split(" ").slice(1).forEach((className) => {
-    //                 const polygonId = className.replace("transaction-log-", "");
-    //                 d3.selectAll(`.polygon-${polygonId}`)
-    //                     .style("opacity", 1.0);
-    //                     // transform-origin: 50% 50%;
-    //             })
-    //         })
-    //         .on("mouseout", function(e) {
-    //             d3.selectAll(".transaction-card__transaction-item")
-    //                 .style("opacity", 1.0)
+                element.attr("class").split(" ").slice(1).forEach((className) => {
+                    const polygonId = className.replace("transaction-log-", "");
+                    d3.selectAll(`.polygon-${polygonId}`)
+                        .style("opacity", 1.0);
+                })
+            })
+            .on("mouseout", function(e) {
+                d3.selectAll(".transaction-card__transaction-item")
+                    .style("opacity", 1.0)
 
-    //             d3.selectAll(`.player-polygon`)
-    //                 .style("opacity", function() { return d3.select(this).attr("revertOpacity")});
-    //         })
-    // }
+                d3.selectAll(`.player-polygon`)
+                    .style("opacity", 1.0);
+            })
+    }
 
     const refElement = useRef(null);
     let scroller = scrollama();
@@ -116,7 +114,8 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 step: ".transaction-card",
                 debug: false,
                 progress: true,
-                threshold: 6
+                threshold: 6,
+                order: false
             })
             .onStepEnter(({ element, index, direction }) => {
                 scrollDirection = direction;
@@ -132,12 +131,17 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 return
             })
             .onStepProgress(({ element, index, progress }) => {
-                processProgress({ element, index, progress, scrollDirection })
+                if (element.getAttribute("class").includes("phantom")) {
+                    return;
+                }
+                else {
+                    processProgress({ element, index, progress, scrollDirection })
+                }
             });
 
         window.addEventListener("resize", scroller.resize);
 
-        // setTransactionHoverEvent();
+        setTransactionHoverEvent();
     }, []);
 
     useEffect(() => {
