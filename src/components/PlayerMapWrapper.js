@@ -32,6 +32,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     let allAffectedPlayers = [];
 
     let scrollDirection = "down";
+    let eventTriggerCount = 0;
 
     const processStepTransactions = ({ element, index, direction }) => {
         d3.selectAll(".exit-polygon").remove();
@@ -68,7 +69,8 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     }
 
     const processProgress = ({ element, index, progress, scrollDirection }) => {
-        console.log(progress, index)
+        eventTriggerCount += 1
+        console.log(progress, index, eventTriggerCount)
         vis.updatePositions(allAffectedPlayers, allAffectedTeams, progress, scrollDirection)
     }
 
@@ -111,7 +113,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 step: ".transaction-card",
                 debug: false,
                 progress: true,
-                threshold: 6,
+                threshold: 3,
                 order: false
             })
             .onStepEnter(({ element, index, direction }) => {
@@ -119,7 +121,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 if (element.getAttribute("class").includes("phantom")) {
                     return;
                 }
-                // else if (direction === "down") {
                 else {
                     processStepTransactions({ element, index, direction })
                 }
@@ -142,7 +143,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     }, []);
 
     useEffect(() => {
-        // console.log("Effect triggered", mapColor, opacity)
         vis.updateMapColor({ mapColor, opacity })
     }, [mapColor, opacity]);
 
