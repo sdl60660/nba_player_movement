@@ -95,7 +95,6 @@ class PlayerMap {
 
         this.teamData = teamData;
         this.trueTeamData = teamData.filter(d => d.team_id !== 'FA' && d.team_id !== 'RET');
-
         this.initPlayerPhotos({ playerData })
         
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
@@ -103,7 +102,10 @@ class PlayerMap {
             .fitExtent([[0, 30], [width-60, height-60]], geoJSON);
         this.generateMap({ geoJSON, projection, mapColor });
 
+        this.g = this.svg.append("g").attr("id", "polygon-group");
+        this.labelGroup = this.svg.append("g").attr("id", "label-group");
         this.generateTeamGroups({ projection });
+        this.setTeamLabels(this.trueTeamData);
 
         this.allPolygons = [];
         this.trueTeamData.forEach((team) => {
@@ -113,6 +115,41 @@ class PlayerMap {
         })
 
         this.generatePolygons(this.allPolygons);
+    }
+
+    setTeamLabels = (teamData) => {
+        const vis = this;
+
+        vis.labelGroup.selectAll(".team-label")
+            .data(teamData, d => d.team_id)
+            .join(
+                enter => enter
+                    .append("text")
+                    .attr("class", "team-label")
+                    .attr("id", d => `${d.team_id}-label`)
+                    .text(d => d.team_full_name)
+                    .style("font-size", "1rem")
+                    .style("fill", d => d.color_1)
+                    .style("stroke", d => d.color_2)
+                    .style("stroke-width", "1px")
+                    .style("paint-order", "stroke")
+                    .style("font-weight", "bold")
+                    .attr("x", d => {
+                        return (d.x || d.xCoordinate);
+                    })
+                    .attr("y", d => {
+                        return 14 + Math.max(50, d.radius) + (d.y || d.yCoordinate);
+                    })
+                    .style("text-anchor", "middle")
+                    .style("padding", "0.5rem")
+                    .style("background-color", "white")
+                    .style("display", "none"),
+                
+                update => update
+                    .attr("y", d => {
+                        return 14 + d.radius + (d.y || d.yCoordinate);
+                    })
+            )
     }
 
     initTooltip = () => {
@@ -182,7 +219,7 @@ class PlayerMap {
                     .attr("d", path)
                     .attr("class", "state-path")
                     .style("opacity", 0.8)
-                    .style("stroke","black")
+                    .style("stroke", "black")
                     .style('stroke-width', 0.5)
                     .style("fill", mapColor)
 
@@ -227,7 +264,7 @@ class PlayerMap {
             .force('y', d3.forceY(d => d.yCoordinate).strength(1.0))
             .force("charge", d3.forceManyBody())
             .force("collision", d3.forceCollide(d => {
-                console.log(d.team_id, d.radius)
+                // console.log(d.team_id, d.radius)
                 return Math.max(d.radius, 50) + 6
             }))
             .on("tick", tick)
@@ -281,7 +318,7 @@ class PlayerMap {
 
         // Create/update both sets of polygons (player image and fill)
         vis.polygonSets.forEach((polygonAttributes) => {
-            vis.svg
+            vis.g
                 .selectAll(`.${polygonAttributes.class}`)
                 .data(polygons, d => d.site.originalObject.data.originalData.player_id)
                 .join(
@@ -309,12 +346,18 @@ class PlayerMap {
 
                                 d3.selectAll(`.transaction-log-${originalData.player_id}`)
                                     .style("opacity", 1.0)
+
+                                vis.labelGroup.select(`#${d.site.originalObject.data.originalData.team.team_id}-label`)
+                                    .style("display", "block")
                             })
                             .on("mouseout", function(d) {
                                 vis.tip.hide(d, this);
 
                                 d3.selectAll(".transaction-card__transaction-item")
                                     .style("opacity", 1.0)
+                                
+                                vis.labelGroup.selectAll(".team-label")
+                                    .style("display", "none")
                             })
                             .style("fill-opacity", 0.95)
                             .style("fill", d => polygonAttributes.fillAccessor(d))

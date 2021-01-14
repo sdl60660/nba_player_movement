@@ -65,6 +65,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         allAffectedPlayers = [...new Set(allAffectedPlayers)];
         
         vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
+        // vis.setTeamLabels(vis.trueTeamData);
     }
 
     const processProgress = ({ element, index, progress, scrollDirection }) => {
