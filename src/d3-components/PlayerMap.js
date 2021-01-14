@@ -250,11 +250,12 @@ class PlayerMap {
             .prng(seedrandom('randomsed'))
             .clip(getCircleCoordinates(xVal, yVal, radius, 35))
             .initialPosition((d) => {
-                // const polygon = this.svg.select(`#polygon-${d.player_id}`)
-                // return (polygon.nodes().length > 0 &&
-                //         polygon.data()[0].site.originalObject.data.originalData.team.team_id === d.team.team_id) ?
-                //     [polygon.data()[0].site.x, polygon.data()[0].site.y] :
-                return [undefined, undefined]
+                const polygon = this.svg.select(`#polygon-${d.player_id}`)
+
+                return (polygon.nodes().length > 0 &&
+                        polygon.data()[0].site.originalObject.data.originalData.team.team_id === d.team.team_id) ?
+                    [polygon.data()[0].site.x, polygon.data()[0].site.y] :
+                    [undefined, undefined]
             })
             .stop()                                               
 

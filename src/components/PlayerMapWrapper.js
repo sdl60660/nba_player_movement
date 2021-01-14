@@ -32,7 +32,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     let allAffectedPlayers = [];
 
     let scrollDirection = "down";
-    let eventTriggerCount = 0;
 
     const processStepTransactions = ({ element, index, direction }) => {
         d3.selectAll(".exit-polygon").remove();
@@ -69,8 +68,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     }
 
     const processProgress = ({ element, index, progress, scrollDirection }) => {
-        eventTriggerCount += 1
-        console.log(progress, index, eventTriggerCount)
+        // console.log(progress, index)
         vis.updatePositions(allAffectedPlayers, allAffectedTeams, progress, scrollDirection)
     }
 
@@ -113,7 +111,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 step: ".transaction-card",
                 debug: false,
                 progress: true,
-                threshold: 3,
+                threshold: 2,
                 order: false
             })
             .onStepEnter(({ element, index, direction }) => {
