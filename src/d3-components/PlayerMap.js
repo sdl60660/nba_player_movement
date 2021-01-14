@@ -133,23 +133,68 @@ class PlayerMap {
                     .style("stroke", d => d.color_2)
                     .style("stroke-width", "1px")
                     .style("paint-order", "stroke")
-                    .style("font-weight", "bold")
+                    // .style("font-weight", "bold")
                     .attr("x", d => {
                         return (d.x || d.xCoordinate);
                     })
                     .attr("y", d => {
-                        return 14 + Math.max(50, d.radius) + (d.y || d.yCoordinate);
+                        return 18 + d.radius + (d.y || d.yCoordinate);
                     })
                     .style("text-anchor", "middle")
                     .style("padding", "0.5rem")
-                    .style("background-color", "white")
-                    .style("display", "none"),
+                    .style("background-color", "white"),
                 
                 update => update
+                    .attr("x", d => {
+                        return (d.x || d.xCoordinate);
+                    })
                     .attr("y", d => {
-                        return 14 + d.radius + (d.y || d.yCoordinate);
+                        return 18 + d.radius + (d.y || d.yCoordinate);
                     })
             )
+        
+        vis.labelGroup.selectAll('.team-label-box')
+            .data(teamData, d => d.team_id)
+            .join(
+                enter => enter
+                    .append("rect")
+                    .attr("class", "team-label-box")
+                    .attr("id", d => `${d.team_id}-label-box`)
+                    .attr("x", (d) => d3.select(`#${d.team_id}-label`).node().getBBox().x - 5)
+                    .attr("y", (d) => d3.select(`#${d.team_id}-label`).node().getBBox().y - 3)
+                    .attr("width", (d) => d3.select(`#${d.team_id}-label`).node().getBBox().width + 10)
+                    .attr("height", (d) => d3.select(`#${d.team_id}-label`).node().getBBox().height + 4)
+                    .style("fill", "white")
+                    .style("fill-opacity", 0.8)
+                    .attr("rx", 3)
+                    .attr("ry", 3)
+                    .style("display", "none")
+
+            )
+        
+        vis.labelGroup.selectAll(".team-label")
+            .raise()
+            .style("display", "none");
+    }
+
+    updateLabelPosition = (teamId, x, y, radius) => {
+        const vis = this;
+
+        const labelElement = vis.labelGroup.select(`#${teamId}-label`);
+        const dx = x - parseFloat(labelElement.attr("x"));
+        const dy = y - parseFloat(labelElement.attr("y"));
+
+        const labelBox = vis.labelGroup.select(`#${teamId}-label-box`);
+        const currentX = parseFloat(labelBox.attr("x"));
+        const currentY = parseFloat(labelBox.attr("y"));
+
+        labelElement
+            .attr("x", x)
+            .attr("y", 18 + radius + y);
+        
+        labelBox
+            .attr("x", currentX + dx)
+            .attr("y", radius + y);
     }
 
     initTooltip = () => {
@@ -246,6 +291,7 @@ class PlayerMap {
                 .filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
             const weightSum = players.map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
             team.radius = this.voronoiRadius(weightSum);
+
             // this.addTeamTreemap({ teamData, players });
         })
 
@@ -301,12 +347,13 @@ class PlayerMap {
             simulation.tick();
             state = simulation.state();
         }
+
+        this.updateLabelPosition(team.team_id, xVal, yVal, radius);
         
         return state.polygons;
     }
 
     generatePolygons = (polygons, affectedTeams = [], affectedPlayers = []) => {
-        const playerTravelTransitionTime = 1800;
         const vis = this;
 
         polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
@@ -347,8 +394,8 @@ class PlayerMap {
                                 d3.selectAll(`.transaction-log-${originalData.player_id}`)
                                     .style("opacity", 1.0)
 
-                                vis.labelGroup.select(`#${d.site.originalObject.data.originalData.team.team_id}-label`)
-                                    .style("display", "block")
+                                vis.labelGroup.selectAll(`#${originalData.team.team_id}-label, #${originalData.team.team_id}-label-box`)
+                                    .style("display", "inline-block")
                             })
                             .on("mouseout", function(d) {
                                 vis.tip.hide(d, this);
@@ -356,7 +403,7 @@ class PlayerMap {
                                 d3.selectAll(".transaction-card__transaction-item")
                                     .style("opacity", 1.0)
                                 
-                                vis.labelGroup.selectAll(".team-label")
+                                vis.labelGroup.selectAll(".team-label, .team-label-box")
                                     .style("display", "none")
                             })
                             .style("fill-opacity", 0.95)
