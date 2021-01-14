@@ -311,10 +311,21 @@ class PlayerMap {
 
                                 tipElement
                                     .style("position", "fixed")
-                                    .style("top", `${top - offset}px`)
+                                    .style("top", `${top - offset}px`);
+                                
+                                const originalData = d.site.originalObject.data.originalData;
+
+                                d3.selectAll(".transaction-card__transaction-item")
+                                    .style("opacity", 0.3)
+
+                                d3.selectAll(`.transaction-log-${originalData.player_id}`)
+                                    .style("opacity", 1.0)
                             })
                             .on("mouseout", function(d) {
                                 vis.tip.hide(d, this);
+
+                                d3.selectAll(".transaction-card__transaction-item")
+                                    .style("opacity", 1.0)
                             })
                             .style("fill-opacity", 0.95)
                             .style("fill", d => polygonAttributes.fillAccessor(d))

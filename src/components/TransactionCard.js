@@ -12,11 +12,17 @@ const TransactionCard = ({ transactionDate, transactions, className }) => {
             <div className={"transaction-card__visible-section"}>
                 <div className={"transaction-card__date-header"}>{formattedDate}</div>
                 <ul className={"transaction-card__transaction-list"}>
-                    { transactions.map((transaction, i) => <li
-                                                            className={"transaction-card__transaction-item"}
-                                                            key={i}>{ transaction.text }
-                                                            </li> ) 
-                                                        }
+                    { transactions.map((transaction, i) => {
+                        const classList = transaction.players.map((player) => `transaction-log-${player.player_id}`).join(' ')
+                        
+                        return (
+                            <li
+                                className={`transaction-card__transaction-item ${classList}`}
+                                key={i}>{ transaction.text }
+                            </li>
+                            )
+                        }) 
+                    }
                 </ul>
             </div>
         </div>
