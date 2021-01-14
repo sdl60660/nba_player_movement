@@ -355,7 +355,7 @@ class PlayerMap {
                         
                         update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                             .raise()
-                            .attr('d', (d,i,n) => {
+                            .attr('startPath', (d,i,n) => {
                                 const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
                                 
                                 let existingPath = d3.select(n[i]).attr('d');
@@ -363,10 +363,8 @@ class PlayerMap {
                                 const startPath = getCirclePath(existingCenter, radius);
 
                                 d3.select(n[i])
-                                    .attr('startX', existingCenter[0])
-                                    .attr('startY', existingCenter[1])
-                                    .attr('radius', radius)
-                                    .attr('startPath', startPath);
+                                    .attr('radius', radius);
+                                    // .attr('startPath', startPath);
 
                                 return startPath;
                             })
