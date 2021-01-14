@@ -411,7 +411,7 @@ class PlayerMap {
                         return interpolatePath(originalShape, circleStart)(stagePosition);
                     }
                     else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
-                        const stagePosition = (tweenPosition - traverseThreshold) / (1 - traverseThreshold);
+                        const stagePosition = (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
                         return interpolatePath(circleStart, positionFinal)(stagePosition);
                     }
                     else {

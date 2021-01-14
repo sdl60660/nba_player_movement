@@ -72,40 +72,40 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     }
 
     const processProgress = ({ element, index, progress, scrollDirection }) => {
-        // console.log(element, index, progress);
+        console.log(element, index, progress);
         vis.updatePositions(allAffectedPlayers, allAffectedTeams, polygonSelections, progress, scrollDirection)
     }
 
-    const setTransactionHoverEvent = () => {
-        d3.selectAll(".transaction-card__transaction-item")
-            .on("mouseover", function(e) {
-                const element = d3.select(this);
+    // const setTransactionHoverEvent = () => {
+    //     d3.selectAll(".transaction-card__transaction-item")
+    //         .on("mouseover", function(e) {
+    //             const element = d3.select(this);
 
-                d3.selectAll(".transaction-card__transaction-item")
-                    .style("opacity", 0.3)
+    //             d3.selectAll(".transaction-card__transaction-item")
+    //                 .style("opacity", 0.3)
                 
-                element
-                    .style("opacity", 1.0)
+    //             element
+    //                 .style("opacity", 1.0)
 
-                d3.selectAll(`.player-polygon`)
-                    .attr("revertOpacity", function() { return d3.select(this).style("opacity") })
-                    .style("opacity", 0.3);
+    //             d3.selectAll(`.player-polygon`)
+    //                 .attr("revertOpacity", function() { return d3.select(this).style("opacity") })
+    //                 .style("opacity", 0.3);
 
-                element.attr("class").split(" ").slice(1).forEach((className) => {
-                    const polygonId = className.replace("transaction-log-", "");
-                    d3.selectAll(`.polygon-${polygonId}`)
-                        .style("opacity", 1.0);
-                        // transform-origin: 50% 50%;
-                })
-            })
-            .on("mouseout", function(e) {
-                d3.selectAll(".transaction-card__transaction-item")
-                    .style("opacity", 1.0)
+    //             element.attr("class").split(" ").slice(1).forEach((className) => {
+    //                 const polygonId = className.replace("transaction-log-", "");
+    //                 d3.selectAll(`.polygon-${polygonId}`)
+    //                     .style("opacity", 1.0);
+    //                     // transform-origin: 50% 50%;
+    //             })
+    //         })
+    //         .on("mouseout", function(e) {
+    //             d3.selectAll(".transaction-card__transaction-item")
+    //                 .style("opacity", 1.0)
 
-                d3.selectAll(`.player-polygon`)
-                    .style("opacity", function() { return d3.select(this).attr("revertOpacity")});
-            })
-    }
+    //             d3.selectAll(`.player-polygon`)
+    //                 .style("opacity", function() { return d3.select(this).attr("revertOpacity")});
+    //         })
+    // }
 
     const refElement = useRef(null);
     let scroller = scrollama();
