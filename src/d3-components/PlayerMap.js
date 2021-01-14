@@ -360,13 +360,11 @@ class PlayerMap {
                                 
                                 let existingPath = d3.select(n[i]).attr('d');
                                 const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
-                                const startPath = getCirclePath(existingCenter, radius);
 
                                 d3.select(n[i])
                                     .attr('radius', radius);
-                                    // .attr('startPath', startPath);
 
-                                return startPath;
+                                return getCirclePath(existingCenter, radius);
                             })
                             .attr("originalFill", (d,i,n) => d3.select(n[i]).style("fill"))
                             .attr("originalStroke", (d,i,n) => d3.select(n[i]).style("stroke"))

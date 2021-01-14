@@ -68,11 +68,10 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         
         polygonSelections = vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
 
-        console.log(allAffectedTeams, index, polygonSelections);
+        // console.log(allAffectedTeams, index, polygonSelections);
     }
 
     const processProgress = ({ element, index, progress, scrollDirection }) => {
-        console.log(element, index, progress);
         vis.updatePositions(allAffectedPlayers, allAffectedTeams, polygonSelections, progress, scrollDirection)
     }
 
