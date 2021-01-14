@@ -75,7 +75,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
     const setTransactionHoverEvent = () => {
         d3.selectAll(".transaction-card__transaction-item")
-            .on("mouseover", function(e) {
+            .on("mouseover", function() {
                 const element = d3.select(this);
 
                 d3.selectAll(".transaction-card__transaction-item")
@@ -86,12 +86,10 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
                 d3.selectAll(`.player-polygon`)
                     .style("opacity", 0.3);
-
-                element.attr("class").split(" ").slice(1).forEach((className) => {
-                    const polygonId = className.replace("transaction-log-", "");
-                    d3.selectAll(`.polygon-${polygonId}`)
-                        .style("opacity", 1.0);
-                })
+                
+                const classSelector = element.attr("class").replaceAll("transaction-log-", ", .polygon-")
+                d3.selectAll(classSelector)
+                    .style("opacity", 1.0);
             })
             .on("mouseout", function(e) {
                 d3.selectAll(".transaction-card__transaction-item")
