@@ -25,13 +25,11 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const [height, setHeight] = useState(750);
     const [opacity, setOpacity] = useState(0.5);
 
-    const colors = chromatic.schemeCategory10;
     const transactionDates = Object.keys(transactionData);
     const playerDataIds = playerData.map((player) => player.player_id);
 
     let allAffectedTeams = [];
     let allAffectedPlayers = [];
-    let polygonSelections = [];
 
     let scrollDirection = "down";
 
@@ -66,13 +64,12 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         allAffectedTeams = [...new Set(allAffectedTeams.filter((team) => team !== "FA" && team !== "RET"))];
         allAffectedPlayers = [...new Set(allAffectedPlayers)];
         
-        polygonSelections = vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
-
-        // console.log(allAffectedTeams, index, polygonSelections);
+        vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
     }
 
     const processProgress = ({ element, index, progress, scrollDirection }) => {
-        vis.updatePositions(allAffectedPlayers, allAffectedTeams, polygonSelections, progress, scrollDirection)
+        console.log(progress, index)
+        vis.updatePositions(allAffectedPlayers, allAffectedTeams, progress, scrollDirection)
     }
 
     const setTransactionHoverEvent = () => {
@@ -149,10 +146,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         vis.updateMapColor({ mapColor, opacity })
     }, [mapColor, opacity]);
 
-    // useEffect(() => {
-    //     // console.log("Effect triggered", mapColor, opacity)
-    //     vis.runTransactions(playerData, affectedTeams, affectedPlayers)
-    // }, [playerData]);
 
     return (
         <section id={"scroll"}>

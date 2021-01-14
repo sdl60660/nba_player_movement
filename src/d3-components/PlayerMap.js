@@ -278,18 +278,11 @@ class PlayerMap {
             vis.svg.select(`#polygon-image-${playerId}`).raise();
         })
 
-        let polygonSelections = []
-
         // Create/update both sets of polygons (player image and fill)
         vis.polygonSets.forEach((polygonAttributes) => {
-
-            let polygonSelection = vis.svg
+            vis.svg
                 .selectAll(`.${polygonAttributes.class}`)
-                .data(polygons, d => d.site.originalObject.data.originalData.player_id);
-
-            polygonSelections.push(polygonSelection);
-
-            polygonSelection
+                .data(polygons, d => d.site.originalObject.data.originalData.player_id)
                 .join(
                     enter => {
                         enter
@@ -375,11 +368,11 @@ class PlayerMap {
                         .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
                 )
         })
-        
-        return polygonSelections;
     }
 
-    updatePositions = ( affectedPlayers, affectedTeams, polygonSelections, tweenPosition, direction ) => {
+    updatePositions = ( affectedPlayers, affectedTeams, tweenPosition, direction ) => {
+        const vis = this;
+
         const traverseThreshold = 0.1;
         const reshuffleThreshold = 0.9;
 
@@ -387,85 +380,68 @@ class PlayerMap {
             tweenPosition = 1 - tweenPosition;
         }
 
-        polygonSelections.forEach((selection) => {
-            selection
-                .filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                .attr('d', (d,i,n) => {
-                    const element = d3.select(n[i]);
-                    const radius = element.attr("radius");
+        let selection = vis.svg.selectAll(".player-polygon:not(.enter-polygon):not(.exit-polygon)");
+        selection
+            .filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+            .attr('d', (d,i,n) => {
+                const element = d3.select(n[i]);
+                const radius = element.attr("radius");
 
-                    const originalShape = element.attr("startPosition");
-                    const circleStart = element.attr("startPath");
+                const originalShape = element.attr("startPosition");
+                const circleStart = element.attr("startPath");
 
-                    const positionFinal = getCirclePath(d[0], radius);
-                    const shapeFinal = `M${d.join('L')}z`;
+                const positionFinal = getCirclePath(d[0], radius);
+                const shapeFinal = `M${d.join('L')}z`;
 
-                    if (tweenPosition < traverseThreshold) {
-                        const stagePosition = tweenPosition / traverseThreshold;
-                        return interpolatePath(originalShape, circleStart)(stagePosition);
-                    }
-                    else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
-                        const stagePosition = (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
-                        return interpolatePath(circleStart, positionFinal)(stagePosition);
-                    }
-                    else {
-                        const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
-                        return interpolatePath(positionFinal, shapeFinal)(stagePosition);
-                    }
-                })
-                .style("stroke", (d,i,n) => {
-                    const element = d3.select(n[i]);
+                if (tweenPosition < traverseThreshold) {
+                    const stagePosition = tweenPosition / traverseThreshold;
+                    return interpolatePath(originalShape, circleStart)(stagePosition);
+                }
+                else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
+                    const stagePosition = (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
+                    return interpolatePath(circleStart, positionFinal)(stagePosition);
+                }
+                else {
+                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                    return interpolatePath(positionFinal, shapeFinal)(stagePosition);
+                }
+            })
+            .style("stroke", (d,i,n) => {
+                const element = d3.select(n[i]);
+                const originalColor = element.attr("originalStroke")
+                const updatedColor = d.site.originalObject.data.originalData.team.color_2;
 
-                    const originalColor = element.attr("originalStroke")
-                    const updatedColor = d.site.originalObject.data.originalData.team.color_2;
-
+                return d3.interpolateRgb(originalColor, updatedColor)(tweenPosition);
+            })
+            .style("fill", (d,i,n)  => {
+                const element = d3.select(n[i]);
+                const originalColor = element.attr("originalFill")
+                if (originalColor.startsWith("rgb")) {
+                    const updatedColor = d.site.originalObject.data.originalData.team.color_1;
                     return d3.interpolateRgb(originalColor, updatedColor)(tweenPosition);
-                })
-                .style("fill", (d,i,n)  => {
-                    const element = d3.select(n[i]);
-                    const originalColor = element.attr("originalFill")
-                    if (originalColor.startsWith("rgb")) {
-                        const updatedColor = d.site.originalObject.data.originalData.team.color_1;
-                        return d3.interpolateRgb(originalColor, updatedColor)(tweenPosition);
-                    }
-                    else {
-                        return originalColor;
-                    }
-                })
+                }
+                else {
+                    return originalColor;
+                }
+            })
 
-            selection.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                .attr("d", (d,i,n) => {
-                    const element = d3.select(n[i]);
-                    const originalShape = element.attr("startPosition");
-                    const shapeFinal = `M${d.join('L')}z`;
+        selection.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+            .attr("d", (d,i,n) => {
+                const element = d3.select(n[i]);
+                const originalShape = element.attr("startPosition");
+                const shapeFinal = `M${d.join('L')}z`;
 
-                    if (tweenPosition >= reshuffleThreshold) {
-                        const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
-                        return interpolatePath(originalShape, shapeFinal)(stagePosition);
-                    }
-                    else {
-                        return originalShape;
-                    }
-                })
-            
-            // selection.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-            //     .style("opacity", () => {
-            //         if (tweenPosition >= reshuffleThreshold) {
-            //             const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
-            //             return d3.interpolateNumber(1.0, 1.0)(stagePosition)
-            //         }
-            //         else if (tweenPosition <= traverseThreshold) {
-            //             const stagePosition = tweenPosition / traverseThreshold;
-            //             return d3.interpolateNumber(1.0, 1.0)(stagePosition)
-            //         }
-            //         else {
-            //             return 1.0
-            //         }
-                    
-            //     });
-        })
+                if (tweenPosition >= reshuffleThreshold) {
+                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                    return interpolatePath(originalShape, shapeFinal)(stagePosition);
+                }
+                else {
+                    return originalShape;
+                }
+            })
 
-        d3.selectAll('.enter-polygon')
+
+        vis.svg.selectAll('.enter-polygon')
             .attr('d', (d,i,n) => {
                 if (tweenPosition >= reshuffleThreshold) {
                     const previous = d3.select(n[i]).attr("d");
@@ -479,7 +455,7 @@ class PlayerMap {
                 }
             })
         
-        d3.selectAll(".exit-polygon")
+        vis.svg.selectAll(".exit-polygon")
             .attr('d', (d,i,n) => {
                 const element = d3.select(n[i]);
 
