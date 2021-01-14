@@ -300,7 +300,7 @@ class PlayerMap {
                         enter
                             .append('path')
                             .raise()
-                            .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix} enter-polygon`)
+                            .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix} enter-polygon`)
                             .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
                             .on("mouseover", function(e ,d) {
                                 vis.tip.show(d, this);
@@ -344,7 +344,7 @@ class PlayerMap {
 
                     update => {  
                         update
-                            .attr("class", d => `${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                            .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
                         
                         update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                             .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
@@ -377,7 +377,7 @@ class PlayerMap {
                     },
 
                     exit => exit
-                        .attr("class", d => `exit-polygon ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                        .attr("class", d => `exit-polygon player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
                         .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
                 )
         })
