@@ -57,7 +57,7 @@ def process_trade(links):
     return players
     
 
-transaction_types = ['signed', 'waived', 'claimed', '-team trade', 'traded']
+transaction_types = ['contract extension', 'signed', 'waived', 'claimed', '-team trade', 'traded']
 all_transactions = []
 
 with open('../data/players_start.csv', 'r') as f:
@@ -92,7 +92,11 @@ for date in transaction_dates[::-1]:
         
         player_data = []
 
-        if transaction_type == "signed" or transaction_type == "claimed":
+        # if transaction_type == "contract extension":
+        #     # player_id = transaction.find_all("a")[-1]['href'].split('/')[-1].replace('.html', '')
+        #     player_data = []
+
+        if transaction_type == "signed" or transaction_type == "claimed" or transaction_type == "contract extension":
             player_id = transaction.find_all("a")[-1]['href'].split('/')[-1].replace('.html', '')
 
             # Transaction logs don't specify two-way contracts on waiver claims, so filter these and continue here

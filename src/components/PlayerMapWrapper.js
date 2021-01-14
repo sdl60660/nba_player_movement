@@ -44,7 +44,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         allAffectedPlayers = [];
         
         setPlayerData((state) => {
-            transactions.forEach((transaction) => {
+            transactions.filter(d => d.type !== "contract extension").forEach((transaction) => {
                 allAffectedTeams = allAffectedTeams.concat(transaction.affected_teams);
 
                 // Maintain correct ordering on transactions if running upwards, for things like sign-and-trades
