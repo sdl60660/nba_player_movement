@@ -128,12 +128,12 @@ class PlayerMap {
                     .attr("class", "team-label")
                     .attr("id", d => `${d.team_id}-label`)
                     .text(d => d.team_full_name)
-                    .style("font-size", "0.9rem")
+                    .style("font-size", "0.85rem")
                     .style("fill", d => d.color_1)
                     .style("stroke", d => "white")
-                    .style("stroke-width", "4px")
+                    .style("stroke-width", "3px")
                     .style("paint-order", "stroke")
-                    // .style("font-weight", "bold")
+                    .style("font-weight", "bold")
                     .attr("x", d => {
                         return (d.x || d.xCoordinate);
                     })
@@ -162,8 +162,8 @@ class PlayerMap {
                 const playerData = d.site.originalObject.data.originalData;
                 return (
                     `<div class="d3-tip__grid">
-                        <div class="d3-tip__player-name">${playerData.player_name}</div>
-                        <div class="d3-tip__player-attr">Salary:</div><div class="d3-tip__player-attr">${d3.format("$,.0f")(playerData.salary)}</div>
+                        <div class="d3-tip__player-name">${playerData.player_name} (${playerData.position})</div>
+                        <div class="d3-tip__player-attr">Salary:</div><div class="d3-tip__player-attr">${playerData.salary > 1 ? d3.format("$,.0f")(playerData.salary) : "-"}</div>
                         <div class="d3-tip__player-attr">VORP (2020):</div><div class="d3-tip__player-attr">${playerData.vorp}</div>
                         <div class="d3-tip__player-attr">PER (2020):</div><div class="d3-tip__player-attr">${playerData.per}</div>
                     </div>`
@@ -385,6 +385,7 @@ class PlayerMap {
                     update => {  
                         update
                             .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+                            .style("stroke-width", "2px")
                         
                         update.filter(d => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                             .attr("d", d => `M${d.join('L')}z`)
@@ -513,6 +514,15 @@ class PlayerMap {
                     return circlePath;
                 }
             })
+            .style("stroke-width", () => {
+                if (tweenPosition <= traverseThreshold) {
+                    const stagePosition = tweenPosition / traverseThreshold;
+                    return d3.interpolateNumber(0, 2)(stagePosition);
+                }
+                else {
+                    return 2;
+                }
+            })
         
         vis.svg.selectAll(".exit-polygon")
             .attr('d', (d,i,n) => {
@@ -534,6 +544,15 @@ class PlayerMap {
                 }
                 else {
                     return middlePosition;
+                }
+            })
+            .style("stroke-width", () => {
+                if (tweenPosition >= reshuffleThreshold) {
+                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                    return d3.interpolateNumber(2, 0)(stagePosition);
+                }
+                else {
+                    return 2;
                 }
             })
 

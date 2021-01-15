@@ -55,6 +55,10 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
                     const playerIndex = playerDataIds.indexOf(player.player_id);
 
+                    if (state[playerIndex].player_id === "woodaro01") {
+                        console.log(state[playerIndex].salary, state[playerIndex].weight)
+                    }
+
                     state[playerIndex].team = teamData
                         // Reverse transaction if running upwards
                         .find((team) => team.team_id === ( direction === "down" ? player.to_team : player.from_team));
@@ -124,7 +128,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 debug: false,
                 progress: true,
                 threshold: 2,
-                order: false
+                order: true
             })
             .onStepEnter(({ element, index, direction }) => {
                 scrollDirection = direction;

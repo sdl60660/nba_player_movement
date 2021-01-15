@@ -48,6 +48,7 @@ const formatPlayerData = (playerData, teamData) => {
     player_name: player.player,
     player_id: player.player_id,
     team: teamData.find((team) => team.team_id === player.team_id),
+    position: player.position,
     per: player['2020_per'] === "" ? "-" : +player['2020_per'],
     salary: player.salary === 0 ? 1 : player.salary,
     start_salary: player.salary === 0 ? 1 : player.salary,
