@@ -410,10 +410,12 @@ class PlayerMap {
                             .style("fill", d => polygonAttributes.fillAccessor(d))
                             .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
                             .style("stroke-width", "2px")
-                            .attr('d', (d) => {
+                            .attr('d', (d,i,n) => {
                                 if (affectedPlayers.includes(d.site.originalObject.data.originalData.player_id)) {
                                     const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
-                                    return getCirclePath(d[0], radius);
+                                    const path = getCirclePath(d[0], radius);
+                                    d3.select(n[i]).attr("circlePath", path)
+                                    return getCirclePath(d[0], 1);
                                 }
                                 else {
                                     return `M${d.join('L')}z`;
@@ -534,15 +536,22 @@ class PlayerMap {
 
         vis.svg.selectAll('.enter-polygon')
             .attr('d', (d,i,n) => {
-                if (tweenPosition >= reshuffleThreshold) {
-                    const previous = d3.select(n[i]).attr("d");
-                    const current = `M${d.join('L')}z`;
+                const element = d3.select(n[i]);
 
-                    return interpolatePath(previous, current)(0.9);
+                const startPosition = getCirclePath(d[0], 0.5);
+                const circlePath = element.attr("circlePath");
+                const finalPosition = `M${d.join('L')}z`;
 
+                if (tweenPosition <= traverseThreshold) {
+                    const stagePosition = tweenPosition / traverseThreshold;
+                    return interpolatePath(startPosition, circlePath)(stagePosition);
+                }
+                else if (tweenPosition >= reshuffleThreshold) {
+                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                    return interpolatePath(circlePath, finalPosition)(stagePosition);
                 }
                 else {
-                    return d3.select(n[i]).attr("d");
+                    return circlePath;
                 }
             })
         
@@ -554,7 +563,7 @@ class PlayerMap {
                 
                 const startPosition = element.attr("startPosition");
                 const middlePosition = getCirclePath(d[0], radius);
-                const endPosition = getCirclePath(d[0], 1);
+                const endPosition = getCirclePath(d[0], 0.5);
 
                 if (tweenPosition <= traverseThreshold) {
                     const stagePosition = tweenPosition / traverseThreshold;

@@ -123,7 +123,10 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 }
             })
             .onStepExit(({ element, index, direction }) => {
-                return
+                if (index === 0 && direction === "up") {
+                    d3.selectAll(".exit-polygon").remove();
+                }
+                return;
             })
             .onStepProgress(({ element, index, progress }) => {
                 if (element.getAttribute("class").includes("phantom")) {
