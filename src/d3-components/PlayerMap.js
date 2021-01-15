@@ -69,7 +69,13 @@ class PlayerMap {
 
         this.maxWeight = 100;
         this.weightScale = d3.scaleLinear()
-            .domain(d3.extent(playerData, (d) => d[this.attribute]))
+            .domain(d3.extent(playerData
+                                // Players with no salary have been set to salary of $1 for divide-by-zero reasons
+                                // If the set attribute is salary, we'll want to filter them out of the domain, meaning their
+                                // weight will eventually register as negative and they won't be visible if on a team's roster,
+                                // which will happen if they are drafted and traded, but still un-signed
+                                .filter(player => this.attribute !== 'salary' ? true : player[this.attribute] > 1),
+                                (d) => d[this.attribute]))
             .range([1, this.maxWeight]);
         
         let signedPlayers = playerData.filter(d => d.team.team_id !== "FA" && d.team.team_id !== "RET")
