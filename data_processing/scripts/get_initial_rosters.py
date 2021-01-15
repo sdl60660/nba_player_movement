@@ -42,7 +42,7 @@ for team in teams:
         
         try:
             y2_salary = row.find_all("td")[2]
-            player_dict[player_id]['2021_salary'] = y2_salary['csk']
+            player_dict[player_id]['2021_preseason_salary'] = y2_salary['csk']
             player_dict[player_id]['team_id'] = team_id
 
             if 'salary-pl' in y2_salary['class'] or 'salary-tm' in y2_salary['class']:
@@ -74,10 +74,11 @@ for date in transaction_dates:
                 player_dict[player_id]['team_id'] = 'RET'
 
 
-with open('../data/players_start.csv', 'w') as f:
-    out_data = list(player_dict.values())
+for filename in ['../data/players_start.csv', '../../public/data/players_start.csv']:
+    with open(filename, 'w') as f:
+        out_data = list(player_dict.values())
 
-    out_csv = csv.DictWriter(f, fieldnames=list(out_data[0].keys()))
-    out_csv.writeheader()
-    for row in out_data:
-        out_csv.writerow(row)
+        out_csv = csv.DictWriter(f, fieldnames=list(out_data[0].keys()))
+        out_csv.writeheader()
+        for row in out_data:
+            out_csv.writerow(row)

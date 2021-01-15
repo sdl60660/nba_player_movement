@@ -36,22 +36,26 @@ const formatTeamData = (teamData) => {
 
 const formatPlayerData = (playerData, teamData) => {
   playerData.forEach(player => {
+    player["2021_preseason_salary"] = +player["2021_preseason_salary"];
     player["2021_salary"] = +player["2021_salary"];
     player["2020_salary"] = +player["2020_salary"];
 
-    player.salary = player["2021_salary"] ||  player["2020_salary"];
+    player.salary = player["2021_preseason_salary"];
   });
 
   playerData = playerData.filter(x => x.salary !== undefined);
   playerData = playerData.map((player) => ({ 
-    // weight: this.weightScale(player[this.attribute]),
     player_name: player.player,
     player_id: player.player_id,
     team: teamData.find((team) => team.team_id === player.team_id),
     per: player['2020_per'] === "" ? "-" : +player['2020_per'],
     salary: player.salary === 0 ? 1 : player.salary,
+    start_salary: player.salary === 0 ? 1 : player.salary,
+    end_salary: player["2021_salary"] === 0 ? 1 : player["2021_salary"],
     vorp: player['2020_vorp'] === "" ? "-" : +player['2020_vorp']
   }));
+
+  // console.log(playerData.filter(d => d.player_id === "vonleno01"))
   
   return playerData;
 }

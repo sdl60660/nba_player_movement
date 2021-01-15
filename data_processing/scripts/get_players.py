@@ -77,16 +77,16 @@ for player_id, player in player_dict.items():
     if r.status_code == 200:
         player_dict[player_id]['img_link'] = image_url
         # player_dict[player_id]['internal_image_link'] = f"/images/{player_id}.png"
-        if not path.exists(f"../../public/images/{player_id}.png"):
-            with open(f"../new_images/{player_id}.png", 'wb') as f:
-                r.raw.decode_content = True
-                shutil.copyfileobj(r.raw, f) 
+        # if not path.exists(f"../../public/images/{player_id}.png"):
+        #     with open(f"../new_images/{player_id}.png", 'wb') as f:
+        #         r.raw.decode_content = True
+        #         shutil.copyfileobj(r.raw, f) 
     else:
         player_dict[player_id]['img_link'] = f"https://www.basketball-reference.com/req/202101021/images/players/{player_id}.jpg"
         # player_dict[player_id]['internal_image_link'] = f"/images/{player_id}.jpg"
         
 
-for filename in ['../data/players.csv', '../../public/data/players.csv']:
+for filename in ['../data/players.csv']:
     with open(filename, 'w') as f:
         out_data = list(player_dict.values())
 

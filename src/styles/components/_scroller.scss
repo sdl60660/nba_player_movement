@@ -18,9 +18,11 @@
 #annotations {
     position: relative;
     max-width: 20vw;
+    // margin-left: 80vw;
 
     @media screen and (max-width: $mobile-breakpoint) {
         max-width: 30vw;
+        // margin-left: 70vw;
         // margin: auto;
     }
 }

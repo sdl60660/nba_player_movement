@@ -1,0 +1,4 @@
+python get_players.py
+python get_initial_rosters.py
+python get_table_transactions.py
+python get_transactions.py

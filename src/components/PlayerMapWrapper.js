@@ -34,7 +34,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     let scrollDirection = "down";
 
     const processStepTransactions = ({ element, index, direction }) => {
-        d3.selectAll(".exit-polygon").remove();
+        // d3.selectAll(".exit-polygon").remove();
 
         // console.log({ element, index, direction });
         let transactionDate = transactionDates[index];
@@ -44,7 +44,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         allAffectedPlayers = [];
         
         setPlayerData((state) => {
-            transactions.filter(d => d.type !== "contract extension").forEach((transaction) => {
+            transactions.filter(d => d.type !== "contract extension" && d.type !== "exercised option").forEach((transaction) => {
                 allAffectedTeams = allAffectedTeams.concat(transaction.affected_teams);
 
                 // Maintain correct ordering on transactions if running upwards, for things like sign-and-trades
@@ -53,9 +53,22 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 transaction.players.forEach((player) => {
                     allAffectedPlayers.push(player.player_id);
 
-                    state[playerDataIds.indexOf(player.player_id)].team = teamData
+                    const playerIndex = playerDataIds.indexOf(player.player_id);
+
+                    state[playerIndex].team = teamData
                         // Reverse transaction if running upwards
                         .find((team) => team.team_id === ( direction === "down" ? player.to_team : player.from_team));
+                    
+                    if (transaction.type === "signed") {
+                        const startSalary = transaction.salary_data ? transaction.salary_data.start_salary : state[playerIndex].start_salary
+                        const endSalary = transaction.salary_data ? transaction.salary_data.end_salary : state[playerIndex].end_salary;
+
+                        state[playerIndex].salary = (direction === "down") ? endSalary : startSalary;
+                        state[playerIndex].weight = vis.weightScale(state[playerIndex][vis.attribute]);
+                        
+                        vis.svg.select(`#${state[playerIndex].player_id}-photo-pattern`)
+                            .attr("width", Math.sqrt(state[playerIndex][vis.attribute] / (159.12 * 57)));
+                    }
                 })
             })
             return state;
@@ -123,9 +136,9 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 }
             })
             .onStepExit(({ element, index, direction }) => {
-                if (index === 0 && direction === "up") {
-                    d3.selectAll(".exit-polygon").remove();
-                }
+                // if (index === 0 && direction === "up") {
+                d3.selectAll(".exit-polygon").remove();
+                // }
                 return;
             })
             .onStepProgress(({ element, index, progress }) => {
