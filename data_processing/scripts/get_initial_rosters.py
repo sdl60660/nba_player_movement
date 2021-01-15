@@ -51,8 +51,6 @@ for team in teams:
         except KeyError:
             pass
 
-print(option_contracts)
-
 driver.quit()
 
 # 2019-20 Retirements
@@ -72,6 +70,22 @@ for date in transaction_dates:
             
             if player_id in player_dict.keys():
                 player_dict[player_id]['team_id'] = 'RET'
+
+# Positions
+for player_id, player in player_dict.items():
+    if player['2021_pos'] != '':
+        player_dict[player_id]['position'] = player['2021_pos']
+    elif player['2020_pos'] != '':
+        player_dict[player_id]['position'] = player['2020_pos']
+    else:
+        r = requests.get(f"https://www.basketball-reference.com/players/{player_id[0]}/{player_id}.html")
+        soup = BeautifulSoup(r.text, 'html.parser')
+
+        try:
+            table = soup.find("table", attrs={"id": "per_game"}).find("tbody")
+            player_dict[player_id]['position'] = table.find_all("td", attrs={"data-stat": "pos"})[-1].text
+        except:
+            player_dict[player_id]['position'] = '-'
 
 
 for filename in ['../data/players_start.csv', '../../public/data/players_start.csv']:
