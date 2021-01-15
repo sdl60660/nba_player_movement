@@ -20,6 +20,10 @@
     list-style-type: none;
     padding-left: 0.5rem;
     margin-top: 1rem;
+
+    @media screen and (max-width: $mobile-breakpoint) {
+      padding-left: 0rem;
+    }
   }
   
   .transaction-card__date-header {

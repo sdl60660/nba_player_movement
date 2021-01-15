@@ -9,7 +9,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-@media (max-width: $mobile-breakpoint) {
+@media screen and (max-width: $mobile-breakpoint) {
   html { font-size: 14px; }
 }
 
