@@ -39,7 +39,7 @@ class PlayerMap {
   
     constructor(containerEl, props) {
         this.containerEl = containerEl;
-        const { width, height, mapColor, geoData, teamData, playerData, setPlayerData } = props;
+        const { width, height, mapColor, geoData, teamData, playerData, setPlayerData, sizingAttribute } = props;
 
         this.svg = d3.select(containerEl)
             .append("svg")
@@ -47,7 +47,7 @@ class PlayerMap {
         
         this.initTooltip();
 
-        this.attribute = "salary";
+        this.attribute = sizingAttribute;
 
         this.polygonSets = [
             {
@@ -71,7 +71,7 @@ class PlayerMap {
         this.maxWeight = 10;
         this.weightScale = d3.scaleLinear()
             .domain(d3.extent(playerData.filter(player => player[this.attribute] !== "-"), d => d[this.attribute]))
-            .range([0, this.maxWeight]);
+            .range([0.001, this.maxWeight]);
         
         let signedPlayers = playerData.filter(d => d.team.team_id !== "FA" && d.team.team_id !== "RET")
         let teamTotalWeights = Object.values(groupBy(signedPlayers, (d) => d.team.team_id))

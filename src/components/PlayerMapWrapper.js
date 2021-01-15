@@ -21,6 +21,8 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const [geoData, setGeoData] = useState(_geoData);
     const [teamData, setTeamData] = useState(_teamData);
     const [playerData, setPlayerData] = useState(_playerData);
+    const [sizingAttribute, setSizingAttribute] = useState("salary");
+
     const [width, setWidth] = useState(1300);
     const [height, setHeight] = useState(750);
     const [opacity, setOpacity] = useState(0.5);
@@ -64,11 +66,11 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                         const endSalary = transaction.salary_data ? transaction.salary_data.end_salary : state[playerIndex].end_salary;
 
                         state[playerIndex].salary = (direction === "down") ? endSalary : startSalary;
-                        state[playerIndex].weight = vis.weightScale(state[playerIndex][vis.attribute]);
                         
-                        if (vis.attribute === "salary") {
+                        if (sizingAttribute === "salary") {
+                            state[playerIndex].weight = vis.weightScale(state[playerIndex][sizingAttribute]);
                             vis.svg.select(`#${state[playerIndex].player_id}-photo-pattern`)
-                                .attr("width", d => d[vis.attribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight))
+                                .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
                         }
                     }
                 })
@@ -119,7 +121,17 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     let scroller = scrollama();
 
     useEffect(() => {
-        vis = new PlayerMap(refElement.current, { width, height, mapColor, geoData, teamData, playerData, setPlayerData });
+        vis = new PlayerMap(refElement.current, {
+            width,
+            height,
+            mapColor,
+            geoData,
+            teamData,
+            playerData,
+            setPlayerData,
+            sizingAttribute
+        });
+        
         scroller
             .setup({
                 step: ".transaction-card",
