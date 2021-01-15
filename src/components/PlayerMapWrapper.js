@@ -55,10 +55,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
                     const playerIndex = playerDataIds.indexOf(player.player_id);
 
-                    if (state[playerIndex].player_id === "woodaro01") {
-                        console.log(state[playerIndex].salary, state[playerIndex].weight)
-                    }
-
                     state[playerIndex].team = teamData
                         // Reverse transaction if running upwards
                         .find((team) => team.team_id === ( direction === "down" ? player.to_team : player.from_team));
@@ -70,8 +66,10 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                         state[playerIndex].salary = (direction === "down") ? endSalary : startSalary;
                         state[playerIndex].weight = vis.weightScale(state[playerIndex][vis.attribute]);
                         
-                        vis.svg.select(`#${state[playerIndex].player_id}-photo-pattern`)
-                            .attr("width", Math.sqrt(state[playerIndex][vis.attribute] / (159.12 * 57)));
+                        if (vis.attribute === "salary") {
+                            vis.svg.select(`#${state[playerIndex].player_id}-photo-pattern`)
+                                .attr("width", d => d[vis.attribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight))
+                        }
                     }
                 })
             })

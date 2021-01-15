@@ -67,52 +67,62 @@ class PlayerMap {
             }
         ];
 
-        this.maxWeight = 100;
+        // Set scales
+        this.maxWeight = 10;
         this.weightScale = d3.scaleLinear()
-            .domain(d3.extent(playerData
-                                // Players with no salary have been set to salary of $1 for divide-by-zero reasons
-                                // If the set attribute is salary, we'll want to filter them out of the domain, meaning their
-                                // weight will eventually register as negative and they won't be visible if on a team's roster,
-                                // which will happen if they are drafted and traded, but still un-signed
-                                .filter(player => this.attribute !== 'salary' ? true : player[this.attribute] > 1),
-                                (d) => d[this.attribute]))
-            .range([1, this.maxWeight]);
+            .domain(d3.extent(playerData.filter(player => player[this.attribute] !== "-"), d => d[this.attribute]))
+            .range([0, this.maxWeight]);
         
         let signedPlayers = playerData.filter(d => d.team.team_id !== "FA" && d.team.team_id !== "RET")
         let teamTotalWeights = Object.values(groupBy(signedPlayers, (d) => d.team.team_id))
                             .map(array => {
                                 return array
+                                    .filter(d => d[this.attribute] !== "-")
                                     .map(d => this.weightScale(d[this.attribute]))
                                     .reduce((a, b) => a + b, 0);
                             })
                             
         this.maxTotalWeight = d3.max(teamTotalWeights);
-        this.maxCircleRadius = 57;
+        this.maxCircleRadius = 58;
 
         this.voronoiRadius = d3.scaleLinear()
             .domain([0, this.maxTotalWeight])
             .range([0, this.maxCircleRadius])
 
+
+        // Set player data
+        // This part would need to run again on change to attribute
         this.playerData = playerData;
         this.playerData.forEach((player) => {
-            player.weight = this.weightScale(player[this.attribute]);
+            player.weight = player[this.attribute] === "-" ? 0 : this.weightScale(player[this.attribute]);
         });
         setPlayerData(this.playerData);
 
+
+        // Initialize player photo patterns
         this.teamData = teamData;
         this.trueTeamData = teamData.filter(d => d.team_id !== 'FA' && d.team_id !== 'RET');
         this.initPlayerPhotos({ playerData })
         
+
+        // Generate background map and projection
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
         const projection = d3.geoAlbersUsa()
             .fitExtent([[0, 30], [width-60, height-60]], geoJSON);
         this.generateMap({ geoJSON, projection, mapColor });
 
+
+        // Create team groups
         this.g = this.svg.append("g").attr("id", "polygon-group");
         this.labelGroup = this.svg.append("g").attr("id", "label-group");
         this.generateTeamGroups({ projection });
+
+
+        // Create/set team labels
         this.setTeamLabels(this.trueTeamData);
 
+
+        // Calculate voronoi treemaps for each team's players
         this.allPolygons = [];
         this.trueTeamData.forEach((team) => {
             let players = this.playerData.filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
@@ -120,6 +130,8 @@ class PlayerMap {
             this.allPolygons = this.allPolygons.concat(polygons);
         })
 
+
+        // Draw those polygons
         this.generatePolygons(this.allPolygons);
     }
 
@@ -202,13 +214,8 @@ class PlayerMap {
                 .attr("patternUnits", "objectBoundingBox")
                 .append("svg:image")
                     .attr("xlink:href", d => `images/player_photos/${d.player_id}.png`)
-                    // Found the ratio of salary to polygon area, per unit of circle radius range (~159), then took sqrt to get length of one side (width)
-                    // (0.45462857 * this.maxTotalWeight)
-                    // .attr("width", d => {
-                    //     Math.sqrt( this.voronoiRadius(this.weightScale(d[this.attribute])) / this.maxCircleRadius )
-                    // })
                     .attr("id", d => `${d.player_id}-photo-pattern`)
-                    .attr("width", d => Math.sqrt(d[this.attribute] / (159.12 * 57)))
+                    .attr("width", d => d[this.attribute] === "-" ? 1 : Math.sqrt(this.weightScale(d[this.attribute]) * this.maxCircleRadius * this.maxWeight))
                     .attr("x", 0)
                     .attr("y", 0);
     }
@@ -253,7 +260,7 @@ class PlayerMap {
             team.yCoordinate = yCenter;
 
             const players = this.playerData
-                .filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
+                .filter((player) => player[this.attribute] !== "-" && player.team !== undefined && player.team.team_id === team.team_id);
             const weightSum = players.map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
             team.radius = this.voronoiRadius(weightSum);
 
@@ -291,7 +298,10 @@ class PlayerMap {
         let xVal = team.x || team.xCoordinate;
         let yVal = team.y || team.yCoordinate;
 
-        const weightSum = players.map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
+        const weightSum = players
+                                .filter(x => x[this.attribute] !== "-")
+                                .map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
+
         const radius = this.voronoiRadius(weightSum);
         
         const simulation = voronoiMapSimulation(players)
@@ -377,7 +387,8 @@ class PlayerMap {
                             .style("stroke-width", "2px")
                             .attr('d', (d,i,n) => {
                                 if (affectedPlayers.includes(d.site.originalObject.data.originalData.player_id)) {
-                                    const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                                    const originalData = d.site.originalObject.data.originalData;
+                                    const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
                                     const path = getCirclePath(d[0], radius);
                                     d3.select(n[i]).attr("circlePath", path)
                                     return getCirclePath(d[0], 1);
@@ -406,7 +417,8 @@ class PlayerMap {
                         update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                             .raise()
                             .attr('startPath', (d,i,n) => {
-                                const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                                const originalData = d.site.originalObject.data.originalData;
+                                const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
                                 
                                 let existingPath = d3.select(n[i]).attr('d');
                                 const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
@@ -534,7 +546,8 @@ class PlayerMap {
             .attr('d', (d,i,n) => {
                 const element = d3.select(n[i]);
 
-                const radius = Math.sqrt(d.site.originalObject.data.originalData.salary / (159.12*57)) / 2;
+                const originalData = d.site.originalObject.data.originalData;
+                const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
                 
                 const startPosition = element.attr("startPosition");
                 const middlePosition = getCirclePath(d[0], radius);
@@ -576,7 +589,7 @@ class PlayerMap {
             this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
 
             let team = this.teamData.find((t) => t.team_id === team_id)
-            let players = playerData.filter((player) => player.team.team_id === team.team_id);
+            let players = playerData.filter((player) => player[this.attribute] !== "-" && player.team.team_id === team.team_id);
             
             let polygons = this.addTeamTreemap({ team, players })
             this.allPolygons = this.allPolygons.concat(polygons);
