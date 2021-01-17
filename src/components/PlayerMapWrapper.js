@@ -4,6 +4,7 @@ import React, { useState, useEffect, useReducer, useRef } from 'react';
 import scrollama from 'scrollama';
 import * as d3 from 'd3';
 import * as chromatic from "d3-scale-chromatic";
+import { isEqual } from 'lodash';
 
 import PlayerMapControls from './PlayerMapControls';
 import PlayerMap from '../d3-components/PlayerMap';
@@ -14,6 +15,12 @@ import transactionReducer from '../reducers/transactionReducer';
 
 
 let vis;
+let allAffectedTeams = [];
+let allAffectedPlayers = [];
+let scrollDirection = "down";
+let phantomFlag = false;
+let originalState;
+
 
 const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData }) => {
 
@@ -25,20 +32,41 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
     const [width, setWidth] = useState(1300);
     const [height, setHeight] = useState(750);
-    const [opacity, setOpacity] = useState(0.5);
+    const [opacity, setOpacity] = useState(0.3);
+
+    originalState = JSON.parse(JSON.stringify(_playerData.slice()));
 
     const transactionDates = Object.keys(transactionData);
     const playerDataIds = playerData.map((player) => player.player_id);
 
-    let allAffectedTeams = [];
-    let allAffectedPlayers = [];
+    let stepProgress = 0;
 
-    let scrollDirection = "down";
+    const processPlayerMovement = ({ player, direction, transaction, allAffectedPlayers, state }) => {
+        allAffectedPlayers.push(player.player_id);
+
+        const playerIndex = playerDataIds.indexOf(player.player_id);
+
+        state[playerIndex].team = teamData
+            // Reverse transaction if running upwards
+            .find((team) => team.team_id === ( direction === "down" ? player.to_team : player.from_team));
+        
+        if (transaction.type === "signed") {
+            const startSalary = transaction.salary_data ? transaction.salary_data.start_salary : state[playerIndex].start_salary
+            const endSalary = transaction.salary_data ? transaction.salary_data.end_salary : state[playerIndex].end_salary;
+
+            state[playerIndex].salary = (direction === "down") ? endSalary : startSalary;
+            
+            if (sizingAttribute === "salary") {
+                state[playerIndex].weight = vis.weightScale(state[playerIndex][sizingAttribute]);
+                vis.svg.select(`#${state[playerIndex].player_id}-photo-pattern`)
+                    .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
+            }
+        }
+
+        return [allAffectedPlayers, state];
+    }
 
     const processStepTransactions = ({ element, index, direction }) => {
-        // d3.selectAll(".exit-polygon").remove();
-
-        // console.log({ element, index, direction });
         let transactionDate = transactionDates[index];
         let transactions = transactionData[transactionDate];
 
@@ -46,33 +74,15 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         allAffectedPlayers = [];
         
         setPlayerData((state) => {
+            // Maintain correct ordering on transactions if running upwards, for things like sign-and-trades
+            transactions = direction === "down" ? transactions : transactions.slice().reverse();
+
             transactions.filter(d => d.type !== "contract extension" && d.type !== "exercised option").forEach((transaction) => {
                 allAffectedTeams = allAffectedTeams.concat(transaction.affected_teams);
-
-                // Maintain correct ordering on transactions if running upwards, for things like sign-and-trades
-                const playerArray = direction === "down" ? transaction.players : transaction.players.reverse()
+                const playerArray = transaction.players;
 
                 transaction.players.forEach((player) => {
-                    allAffectedPlayers.push(player.player_id);
-
-                    const playerIndex = playerDataIds.indexOf(player.player_id);
-
-                    state[playerIndex].team = teamData
-                        // Reverse transaction if running upwards
-                        .find((team) => team.team_id === ( direction === "down" ? player.to_team : player.from_team));
-                    
-                    if (transaction.type === "signed") {
-                        const startSalary = transaction.salary_data ? transaction.salary_data.start_salary : state[playerIndex].start_salary
-                        const endSalary = transaction.salary_data ? transaction.salary_data.end_salary : state[playerIndex].end_salary;
-
-                        state[playerIndex].salary = (direction === "down") ? endSalary : startSalary;
-                        
-                        if (sizingAttribute === "salary") {
-                            state[playerIndex].weight = vis.weightScale(state[playerIndex][sizingAttribute]);
-                            vis.svg.select(`#${state[playerIndex].player_id}-photo-pattern`)
-                                .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
-                        }
-                    }
+                    [allAffectedPlayers, state] = processPlayerMovement({ player, direction, transaction, allAffectedPlayers, state })
                 })
             })
             return state;
@@ -80,13 +90,14 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
         allAffectedTeams = [...new Set(allAffectedTeams.filter((team) => team !== "FA" && team !== "RET"))];
         allAffectedPlayers = [...new Set(allAffectedPlayers)];
-        
-        vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers);
+
+        // vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers, scrollDirection);
         // vis.setTeamLabels(vis.trueTeamData);
     }
 
+
     const processProgress = ({ element, index, progress, scrollDirection }) => {
-        // console.log(progress, index)
+        stepProgress = progress;
         vis.updatePositions(allAffectedPlayers, allAffectedTeams, progress, scrollDirection)
     }
 
@@ -141,18 +152,41 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 order: true
             })
             .onStepEnter(({ element, index, direction }) => {
+                // console.log('enter', index, direction)
                 scrollDirection = direction;
                 if (element.getAttribute("class").includes("phantom")) {
+                    phantomFlag = true;
                     return;
                 }
                 else {
+                    if (direction === "up" && phantomFlag === false) {
+                        processStepTransactions({ element, index: (index + 1), direction });
+                        vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers, scrollDirection, sizingAttribute);
+                    }
                     processStepTransactions({ element, index, direction })
+                    vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers, scrollDirection, sizingAttribute);
+
+                    phantomFlag = false;
                 }
             })
             .onStepExit(({ element, index, direction }) => {
+                // If at the top, check that roster state is same as at the start 
                 // if (index === 0 && direction === "up") {
-                d3.selectAll(".exit-polygon").remove();
+                //     playerData.forEach(player => {
+                //         const match = originalState.find(x => x.player_id === player.player_id)
+                //         console.log(match.team.team_id === player.team.team_id)
+                //         if (match.team.team_id !== player.team.team_id) {
+                //             console.log("Non-match", match.player_id, match.team.team_id, player.team.team_id);
+                //         }
+                //     })
                 // }
+                if (scrollDirection === direction) {
+                    d3.selectAll(".exit-polygon").remove();
+                }
+                else {
+                    d3.selectAll(".enter-polygon").remove();
+                }
+
                 return;
             })
             .onStepProgress(({ element, index, progress }) => {
@@ -173,11 +207,28 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         vis.updateMapColor({ mapColor, opacity })
     }, [mapColor, opacity]);
 
+    useEffect(() => {
+        console.log("triggered", scrollDirection, sizingAttribute, stepProgress, allAffectedTeams, allAffectedPlayers);
+        if (stepProgress === 0) {
+            allAffectedTeams = [];
+            allAffectedPlayers = [];
+        }
+        if (sizingAttribute) {
+            vis.changeWeightAttribute({ sizingAttribute,
+                                        setPlayerData,
+                                        affectedTeams: allAffectedTeams,
+                                        affectedPlayers: allAffectedPlayers,
+                                        stepProgress,
+                                        scrollDirection
+                                    })
+        }
+    }, [sizingAttribute]);
+
 
     return (
         <section id={"scroll"}>
           <div id={"viz-column"}>
-            <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth }}>
+            <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth, sizingAttribute, setSizingAttribute }}>
                 <div ref={refElement} id={"viz-tile"}>
                     {/* <PlayerMapControls /> */}
                 </div>

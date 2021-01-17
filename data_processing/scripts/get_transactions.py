@@ -88,7 +88,7 @@ def process_bbref_transaction(transaction, transaction_text):
     elif transaction_type == "waived":
         player_id = transaction.find_all("a")[-1]['href'].split('/')[-1].replace('.html', '')
 
-        # Transaction logs don't specify Exhitbit 10 contracts on waives, so filter these and continue here
+        # Transaction logs don't specify Exhitbit 10 contracts on waives, so filter these and continue here.
         if player_id not in player_dict.keys():
             return
 
@@ -197,6 +197,10 @@ def process_prosports_transaction(transaction):
             transaction_text = transaction_text.replace("team declined", f"{team['team_nickname']} declined {player['player']}'s")
 
     elif transaction_type == "waived":
+        # If player isn't on this team in roster start, they're on a two-way or Exhibit 10 contract and this waiver shouldn't be processed
+        if player['team_id'] != team_id:
+            return None
+
         from_team = team_id
         to_team = "FA"
 
@@ -205,6 +209,7 @@ def process_prosports_transaction(transaction):
     elif transaction_type == "signed":
         from_team = player_dict[player_id]['team_id']
         to_team = team_id
+        affected_teams = [from_team, to_team]
 
         contract_clause = transaction_text.split(' to a ')[-1]
 
@@ -293,7 +298,10 @@ for date in transaction_dates[::-1]:
     print(date_string)
 
     prosports_date_transactions = [x for x in prosports_transactions if x['date'] == formatted_date]
-    for transaction in prosports_date_transactions:
+    prosports_waivers = [x for x in prosports_date_transactions if 'waived' in x['notes']]
+    prosports_nonwaivers = [x for x in prosports_date_transactions if 'waived' not in x['notes']]
+    
+    for transaction in prosports_nonwaivers:
         transaction_dict = process_prosports_transaction(transaction)
         if transaction_dict:
             processed_transaction_ids.append(transaction_dict['id'])
@@ -309,8 +317,14 @@ for date in transaction_dates[::-1]:
             transaction_dict = process_bbref_transaction(transaction, transaction_text)
             if transaction_dict:
                 all_transactions.append(transaction_dict)
+    
+    for transaction in prosports_waivers:
+        transaction_dict = process_prosports_transaction(transaction)
+        if transaction_dict:
+            processed_transaction_ids.append(transaction_dict['id'])
+            all_transactions.append(transaction_dict)
         
-all_transactions.sort(key=lambda x: datetime.strptime(x['date'], "%Y-%m-%d"))
+# all_transactions.sort(key=lambda x: (datetime.strptime(x['date'], "%Y-%m-%d"))
 
 with open('../data/transactions.json', 'w') as f:
     json.dump(all_transactions, f)

@@ -7,6 +7,7 @@ import * as topojson from "topojson-client";
 import seedrandom from 'seedrandom';
 import { groupBy } from 'lodash';
 import { voronoiMapSimulation } from 'd3-voronoi-map';
+import { transition } from 'd3';
 
 
 const getCirclePath = (center, radius) => {
@@ -48,6 +49,7 @@ class PlayerMap {
         this.initTooltip();
 
         this.attribute = sizingAttribute;
+        this.playerData = playerData;
 
         this.polygonSets = [
             {
@@ -69,30 +71,11 @@ class PlayerMap {
 
         // Set scales
         this.maxWeight = 10;
-        this.weightScale = d3.scaleLinear()
-            .domain(d3.extent(playerData.filter(player => player[this.attribute] !== "-"), d => d[this.attribute]))
-            .range([0.001, this.maxWeight]);
-        
-        let signedPlayers = playerData.filter(d => d.team.team_id !== "FA" && d.team.team_id !== "RET")
-        let teamTotalWeights = Object.values(groupBy(signedPlayers, (d) => d.team.team_id))
-                            .map(array => {
-                                return array
-                                    .filter(d => d[this.attribute] !== "-")
-                                    .map(d => this.weightScale(d[this.attribute]))
-                                    .reduce((a, b) => a + b, 0);
-                            })
-                            
-        this.maxTotalWeight = d3.max(teamTotalWeights);
         this.maxCircleRadius = 58;
-
-        this.voronoiRadius = d3.scaleLinear()
-            .domain([0, this.maxTotalWeight])
-            .range([0, this.maxCircleRadius])
+        this.setScales();
 
 
         // Set player data
-        // This part would need to run again on change to attribute
-        this.playerData = playerData;
         this.playerData.forEach((player) => {
             player.weight = player[this.attribute] === "-" ? 0 : this.weightScale(player[this.attribute]);
         });
@@ -114,25 +97,46 @@ class PlayerMap {
 
         // Create team groups
         this.g = this.svg.append("g").attr("id", "polygon-group");
-        this.labelGroup = this.svg.append("g").attr("id", "label-group");
         this.generateTeamGroups({ projection });
 
 
         // Create/set team labels
+        this.labelGroup = this.svg.append("g").attr("id", "label-group");
         this.setTeamLabels(this.trueTeamData);
 
 
-        // Calculate voronoi treemaps for each team's players
-        this.allPolygons = [];
-        this.trueTeamData.forEach((team) => {
-            let players = this.playerData.filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
-            let polygons = this.addTeamTreemap({ team, players })
-            this.allPolygons = this.allPolygons.concat(polygons);
-        })
+        // // Calculate voronoi treemaps for each team's players
+        // this.allPolygons = [];
+        // this.trueTeamData.forEach((team) => {
+        //     let players = this.playerData.filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
+        //     let polygons = this.addTeamTreemap({ team, players })
+        //     this.allPolygons = this.allPolygons.concat(polygons);
+        // })
 
 
-        // Draw those polygons
-        this.generatePolygons(this.allPolygons);
+        // // Draw those polygons
+        // this.generatePolygons(this.allPolygons);
+    }
+
+    setScales = () => {            
+        this.weightScale = d3.scaleLinear()
+            .domain(d3.extent(this.playerData.filter(player => player[this.attribute] !== "-"), d => d[this.attribute]))
+            .range([0.001, this.maxWeight]);
+        
+        let signedPlayers = this.playerData.filter(d => d.team.team_id !== "FA" && d.team.team_id !== "RET")
+        let teamTotalWeights = Object.values(groupBy(signedPlayers, (d) => d.team.team_id))
+                            .map(array => {
+                                return array
+                                    .filter(d => d[this.attribute] !== "-")
+                                    .map(d => this.weightScale(d[this.attribute]))
+                                    .reduce((a, b) => a + b, 0);
+                            })
+                            
+        this.maxTotalWeight = d3.max(teamTotalWeights);
+
+        this.voronoiRadius = d3.scaleLinear()
+            .domain([0, this.maxTotalWeight])
+            .range([0, this.maxCircleRadius])
     }
 
     setTeamLabels = (teamData) => {
@@ -215,6 +219,7 @@ class PlayerMap {
                 .append("svg:image")
                     .attr("xlink:href", d => `images/player_photos/${d.player_id}.png`)
                     .attr("id", d => `${d.player_id}-photo-pattern`)
+                    .attr("class", "player-photo-pattern")
                     .attr("width", d => d[this.attribute] === "-" ? 1 : Math.sqrt(this.weightScale(d[this.attribute]) * this.maxCircleRadius * this.maxWeight))
                     .attr("x", 0)
                     .attr("y", 0);
@@ -299,8 +304,8 @@ class PlayerMap {
         let yVal = team.y || team.yCoordinate;
 
         const weightSum = players
-                                .filter(x => x[this.attribute] !== "-")
-                                .map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
+            .filter(x => x[this.attribute] !== "-")
+            .map((x) => this.weightScale(x[this.attribute])).reduce((a, b) => a + b, 0);
 
         const radius = this.voronoiRadius(weightSum);
         
@@ -328,7 +333,7 @@ class PlayerMap {
         return state.polygons;
     }
 
-    generatePolygons = (polygons, affectedTeams = [], affectedPlayers = []) => {
+    generatePolygons = (polygons, affectedTeams = [], affectedPlayers = [], direction = "down", attributeTransition = false) => {
         const vis = this;
 
         polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
@@ -384,7 +389,7 @@ class PlayerMap {
                             .style("fill-opacity", 0.95)
                             .style("fill", d => polygonAttributes.fillAccessor(d))
                             .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                            .style("stroke-width", "2px")
+                            .style("stroke-width", d => d.weight <= 0.001 ? "0px" : "2px")
                             .attr('d', (d,i,n) => {
                                 if (affectedPlayers.includes(d.site.originalObject.data.originalData.player_id)) {
                                     const originalData = d.site.originalObject.data.originalData;
@@ -397,6 +402,7 @@ class PlayerMap {
                                     return `M${d.join('L')}z`;
                                 }
                             })
+                            .attr("lastPosition", (d,i,n) => d3.select(n[i]).attr("d"))
                     },
 
                     update => {  
@@ -404,29 +410,45 @@ class PlayerMap {
                             .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
                             .style("stroke-width", "2px")
                         
-                        update.filter(d => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                            .attr("d", d => `M${d.join('L')}z`)
+                        if (attributeTransition) {
+                            update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                                .transition()
+                                .attrTween("d", (d,i,n) => {
+                                    const previous = d3.select(n[i]).attr("d");
+                                    const current = `M${d.join('L')}z`;
+                                    return interpolatePath(previous, current);
+                                }) 
+                        }
+                        else {
+                            // update
+                                // .filter(d => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                                // .filter((d,i,n) => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                                // .attr("d", d => `M${d.join('L')}z`)
+                        }
 
                         update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                             .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
+                            .attr("shapeFinal", (d,i,n) => `M${d.join('L')}z`);
 
                         update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                             .style("fill", d => polygonAttributes.fillAccessor(d))
-                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                        
+                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2);
+
                         update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                             .raise()
-                            .attr('startPath', (d,i,n) => {
+                            .attr("startPath", (d,i,n) => {
+                                const element = d3.select(n[i]);
                                 const originalData = d.site.originalObject.data.originalData;
                                 const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
-                                
-                                let existingPath = d3.select(n[i]).attr('d');
+                                const existingPath = element.attr('d'); 
                                 const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
 
-                                d3.select(n[i])
-                                    .attr('radius', radius);
-
+                                element.attr('radius', radius);
                                 return getCirclePath(existingCenter, radius);
+                            })
+                            .attr("positionFinal", (d,i,n) => {
+                                const radius = d3.select(n[i]).attr('radius');
+                                return getCirclePath(d[0], radius);
                             })
                             .attr("originalFill", (d,i,n) => d3.select(n[i]).style("fill"))
                             .attr("originalStroke", (d,i,n) => d3.select(n[i]).style("stroke"))
@@ -456,17 +478,16 @@ class PlayerMap {
             .filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
             .attr('d', (d,i,n) => {
                 const element = d3.select(n[i]);
-                const radius = element.attr("radius");
 
-                const originalShape = element.attr("startPosition");
+                const startPosition = element.attr("startPosition");
                 const circleStart = element.attr("startPath");
 
-                const positionFinal = getCirclePath(d[0], radius);
-                const shapeFinal = `M${d.join('L')}z`;
+                const positionFinal = element.attr("positionFinal");
+                const shapeFinal = element.attr("shapeFinal");
 
                 if (tweenPosition < traverseThreshold) {
                     const stagePosition = tweenPosition / traverseThreshold;
-                    return interpolatePath(originalShape, circleStart)(stagePosition);
+                    return interpolatePath(startPosition, circleStart)(stagePosition);
                 }
                 else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
                     const stagePosition = (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
@@ -500,7 +521,7 @@ class PlayerMap {
             .attr("d", (d,i,n) => {
                 const element = d3.select(n[i]);
                 const originalShape = element.attr("startPosition");
-                const shapeFinal = `M${d.join('L')}z`;
+                const shapeFinal = element.attr("shapeFinal");
 
                 if (tweenPosition >= reshuffleThreshold) {
                     const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
@@ -577,25 +598,82 @@ class PlayerMap {
 
     }
 
-    updateMapColor = ({ opacity, mapColor }) => { 
-        this.mapPath
-            .transition()
-            .style("fill-opacity", opacity)
-            .style("fill", mapColor);
+    changeWeightAttribute = ({ sizingAttribute, setPlayerData, affectedTeams, affectedPlayers, stepProgress, scrollDirection }) => {
+        const vis = this;
+
+        // Set new sizing attribute for player polygon weights
+        vis.attribute = sizingAttribute;
+
+        // Switch weightScale domain to new attribute
+        vis.setScales();
+
+        // Update player data to set weights according to the sizingAttribute
+        vis.playerData.forEach((player) => {
+            player.weight = player[vis.attribute] === "-" ? 0 : vis.weightScale(player[vis.attribute]);
+        });
+        setPlayerData(vis.playerData);
+
+
+        // Calculate voronoi treemaps for each team's players
+        vis.allPolygons = [];
+        vis.trueTeamData.forEach((team) => {
+            let players = vis.playerData.filter((player) => player[vis.attribute] !== "-" && player.team !== undefined && player.team.team_id === team.team_id);
+            let polygons = vis.addTeamTreemap({ team, players })
+            vis.allPolygons = vis.allPolygons.concat(polygons);
+        })
+
+        // Draw those polygons
+        vis.generatePolygons(vis.allPolygons, affectedTeams, affectedPlayers, scrollDirection, true);
+
+        if (affectedTeams.length !== 0) {
+            vis.updatePositions(affectedPlayers, affectedTeams, stepProgress, scrollDirection)
+        }
+
+        // Resize photos
+        vis.svg.selectAll(".player-photo-pattern")
+            .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
+    
+        vis.svg.selectAll(".exit-polygon").remove();
     }
 
-    runTransactions = (playerData, affectedTeams, affectedPlayers) => {
+    runTransactions = (playerData, affectedTeams, affectedPlayers, scrollDirection, sizingAttribute) => {
+        // this.allPolygons = [];
+        // this.trueTeamData.forEach((team) => {
+        //     // this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
+
+        //     // let team = this.teamData.find((t) => t.team_id === team_id)
+        //     let players = playerData.filter((player) => player[this.attribute] !== "-" && player.team.team_id === team.team_id);
+            
+        //     let polygons = this.addTeamTreemap({ team, players })
+        //     this.allPolygons = this.allPolygons.concat(polygons);
+        // })
+        // this.svg.selectAll(".exit-polygon").remove();
+
         affectedTeams.forEach((team_id) => {
             this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
 
             let team = this.teamData.find((t) => t.team_id === team_id)
-            let players = playerData.filter((player) => player[this.attribute] !== "-" && player.team.team_id === team.team_id);
+            let players = playerData.filter(player => player.team.team_id === team.team_id)
+            if (sizingAttribute === "salary") {
+                players = players.filter((player) => player[this.attribute] > 1);
+            }
+            else {
+                players = players.filter((player) => player[this.attribute] !== "-");
+            }
+            
             
             let polygons = this.addTeamTreemap({ team, players })
             this.allPolygons = this.allPolygons.concat(polygons);
         })
 
-        return this.generatePolygons(this.allPolygons, affectedTeams, affectedPlayers);
+        return this.generatePolygons(this.allPolygons, affectedTeams, affectedPlayers, scrollDirection);
+    }
+
+    updateMapColor = ({ opacity, mapColor }) => { 
+        this.mapPath
+            .transition()
+            .style("fill-opacity", opacity)
+            .style("fill", mapColor);
     }
     
   }
