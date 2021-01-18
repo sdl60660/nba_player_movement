@@ -205,6 +205,13 @@ def process_prosports_transaction(transaction):
         to_team = "FA"
 
         transaction_text = f"The {team['team_full_name']} waived {player['player']}."
+    
+    elif transaction_type == "claimed":
+        from_team = player_dict[player_id]['team_id']
+        to_team = team_id
+
+        affected_teams = [from_team, to_team]
+        transaction_text = f"The {team['team_full_name']} claimed {player['player']} off waivers."
 
     elif transaction_type == "signed":
         from_team = player_dict[player_id]['team_id']
@@ -277,7 +284,7 @@ with open('../data/team_data.csv', 'r', encoding='utf-8-sig') as f:
     team_data = [x for x in csv.DictReader(f)]
 
 with open('../data/supplementary_transaction_data.json', 'r') as f:
-    prosports_transactions = [x for x in json.load(f) if 'waived' in x['notes'] or 'contract option' in x['notes'] or 'signed' in x['notes']]
+    prosports_transactions = [x for x in json.load(f) if 'waived' in x['notes'] or 'contract option' in x['notes'] or 'signed' in x['notes'] or 'claimed' in x['notes']]
     prosports_transactions = [x for x in prosports_transactions if '10-day contract' not in x['notes'] and 'Exhibit 10' not in x['notes'] and 'two way contract' not in x['notes'] and 'option for 2021-22' not in x['notes']]
 
 
@@ -298,8 +305,8 @@ for date in transaction_dates[::-1]:
     print(date_string)
 
     prosports_date_transactions = [x for x in prosports_transactions if x['date'] == formatted_date]
-    prosports_waivers = [x for x in prosports_date_transactions if 'waived' in x['notes']]
-    prosports_nonwaivers = [x for x in prosports_date_transactions if 'waived' not in x['notes']]
+    prosports_waivers = [x for x in prosports_date_transactions if 'waived' in x['notes'] or 'claimed' in x['notes']]
+    prosports_nonwaivers = [x for x in prosports_date_transactions if 'waived' not in x['notes'] and 'claimed' not in x['notes']]
     
     for transaction in prosports_nonwaivers:
         transaction_dict = process_prosports_transaction(transaction)
