@@ -226,28 +226,29 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
 
     return (
-        <section id={"scroll"}>
-          <div id={"viz-column"}>
-            <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth, sizingAttribute, setSizingAttribute }}>
-                <div ref={refElement} id={"viz-tile"}>
-                    {/* <PlayerMapControls /> */}
-                </div>
-            </PlayerMapContext.Provider>
-          </div>
-          <div className={"text-column"} id={"annotations"}>
-                { Object.entries(transactionData).map(
-                    (transactionDateData, i) =>
-                        <TransactionCard 
-                            className={"transaction-card"}
-                            key={i}
-                            transactionDate={transactionDateData[0]}
-                            transactions={transactionDateData[1]}
-                        />
-                    )
-                }
-                <div key={"phantom-end"} className={"transaction-card phantom"} />
-          </div>
-      </section>
+        <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth, sizingAttribute, setSizingAttribute }}>
+            <section id={"scroll"}>
+            <div id={"viz-column"}>
+                    <div ref={refElement} id={"viz-tile"}>
+                        { /* <PlayerMapControls /> */ }
+                    </div>
+                
+            </div>
+            <div className={"text-column"} id={"annotations"}>
+                    { Object.entries(transactionData).map(
+                        (transactionDateData, i) =>
+                            <TransactionCard 
+                                className={"transaction-card"}
+                                key={i}
+                                transactionDate={transactionDateData[0]}
+                                transactions={transactionDateData[1]}
+                            />
+                        )
+                    }
+                    <div key={"phantom-end"} className={"transaction-card phantom"} />
+            </div>
+        </section>
+      </PlayerMapContext.Provider>
     )
 }
 

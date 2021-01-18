@@ -7,7 +7,6 @@ import * as topojson from "topojson-client";
 import seedrandom from 'seedrandom';
 import { groupBy } from 'lodash';
 import { voronoiMapSimulation } from 'd3-voronoi-map';
-import { transition } from 'd3';
 
 
 const getCirclePath = (center, radius) => {
@@ -333,7 +332,7 @@ class PlayerMap {
         return state.polygons;
     }
 
-    generatePolygons = (polygons, affectedTeams = [], affectedPlayers = [], direction = "down", attributeTransition = false) => {
+    generatePolygons = ({ polygons, affectedTeams = [], affectedPlayers = [], direction = "down", attributeTransition = false, midstate = [] }) => {
         const vis = this;
 
         polygons = polygons.filter(d => d.site.originalObject.data.originalData.team.team_id !== "FA");
@@ -403,7 +402,7 @@ class PlayerMap {
                                 }
                             })
                             .attr("lastPosition", (d,i,n) => d3.select(n[i]).attr("d"))
-                    },
+                        },
 
                     update => {  
                         update
@@ -419,16 +418,16 @@ class PlayerMap {
                                     return interpolatePath(previous, current);
                                 }) 
                         }
-                        else {
-                            // update
-                                // .filter(d => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                                // .filter((d,i,n) => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                                // .attr("d", d => `M${d.join('L')}z`)
-                        }
 
                         update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
                             .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
-                            .attr("shapeFinal", (d,i,n) => `M${d.join('L')}z`);
+                            .attr("shapeFinal", (d) => `M${d.join('L')}z`);
+                        
+                        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+                            .attr("midstatePosition", (d,i,n) => {
+                                const matchingPolygon = midstate.find(polygon => polygon.site.originalObject.data.originalData.player_id === d.site.originalObject.data.originalData.player_id)
+                                return `M${matchingPolygon.join('L')}z`
+                            })
 
                         update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
                             .style("fill", d => polygonAttributes.fillAccessor(d))
@@ -474,6 +473,29 @@ class PlayerMap {
         }
 
         let selection = vis.svg.selectAll(".player-polygon:not(.enter-polygon):not(.exit-polygon)");
+
+        selection
+            .filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+            .attr("d", (d,i,n) => {
+                const element = d3.select(n[i]);
+                const originalShape = element.attr("startPosition");
+                const midstatePosition = element.attr("midstatePosition");
+                const shapeFinal = element.attr("shapeFinal");
+
+                if (tweenPosition >= reshuffleThreshold) {
+                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
+                    return interpolatePath(midstatePosition, shapeFinal)(stagePosition);
+                }
+                else if (tweenPosition <= traverseThreshold) {
+                    const stagePosition = tweenPosition / traverseThreshold;
+                    return interpolatePath(originalShape, midstatePosition)(stagePosition);
+                }
+                else {
+                    return midstatePosition;
+                }
+            })
+
+
         selection
             .filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
             .attr('d', (d,i,n) => {
@@ -514,21 +536,6 @@ class PlayerMap {
                 }
                 else {
                     return originalColor;
-                }
-            })
-
-        selection.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-            .attr("d", (d,i,n) => {
-                const element = d3.select(n[i]);
-                const originalShape = element.attr("startPosition");
-                const shapeFinal = element.attr("shapeFinal");
-
-                if (tweenPosition >= reshuffleThreshold) {
-                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
-                    return interpolatePath(originalShape, shapeFinal)(stagePosition);
-                }
-                else {
-                    return originalShape;
                 }
             })
 
@@ -623,7 +630,7 @@ class PlayerMap {
         })
 
         // Draw those polygons
-        vis.generatePolygons(vis.allPolygons, affectedTeams, affectedPlayers, scrollDirection, true);
+        vis.generatePolygons({ polygons: vis.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection, attributeTransition: true} );
 
         if (affectedTeams.length !== 0) {
             vis.updatePositions(affectedPlayers, affectedTeams, stepProgress, scrollDirection)
@@ -637,36 +644,28 @@ class PlayerMap {
     }
 
     runTransactions = (playerData, affectedTeams, affectedPlayers, scrollDirection, sizingAttribute) => {
-        // this.allPolygons = [];
-        // this.trueTeamData.forEach((team) => {
-        //     // this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
-
-        //     // let team = this.teamData.find((t) => t.team_id === team_id)
-        //     let players = playerData.filter((player) => player[this.attribute] !== "-" && player.team.team_id === team.team_id);
-            
-        //     let polygons = this.addTeamTreemap({ team, players })
-        //     this.allPolygons = this.allPolygons.concat(polygons);
-        // })
-        // this.svg.selectAll(".exit-polygon").remove();
-
+        let allMidstatePolygons = [];
         affectedTeams.forEach((team_id) => {
             this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
 
             let team = this.teamData.find((t) => t.team_id === team_id)
-            let players = playerData.filter(player => player.team.team_id === team.team_id)
+            let players = playerData.filter(player => player.team.team_id === team.team_id)            
             if (sizingAttribute === "salary") {
                 players = players.filter((player) => player[this.attribute] > 1);
             }
             else {
                 players = players.filter((player) => player[this.attribute] !== "-");
             }
-            
+            let unaffectedPlayers = players.filter(player => !affectedPlayers.includes(player.player_id))
             
             let polygons = this.addTeamTreemap({ team, players })
+            let midstatePolygons = this.addTeamTreemap({ team, players: unaffectedPlayers })
+            
             this.allPolygons = this.allPolygons.concat(polygons);
+            allMidstatePolygons = allMidstatePolygons.concat(midstatePolygons)
         })
-
-        return this.generatePolygons(this.allPolygons, affectedTeams, affectedPlayers, scrollDirection);
+        
+        return this.generatePolygons({ polygons: this.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection , midstate: allMidstatePolygons } );
     }
 
     updateMapColor = ({ opacity, mapColor }) => { 
