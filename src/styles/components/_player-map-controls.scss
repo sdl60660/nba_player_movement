@@ -51,15 +51,21 @@
     border-radius: var(--rmsc-radius);
   }
 
+.single-select {
+    max-width: 12rem;
+
+    @media screen and (max-width: 700px) {
+        min-width: 11rem;
+    }
+}
+
 .multi-select, .single-select {
     font-size: 1rem;
-    max-width: 25rem;
     width: 25rem;
 
     @media screen and (max-width: $mobile-breakpoint) {
         width: unset;
         font-size: 12px;
-        max-width: 12rem;
         --rmsc-h: 30px !important;
         // max-height: 30px !important;
         // width: 20rem;
@@ -76,6 +82,8 @@
 }
 
 .multi-select {
+    max-width: 25rem;
+
     @media screen and (max-width: $mobile-breakpoint) {
         min-width: 17.5rem;
     }
