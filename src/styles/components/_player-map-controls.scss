@@ -1,0 +1,93 @@
+
+.map-control {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    column-gap: 0.5rem;
+    padding: 0 1rem;
+    // margin-left: 5rem;
+    margin-right: 5rem;
+    margin-bottom: $s-size;
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        padding: 0 1.5rem;
+        // margin-left: unset;
+        margin-right: 1rem;
+    }
+
+    @media screen and (max-width: 670px) {
+        padding: 0 1rem;
+        column-gap: 0.2rem;
+    }
+
+}
+
+.map-control__select {
+    max-width: 100%;
+    justify-self: center;
+}
+
+.map-control__header {
+    text-align: center;
+    @media screen and (max-width: $mobile-breakpoint) {
+        font-size: 0.9rem;
+        margin: 0.6rem 0;
+        // width: 20rem;
+    }
+}
+
+.single-select {
+    --rmsc-border: #ccc;
+    --rmsc-p: 10px; /* Spacing */
+    --rmsc-radius: 4px; /* Radius */
+    --rmsc-h: 38px; /* Height */
+
+    padding: 0 var(--rmsc-p);
+    width: 100%;
+    height: var(--rmsc-h);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: 1rem;
+    border: 1px solid var(--rmsc-border);
+    border-radius: var(--rmsc-radius);
+  }
+
+.multi-select, .single-select {
+    font-size: 1rem;
+    max-width: 25rem;
+    width: 25rem;
+
+    @media screen and (max-width: $mobile-breakpoint) {
+        width: unset;
+        font-size: 12px;
+        max-width: 12rem;
+        --rmsc-h: 30px !important;
+        // max-height: 30px !important;
+        // width: 20rem;
+    }
+
+    @media screen and (max-width: 670px) {
+        font-size: 0.8rem;
+    }
+}
+
+.dropdown-search-clear-icon {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.multi-select {
+    @media screen and (max-width: $mobile-breakpoint) {
+        min-width: 17.5rem;
+    }
+    @media screen and (max-width: 950px) {
+        min-width: 13rem;
+    }
+    @media screen and (max-width: 700px) {
+        min-width: 11rem;
+    }
+}
+
+// .clear-selected-button {
+//     height: 1 !important;
+//     width: 1;
+// }

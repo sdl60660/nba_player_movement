@@ -31,7 +31,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const [sizingAttribute, setSizingAttribute] = useState("salary");
 
     const [width, setWidth] = useState(1300);
-    const [height, setHeight] = useState(750);
+    const [height, setHeight] = useState(700);
     const [opacity, setOpacity] = useState(0.3);
 
     originalState = JSON.parse(JSON.stringify(_playerData.slice()));
@@ -152,7 +152,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 order: true
             })
             .onStepEnter(({ element, index, direction }) => {
-                // console.log('enter', index, direction)
+                console.log('enter', index, direction)
                 scrollDirection = direction;
                 if (element.getAttribute("class").includes("phantom")) {
                     phantomFlag = true;
@@ -224,13 +224,35 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         }
     }, [sizingAttribute]);
 
+    
+    const teamOptionData = teamData.filter(({ team_id }) => team_id !== "FA" && team_id !== "RET").map(({team_full_name, team_id}) => {
+        return { label: team_full_name, value: team_id };
+    })
+    const transactionTypeData = ['Traded', 'Signed', 'Waived', 'Claimed', 'Contract Extension', 'Exercised Option', 'Declined Option'].map(transactionType => { 
+        return { label: transactionType, value: transactionType.toLowerCase() };
+    });
+
+    const [teamOptions, setTeamOptions] = useState(teamOptionData);
+    const [transactionTypeOptions, setTransactionTypeOptions] = useState(transactionTypeData);
 
     return (
-        <PlayerMapContext.Provider value={{ opacity, setOpacity, mapColor, setMapColor, setHeight, setWidth, sizingAttribute, setSizingAttribute }}>
+        <PlayerMapContext.Provider
+            value={{opacity,
+                    mapColor,
+                    sizingAttribute,
+                    setSizingAttribute,
+                    allTeamOptions: JSON.parse(JSON.stringify(teamOptionData)),
+                    teamOptions: teamOptions,
+                    allTransactionTypes: JSON.parse(JSON.stringify(transactionTypeData)),
+                    transactionTypeOptions: transactionTypeOptions,
+                    setTeamOptions,
+                    setTransactionTypeOptions
+                }}
+        >
             <section id={"scroll"}>
             <div id={"viz-column"}>
                     <div ref={refElement} id={"viz-tile"}>
-                        { /* <PlayerMapControls /> */ }
+                        <PlayerMapControls teamData={teamData}/>
                     </div>
                 
             </div>

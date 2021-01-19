@@ -90,7 +90,7 @@ class PlayerMap {
         // Generate background map and projection
         const geoJSON = topojson.feature(geoData, geoData.objects.states);
         const projection = d3.geoAlbersUsa()
-            .fitExtent([[0, 30], [width-60, height-60]], geoJSON);
+            .fitExtent([[0, 15], [width-60, height-60]], geoJSON);
         this.generateMap({ geoJSON, projection, mapColor });
 
 
@@ -472,6 +472,8 @@ class PlayerMap {
             tweenPosition = 1 - tweenPosition;
         }
 
+        // tweenPosition *= 1.1;
+
         let selection = vis.svg.selectAll(".player-polygon:not(.enter-polygon):not(.exit-polygon)");
 
         selection
@@ -658,8 +660,8 @@ class PlayerMap {
             }
             let unaffectedPlayers = players.filter(player => !affectedPlayers.includes(player.player_id))
             
-            let polygons = this.addTeamTreemap({ team, players })
             let midstatePolygons = this.addTeamTreemap({ team, players: unaffectedPlayers })
+            let polygons = this.addTeamTreemap({ team, players })
             
             this.allPolygons = this.allPolygons.concat(polygons);
             allMidstatePolygons = allMidstatePolygons.concat(midstatePolygons)

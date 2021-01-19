@@ -10,9 +10,14 @@ const TransactionListing = ({ transaction }) => {
         <li
             className={`transaction-card__transaction-item ${transaction.type}-listing  ${classList}`}
             // id={transaction.id}
-            style={{display: true ? 'block' : 'none' }}
-            test={context.sizingAttribute}
-        >
+            style={
+                { display:
+                    ( transaction.affected_teams.some(item => context.teamOptions.map(d => d.value).includes(item)) && 
+                    context.transactionTypeOptions.map(d => d.value).includes(transaction.type) ) ?
+                    'block' : 
+                    'none' }
+            }
+            >
             { transaction.text }
         </li>
     )

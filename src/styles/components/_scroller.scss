@@ -8,21 +8,24 @@
 #viz-column {
     position: sticky;
     top: 0;
-    padding-left: 16vw;
+    // padding-left: 16vw;
+    padding-right: 16vw;
 
     @media screen and (max-width: $mobile-breakpoint) {
-        padding-left: 26vw;
+        // padding-left: 26vw;
+        padding-right: 26vw;
     }
 }
   
 #annotations {
     position: relative;
     max-width: 20vw;
-    // margin-left: 80vw;
+    margin-left: 80vw;
+    padding-right: 0.8rem;
 
     @media screen and (max-width: $mobile-breakpoint) {
         max-width: 30vw;
-        // margin-left: 70vw;
+        margin-left: 70vw;
         // margin: auto;
     }
 }

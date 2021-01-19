@@ -6154,6 +6154,11 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
+goober@^2.0.21:
+  version "2.0.22"
+  resolved "https://registry.yarnpkg.com/goober/-/goober-2.0.22.tgz#634c2b7af8e4d022683129310691566f7a5b3b00"
+  integrity sha512-P15B3g9FPXVXGRHXAadwxywLMkITJMU+bt5wGIchTzJ4g5eWDw57VTSSIDuwdRAgg1g+mFVCb3TalriWSpL4Bw==
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
@@ -10241,6 +10246,13 @@ react-is@^17.0.1:
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
+
+react-multi-select-component@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-3.1.1.tgz#f08a1f196a42a90b6e53b2a43fe79a90ad05b713"
+  integrity sha512-cobAxgtPZPhbkZv4I7Ubl9ezWt3/iSQCHuKdLm1KllhHWAUHM2Cg+h/xp0DCrOWyk/zfVYr/xOSY2UAuNuvneA==
+  dependencies:
+    goober "^2.0.21"
 
 react-refresh@^0.8.3:
   version "0.8.3"
