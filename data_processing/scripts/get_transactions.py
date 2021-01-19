@@ -105,7 +105,7 @@ def process_bbref_transaction(transaction, transaction_text):
         player_data = process_trade(links)
 
     elif transaction_type == "-team trade":
-        transaction_type = "n-team trade"
+        transaction_type = "traded"
         player_data = process_multi_team(transaction)
 
     affected_teams = []
