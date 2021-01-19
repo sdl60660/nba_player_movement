@@ -15,9 +15,13 @@
         margin-right: 1rem;
     }
 
-    @media screen and (max-width: 670px) {
+    @media screen and (max-width: $small-mobile-breakpoint) {
         padding: 0 1rem;
         column-gap: 0.2rem;
+    }
+
+    @media screen and (max-width: $vertical-breakpoint) {
+        display: none;
     }
 
 }
@@ -34,6 +38,9 @@
         margin: 0.6rem 0;
         // width: 20rem;
     }
+    @media screen and (max-width: $small-mobile-breakpoint) {
+        font-size: 0.8rem;
+    }
 }
 
 .single-select {
@@ -49,13 +56,11 @@
     font-size: 1rem;
     border: 1px solid var(--rmsc-border);
     border-radius: var(--rmsc-radius);
-  }
-
-.single-select {
+    
     max-width: 12rem;
 
-    @media screen and (max-width: 700px) {
-        min-width: 11rem;
+    @media screen and (max-width: $small-mobile-breakpoint) {
+        max-width: 10rem;
     }
 }
 
@@ -67,11 +72,9 @@
         width: unset;
         font-size: 12px;
         --rmsc-h: 30px !important;
-        // max-height: 30px !important;
-        // width: 20rem;
     }
 
-    @media screen and (max-width: 670px) {
+    @media screen and (max-width: $small-mobile-breakpoint) {
         font-size: 0.8rem;
     }
 }
@@ -82,7 +85,7 @@
 }
 
 .multi-select {
-    max-width: 25rem;
+    max-width: 10rem;
 
     @media screen and (max-width: $mobile-breakpoint) {
         min-width: 17.5rem;
