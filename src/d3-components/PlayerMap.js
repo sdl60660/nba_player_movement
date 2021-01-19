@@ -472,7 +472,9 @@ class PlayerMap {
             tweenPosition = 1 - tweenPosition;
         }
 
-        // tweenPosition *= 1.1;
+        // This essentially creates a buffer of 1.0 tween position for the last ~10% of the section, without having to
+        // adjust anything else or add other thresholds, so that there's some period of stillness between movement periods
+        tweenPosition = Math.min(1.0, tweenPosition*1.1);
 
         let selection = vis.svg.selectAll(".player-polygon:not(.enter-polygon):not(.exit-polygon)");
 
