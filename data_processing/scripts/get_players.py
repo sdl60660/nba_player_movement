@@ -20,17 +20,18 @@ def process_player_row(row, year):
 player_dict = {}
 
 # Get active player stat data for players in current and previous year
-for year in (2020, 2021):
-    r = requests.get(f"https://www.basketball-reference.com/leagues/NBA_{year}_advanced.html")
-    soup = BeautifulSoup(r.text, "html.parser")
-    table = soup.find("table", attrs={"id": "advanced_stats"})
+for base_url in ["https://www.basketball-reference.com/leagues/NBA_{}_per_game.html", "https://www.basketball-reference.com/leagues/NBA_{}_advanced.html"]:
+    for year in [2020, 2021]:
+        r = requests.get(base_url.format(year))
+        soup = BeautifulSoup(r.text, "html.parser")
+        table = soup.find("table", attrs={"id": "advanced_stats"})
 
-    rows = soup.find("tbody").find_all("tr", attrs={"class": "full_table"})
-    for row in rows:
-        player_id = row.find_all("td")[0]['data-append-csv']
-        player_data = process_player_row(row, year)
-        player_data['player_id'] = player_id
-        player_dict[player_id] = player_dict.get(player_id, {}) | player_data
+        rows = soup.find("tbody").find_all("tr", attrs={"class": "full_table"})
+        for row in rows:
+            player_id = row.find_all("td")[0]['data-append-csv']
+            player_data = process_player_row(row, year)
+            player_data['player_id'] = player_id
+            player_dict[player_id] = player_dict.get(player_id, {}) | player_data
 
 
 contract_link_data = {

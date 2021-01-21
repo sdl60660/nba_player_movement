@@ -48,6 +48,8 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const transactionDates = Object.keys(transactionData);
     const playerDataIds = originalState.map((player) => player.player_id);
 
+    let isMobile = window.matchMedia ? window.matchMedia('(max-width: 1100px)').matches : false;
+
     const processPlayerMovement = ({ player, direction, transaction, allAffectedPlayers, state }) => {
         allAffectedPlayers.push(player.player_id);
 
@@ -194,7 +196,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 step: ".transaction-card",
                 debug: false,
                 progress: true,
-                threshold: 2,
+                threshold: 1,
                 order: true
             })
             .onStepEnter(({ element, index, direction }) => stepEnterHandler({ element, index, direction }))
@@ -275,7 +277,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
             <section id={"scroll"}>
             <div id={"viz-column"}>
                     <div ref={refElement} id={"viz-tile"}>
-                        <PlayerMapControls teamData={teamData}/>
+                        { !isMobile && <PlayerMapControls teamData={teamData}/> }
                     </div>
                 
             </div>

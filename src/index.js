@@ -44,22 +44,27 @@ const formatPlayerData = (playerData, teamData) => {
   });
 
   playerData = playerData.filter(x => x.salary !== undefined);
-  playerData = playerData.map((player) => ({ 
-    player_name: player.player,
-    player_id: player.player_id,
-    team: teamData.find((team) => team.team_id === player.team_id),
-    position: player.position,
-    per: player['2020_per'] === "" ? "-" : +player['2020_per'],
-    salary: player.salary === 0 ? 1 : player.salary,
-    start_salary: player.salary === 0 ? 1 : player.salary,
-    end_salary: player["2021_salary"] === 0 ? 1 : player["2021_salary"],
-    vorp: player['2020_vorp'] === "" ? "-" : +player['2020_vorp'],
-    bpm: player['2020_bpm'] === "" ? "-" : +player['2020_bpm'],
-    "2020_mp": +player["2020_mp"],
-    "2021_mp": +player["2021_mp"]
-  }));
+  playerData = playerData.map((player) => { 
 
-  // console.log(playerData.filter(d => d.player_id === "vonleno01"))
+    let playerDict = {
+      player_name: player.player,
+      player_id: player.player_id,
+      team: teamData.find((team) => team.team_id === player.team_id),
+      position: player.position,
+      salary: player.salary === 0 ? 1 : player.salary,
+      start_salary: player.salary === 0 ? 1 : player.salary,
+      end_salary: player["2021_salary"] === 0 ? 1 : player["2021_salary"]
+    };
+
+    ['vorp', 'bpm', 'obpm', 'dbpm', 'pts_per_g', 'trb_per_g', 'ast_per_g', 'mp_per_g', 'mp'].forEach(stat => {
+      playerDict[`2020_${stat}`] = player[`2020_${stat}`] === "" ? "-" : +player[`2020_${stat}`];
+      playerDict[`2021_${stat}`] = player[`2021_${stat}`] === "" ? "-" : +player[`2021_${stat}`];
+    })
+
+    return playerDict
+  });
+
+  console.log(playerData)
   
   return playerData;
 }

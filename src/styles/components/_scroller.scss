@@ -16,6 +16,13 @@
         padding-right: 26vw;
     }
 }
+
+#viz-tile svg {
+    @media screen and (max-width: $mobile-breakpoint) {
+        padding-top: 3rem;
+    }
+}
+
   
 #annotations {
     position: relative;

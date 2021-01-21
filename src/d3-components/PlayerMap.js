@@ -70,14 +70,12 @@ class PlayerMap {
 
         // Set scales
         this.maxWeight = 10;
-        this.maxCircleRadius = 58;
+        this.maxCircleRadius = 57;
         this.setScales();
 
 
         // Set player data
-        this.playerData.forEach((player) => {
-            player.weight = player[this.attribute] === "-" ? 0 : this.weightScale(player[this.attribute]);
-        });
+        this.playerData = this.setPlayerWeights(this.playerData);
         setPlayerData(this.playerData);
 
 
@@ -105,22 +103,11 @@ class PlayerMap {
 
         // this.startStatePolygons = [];
         this.allPolygons = [];
+    };
 
-        // // Calculate voronoi treemaps for each team's players
-        // this.allPolygons = [];
-        // this.trueTeamData.forEach((team) => {
-        //     let players = this.playerData.filter((player) => player.team !== undefined && player.team.team_id === team.team_id);
-        //     let polygons = this.addTeamTreemap({ team, players })
-        //     this.allPolygons = this.allPolygons.concat(polygons);
-        // })
-
-
-        // // Draw those polygons
-        // this.generatePolygons(this.allPolygons);
-    }
 
     setScales = () => {               
-        let playerSet = this.attribute === "salary" ?
+        let playerSet = ["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(this.attribute) ?
                         this.playerData :
                         this.playerData.filter(player => player[this.attribute] !== "-" && player['2020_mp'] >= 1000);
 
@@ -143,7 +130,22 @@ class PlayerMap {
         this.voronoiRadius = d3.scaleLinear()
             .domain([0, this.maxTotalWeight])
             .range([0, this.maxCircleRadius])
-    }
+    };
+
+
+    setPlayerWeights(dataset) {
+        const vis = this;
+
+        dataset.forEach((player) => {
+            player.weight = player[vis.attribute] === "-" ? 0 : vis.weightScale(player[vis.attribute]);
+            if (!["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(vis.attribute) && player['2020_mp'] < 500) {
+                player.weight = 0;
+            }
+        });
+
+        return dataset;
+    };
+
 
     setTeamLabels = (teamData) => {
         const vis = this;
@@ -173,7 +175,8 @@ class PlayerMap {
                     .style("background-color", "white")
                     .style("display", "none")
             )
-    }
+    };
+
 
     updateLabelPosition = (teamId, x, y, radius) => {
         const vis = this;
@@ -181,36 +184,44 @@ class PlayerMap {
         vis.labelGroup.select(`#${teamId}-label`)
             .attr("x", x)
             .attr("y", 18 + radius + y);
-    }
+    };
+
 
     initTooltip = () => {
         this.tip = d3Tip()
             .attr('class', 'd3-tip')
             .html((d) => {
                 const playerData = d.site.originalObject.data.originalData;
+
+                let featuredStat = '';
+                if (this.attribute !== "salary") {
+                    const selectedOption = d3.select("#attribute-select option:checked");
+
+                    const text = selectedOption.text();
+                    const value = selectedOption.node().value;
+                    const year = value.split('_')[0];
+
+                    featuredStat = `<div class="d3-tip__player-attr">${text} (${year}):</div><div class="d3-tip__player-attr">${playerData[value] === "-" ? "-" : d3.format(".1f")(playerData[value])}</div>`;
+                }
+                    
                 return (
                     `<div class="d3-tip__grid">
                         <div class="d3-tip__player-name">${playerData.player_name} (${playerData.position})</div>
                         <div class="d3-tip__player-attr">Salary:</div><div class="d3-tip__player-attr">${playerData.salary > 1 ? d3.format("$,.0f")(playerData.salary) : "-"}</div>
-                        <div class="d3-tip__player-attr">BPM (2020):</div><div class="d3-tip__player-attr">${playerData.bpm === "-" ? "-" : d3.format(".1f")(playerData.bpm)}</div>
-                        <div class="d3-tip__player-attr">VORP (2020):</div><div class="d3-tip__player-attr">${playerData.vorp === "-" ? "-" : d3.format(".1f")(playerData.vorp)}</div>
-                        <div class="d3-tip__player-attr">PER (2020):</div><div class="d3-tip__player-attr">${playerData.per === "-" ? "-" : d3.format(".1f")(playerData.per)}</div>
+                        ${featuredStat}
                     </div>`
                 )
             });
+        
+            // <div class="d3-tip__player-attr">BPM (2020):</div><div class="d3-tip__player-attr">${playerData['2020_bpm'] === "-" ? "-" : d3.format(".1f")(playerData['2020_bpm'])}</div>
+            // <div class="d3-tip__player-attr">BPM (2021):</div><div class="d3-tip__player-attr">${playerData['2021_bpm'] === "-" ? "-" : d3.format(".1f")(playerData['2021_bpm'])}</div>
+            // <div class="d3-tip__player-attr">BPM (2020):</div><div class="d3-tip__player-attr">${playerData.bpm === "-" ? "-" : d3.format(".1f")(playerData.bpm)}</div>
+            // <div class="d3-tip__player-attr">VORP (2020):</div><div class="d3-tip__player-attr">${playerData.vorp === "-" ? "-" : d3.format(".1f")(playerData.vorp)}</div>
+            // <div class="d3-tip__player-attr">PER (2020):</div><div class="d3-tip__player-attr">${playerData.per === "-" ? "-" : d3.format(".1f")(playerData.per)}</div>
             
         this.svg.call(this.tip);
     };
 
-    updateTeam = ( playerId, newTeamId ) => {
-        const arrayIndex = this.playerData.findIndex(d => d.player_id === playerId);
-        let oldTeam = this.playerData[arrayIndex].team.team_id;
-        this.playerData[arrayIndex] = {
-            ...this.playerData[arrayIndex],
-            team: this.teamData.find(team => team.team_id === newTeamId)
-        };
-        return oldTeam;
-    };
 
     initPlayerPhotos = ({ playerData }) => {
         const defs = this.svg.append('svg:defs');
@@ -230,8 +241,9 @@ class PlayerMap {
                     .attr("width", d => d[this.attribute] === "-" ? 1 : Math.sqrt(this.weightScale(d[this.attribute]) * this.maxCircleRadius * this.maxWeight))
                     .attr("x", 0)
                     .attr("y", 0);
-    }
+    };
     
+
     generateMap = ({ geoJSON, projection, mapColor }) => {
         geoJSON.features = geoJSON.features.filter(d => !["Alaska", "Hawaii"].includes(d.properties.NAME));
 
@@ -254,8 +266,9 @@ class PlayerMap {
 
                 // exit => exit.remove()
             );
-    }
+    };
     
+
     generateTeamGroups = ({ projection }) => {
         this.teams = this.svg.append("g")
             .attr("class", "teams");
@@ -295,7 +308,7 @@ class PlayerMap {
             .force("charge", d3.forceManyBody())
             .force("collision", d3.forceCollide(d => {
                 // console.log(d.team_id, d.radius)
-                return Math.max(d.radius, 50) + 8
+                return Math.max(d.radius, 50) + 10
             }))
             .on("tick", tick)
             // .stop()
@@ -304,7 +317,8 @@ class PlayerMap {
             simulation.tick();
         };
     
-    }
+    };
+
 
     addTeamTreemap = ({ team, players }) => {
         let xVal = team.x || team.xCoordinate;
@@ -338,7 +352,8 @@ class PlayerMap {
         this.updateLabelPosition(team.team_id, xVal, yVal, radius);
         
         return state.polygons;
-    }
+    };
+
 
     generatePolygons = ({ polygons, affectedTeams = [], affectedPlayers = [], direction = "down", attributeTransition = false, midstate = [] }) => {
         const vis = this;
@@ -476,7 +491,7 @@ class PlayerMap {
                         .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
                 )
         })
-    }
+    };
 
 
     updatePositions = ( affectedPlayers, affectedTeams, tweenPosition, direction ) => {
@@ -532,13 +547,24 @@ class PlayerMap {
 
                 if (tweenPosition < traverseThreshold) {
                     const stagePosition = tweenPosition / traverseThreshold;
+                    // const photoPatternOffset = 8.0*stagePosition - 8.0;
+                    // d3.select(`#${d.player_id}-photo-pattern`)
+                    //     .attr("x", d => Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight) / photoPatternOffset);
+
                     return interpolatePath(startPosition, circleStart)(stagePosition);
                 }
                 else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
                     const stagePosition = (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
+                    // const photoPatternOffset = -8.0*stagePosition;
+                    // d3.select(`#${d.player_id}-photo-pattern`)
+                    //     .attr("x", d => Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight) / photoPatternOffset);
+                        
                     return interpolatePath(circleStart, positionFinal)(stagePosition);
                 }
                 else {
+                    // d3.select(`#${d.player_id}-photo-pattern`)
+                    //     .attr("x", 0);
+
                     const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
                     return interpolatePath(positionFinal, shapeFinal)(stagePosition);
                 }
@@ -626,7 +652,7 @@ class PlayerMap {
                 }
             })
 
-    }
+    };
 
 
     changeWeightAttribute = ({ startState, endState, sizingAttribute, affectedTeams, affectedPlayers, stepProgress, scrollDirection }) => {
@@ -643,14 +669,12 @@ class PlayerMap {
                 return;
             }
 
-            dataset.forEach((player) => {
-                player.weight = player[vis.attribute] === "-" ? 0 : vis.weightScale(player[vis.attribute]);
-            });
+            dataset = this.setPlayerWeights(dataset);
 
             let allMidstatePolygons = [];
             vis.allPolygons = [];
             vis.trueTeamData.forEach((team) => {
-                let players = dataset.filter((player) => player[vis.attribute] !== "-" && player.team !== undefined && player.team.team_id === team.team_id);
+                let players = dataset.filter((player) => player.weight !== 0 && player.team !== undefined && player.team.team_id === team.team_id);
                 let polygons = vis.addTeamTreemap({ team, players })
                 vis.allPolygons = vis.allPolygons.concat(polygons);
 
@@ -671,12 +695,19 @@ class PlayerMap {
         // Resize photos
         vis.svg.selectAll(".player-photo-pattern")
             .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
-            // .attr("x", d => Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight) / -8)
+            .attr("x", d => {
+                if (sizingAttribute === "salary") {
+                    return 0;
+                }
+                else {
+                    return Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight) / -8;
+                }
+            })
 
         vis.svg.selectAll(".exit-polygon").remove();
 
         return [startState, endState]
-    }
+    };
 
 
     runTransactions = (playerData, affectedTeams, affectedPlayers, scrollDirection, sizingAttribute) => {
@@ -688,13 +719,6 @@ class PlayerMap {
             let team = this.teamData.find((t) => t.team_id === team_id)
             let players = playerData.filter(player => player.team.team_id === team.team_id && player.weight !== 0)            
             
-            // if (sizingAttribute === "salary") {
-            //     players = players.filter((player) => player[this.attribute] > 1);
-            // }
-            // else {
-            //     players = players.filter((player) => player[this.attribute] !== "-");
-            // }
-            // players = players.filter()
             let unaffectedPlayers = players.filter(player => !affectedPlayers.includes(player.player_id))
             
             let midstatePolygons = this.addTeamTreemap({ team, players: unaffectedPlayers })
@@ -705,14 +729,8 @@ class PlayerMap {
         })
         
         this.generatePolygons({ polygons: this.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection , midstate: allMidstatePolygons } );
-
-        // console.log("startPosition", d3.select('#polygon-image-paulch01').attr("startPosition"));
-        // console.log("startPath", d3.select('#polygon-image-paulch01').attr("startPath"))
-        // console.log("positionFinal", d3.select('#polygon-image-paulch01').attr("positionFinal"))
-        // console.log("shapeFinal", d3.select('#polygon-image-paulch01').attr("shapeFinal"))
-
         return
-    }
+    };
 
 
     updateMapColor = ({ opacity, mapColor }) => { 
@@ -720,7 +738,7 @@ class PlayerMap {
             .transition()
             .style("fill-opacity", opacity)
             .style("fill", mapColor);
-    }
+    };
     
   }
   

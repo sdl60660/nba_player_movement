@@ -18,11 +18,31 @@ const PlayerMapControls = ({ teamData }) => {
         <div className={"map-control"}>
             <div className="map-control__select">
                 <h4 className="map-control__header">Size Players By</h4>
-                <select className="single-select" value={context.sizingAttribute} onChange={(e) => { onSelectChange(e) }} disabled={false}>
+                <select className="single-select" id={"attribute-select"} value={context.sizingAttribute} onChange={(e) => { onSelectChange(e) }} disabled={false}>
                     <option value="salary">Salary</option>
-                    <option value="bpm">BPM (2020)</option>
-                    <option value="vorp">VORP (2020)</option>
-                    <option value="per">PER (2020)</option>
+                    <optgroup label="2019-20 Stats">
+                        <option value="2020_bpm">Box Plus/Minus</option>
+                        <option value="2020_obpm">Offensive Box Plus/Minus</option>
+                        <option value="2020_dbpm">Defensive Box Plus/Minus</option>
+                        <option value="2020_vorp">VORP</option>
+                        <option value="2020_pts_per_g">Points Per Game</option>
+                        <option value="2020_trb_per_g">Rebounds Per Game</option>
+                        <option value="2020_ast_per_g">Assists Per Game</option>
+                        <option value="2020_mp_per_g">Minutes Per Game</option>
+                        { /* <option value="2020_per">PER (2020)</option> */}
+                    </optgroup>
+                    <optgroup label="2020-21 Stats">
+                        <option value="2021_bpm">Box Plus/Minus</option>
+                        <option value="2021_obpm">Offensive Box Plus/Minus</option>
+                        <option value="2021_dbpm">Defensive Box Plus/Minus</option>
+                        <option value="2021_vorp">VORP</option>
+                        <option value="2021_pts_per_g">Points Per Game</option>
+                        <option value="2021_trb_per_g">Rebounds Per Game</option>
+                        <option value="2021_ast_per_g">Assists Per Game</option>
+                        <option value="2021_mp_per_g">Minutes Per Game</option>
+                        { /* <option value="2021_per">PER (2021)</option> */}
+                    </optgroup>
+                    
                 </select>
             </div>
             <div className="map-control__select">

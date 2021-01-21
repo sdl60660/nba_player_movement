@@ -12,7 +12,8 @@
   
   .d3-tip__grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    // grid-template-columns: 2fr 1fr;
+    grid-template-columns: max-content auto;
     grid-gap: 0.2rem 0.5rem;
   }
   
