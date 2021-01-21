@@ -4,14 +4,14 @@ import React, { useState, useEffect, useReducer, useRef } from 'react';
 import scrollama from 'scrollama';
 import * as d3 from 'd3';
 import * as chromatic from "d3-scale-chromatic";
-import { isEqual } from 'lodash';
+// import { isEqual } from 'lodash';
 
 import PlayerMapControls from './PlayerMapControls';
 import PlayerMap from '../d3-components/PlayerMap';
 import PlayerMapContext from '../context/playerMapContext';
 import TransactionCard from './TransactionCard';
 
-import transactionReducer from '../reducers/transactionReducer';
+// import transactionReducer from '../reducers/transactionReducer';
 
 
 let vis;

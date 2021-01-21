@@ -109,7 +109,7 @@ class PlayerMap {
     setScales = () => {               
         let playerSet = ["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(this.attribute) ?
                         this.playerData :
-                        this.playerData.filter(player => player[this.attribute] !== "-" && player['2020_mp'] >= 1000);
+                        this.playerData.filter(player => player[this.attribute] !== "-" && player[`${this.attribute.split('_')[0]}_mp`] >= 200);
 
         this.weightScale = d3.scaleLinear()
             .domain(d3.extent(playerSet, d => d[this.attribute]))
@@ -138,7 +138,7 @@ class PlayerMap {
 
         dataset.forEach((player) => {
             player.weight = player[vis.attribute] === "-" ? 0 : vis.weightScale(player[vis.attribute]);
-            if (!["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(vis.attribute) && player['2020_mp'] < 500) {
+            if (!["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(vis.attribute) && player[`${this.attribute.split('_')[0]}_mp`] < 200) {
                 player.weight = 0;
             }
         });
