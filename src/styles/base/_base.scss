@@ -16,3 +16,32 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+#rotate-prompt {
+  position: fixed;
+
+  top: 50%;
+  margin-top: -40%;
+
+  left: 50%;
+  margin-left: -40%;
+
+  max-width: 70%;
+  height: auto;
+  // margin: auto;
+
+
+  background: rgba(207, 207, 207, 0.671);
+  padding: 1rem;
+  border-radius: 15px;
+
+  z-index: 1;
+
+  @media screen and (min-width: $vertical-breakpoint) {
+    display: none;
+  }
+}
+
+#content {
+  z-index: 2;
+}

@@ -19,7 +19,7 @@ const Footer = ({ githubLink  }) => {
                 <p>
                     All transaction data comes from <a href="https://www.basketball-reference.com/leagues/NBA_2021_transactions.html">Basketball Reference</a>&nbsp;
                     and <a href="https://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=2020-10-11&EndDate=&PlayerMovementChkBx=yes&Submit=Search">Pro Sports Transactions</a>.&nbsp;
-                    Player stats and contract data came from Basketball Reference. Player photos came from <a href="https://www.2kratings.com/">2KRatings.com</a>.
+                    Player stats and contract data came from Basketball Reference. Player photos came from <a href="https://www.2kratings.com/">2KRatings.com</a>. Phone rotation icon by Kelig Le Luron from the Noun Project.
                 </p>
             </div>
             
