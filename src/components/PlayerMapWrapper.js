@@ -18,15 +18,21 @@ let vis;
 let allAffectedTeams = [];
 let allAffectedPlayers = [];
 let scrollDirection = "down";
+let stepProgress = 0;
 let phantomFlag = false;
 let originalState;
+
+let startState = [];
+let endState = [];
 
 
 const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData }) => {
 
     const [mapColor, setMapColor] = useState(chromatic.schemeCategory10[0]);
-    const [geoData, setGeoData] = useState(_geoData);
-    const [teamData, setTeamData] = useState(_teamData);
+    // const [geoData, setGeoData] = useState(_geoData);
+    // const [teamData, setTeamData] = useState(_teamData);
+    
+    // const [playerStartData, setPlayerStartData] = useState([])
     const [playerData, setPlayerData] = useState(_playerData);
     const [sizingAttribute, setSizingAttribute] = useState("salary");
 
@@ -34,12 +40,13 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const [height, setHeight] = useState(700);
     const [opacity, setOpacity] = useState(0.3);
 
+    const geoData = _geoData;
+    const teamData = _teamData;
     originalState = JSON.parse(JSON.stringify(_playerData.slice()));
+    endState = playerData;
 
     const transactionDates = Object.keys(transactionData);
-    const playerDataIds = playerData.map((player) => player.player_id);
-
-    let stepProgress = 0;
+    const playerDataIds = originalState.map((player) => player.player_id);
 
     const processPlayerMovement = ({ player, direction, transaction, allAffectedPlayers, state }) => {
         allAffectedPlayers.push(player.player_id);
@@ -54,26 +61,28 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
             const startSalary = transaction.salary_data ? transaction.salary_data.start_salary : state[playerIndex].start_salary
             const endSalary = transaction.salary_data ? transaction.salary_data.end_salary : state[playerIndex].end_salary;
 
+            // console.log(vis.attribute)
             state[playerIndex].salary = (direction === "down") ? endSalary : startSalary;
             
-            if (sizingAttribute === "salary") {
-                state[playerIndex].weight = vis.weightScale(state[playerIndex][sizingAttribute]);
+            if (vis.attribute === "salary") {
+                state[playerIndex].weight = vis.weightScale(state[playerIndex][vis.attribute]);
                 vis.svg.select(`#${state[playerIndex].player_id}-photo-pattern`)
-                    .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
+                    .attr("width", d => d[vis.attribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight))
             }
         }
 
         return [allAffectedPlayers, state];
     }
 
-    const processStepTransactions = ({ element, index, direction }) => {
+    const processStepTransactions = ({ index, direction, stateUpdateFunction }) => {
         let transactionDate = transactionDates[index];
         let transactions = transactionData[transactionDate];
 
         allAffectedTeams = [];
         allAffectedPlayers = [];
         
-        setPlayerData((state) => {
+        stateUpdateFunction((state) => {
+            // console.log(state);
             // Maintain correct ordering on transactions if running upwards, for things like sign-and-trades
             transactions = direction === "down" ? transactions : transactions.slice().reverse();
 
@@ -93,6 +102,43 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
         // vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers, scrollDirection);
         // vis.setTeamLabels(vis.trueTeamData);
+    }
+
+    const stepEnterHandler = ( { element, index, direction }) => {                
+        if (element.getAttribute("class").includes("phantom")) {
+            phantomFlag = true;
+            return;
+        }
+
+        else if (direction === "up") {
+            if (phantomFlag === false) {
+                processStepTransactions({ element, index: (index + 1), direction, stateUpdateFunction: setPlayerData });
+                endState = playerData;
+                vis.runTransactions(endState, allAffectedTeams, allAffectedPlayers, direction, sizingAttribute);
+            }
+
+            processStepTransactions({ element, index, direction, stateUpdateFunction: setPlayerData })
+            startState = playerData;
+            vis.runTransactions(endState, allAffectedTeams, allAffectedPlayers, direction, sizingAttribute);
+
+            phantomFlag = false;
+        }
+
+        else {
+            if (scrollDirection !== direction && index !== 0) {
+                processStepTransactions({ element, index: (index - 1), direction, stateUpdateFunction: setPlayerData })
+                vis.runTransactions(endState, allAffectedTeams, allAffectedPlayers, scrollDirection, sizingAttribute);
+            }
+
+            startState = endState;
+            processStepTransactions({ element, index, direction, stateUpdateFunction: setPlayerData })
+            endState = playerData;
+            vis.runTransactions(endState, allAffectedTeams, allAffectedPlayers, direction, sizingAttribute);
+
+            phantomFlag = false;
+        }
+
+        scrollDirection = direction;
     }
 
 
@@ -151,43 +197,14 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 threshold: 2,
                 order: true
             })
-            .onStepEnter(({ element, index, direction }) => {
-                console.log('enter', index, direction)
-                scrollDirection = direction;
-                if (element.getAttribute("class").includes("phantom")) {
-                    phantomFlag = true;
-                    return;
-                }
-                else {
-                    if (direction === "up" && phantomFlag === false) {
-                        processStepTransactions({ element, index: (index + 1), direction });
-                        vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers, scrollDirection, sizingAttribute);
-                    }
-                    processStepTransactions({ element, index, direction })
-                    vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers, scrollDirection, sizingAttribute);
-
-                    phantomFlag = false;
-                }
-            })
+            .onStepEnter(({ element, index, direction }) => stepEnterHandler({ element, index, direction }))
             .onStepExit(({ element, index, direction }) => {
-                // If at the top, check that roster state is same as at the start 
-                // if (index === 0 && direction === "up") {
-                //     playerData.forEach(player => {
-                //         const match = originalState.find(x => x.player_id === player.player_id)
-                //         console.log(match.team.team_id === player.team.team_id)
-                //         if (match.team.team_id !== player.team.team_id) {
-                //             console.log("Non-match", match.player_id, match.team.team_id, player.team.team_id);
-                //         }
-                //     })
-                // }
                 if (scrollDirection === direction) {
-                    d3.selectAll(".exit-polygon").remove();
+                    return d3.selectAll(".exit-polygon").remove();
                 }
                 else {
-                    d3.selectAll(".enter-polygon").remove();
+                    return d3.selectAll(".enter-polygon").remove();
                 }
-
-                return;
             })
             .onStepProgress(({ element, index, progress }) => {
                 if (element.getAttribute("class").includes("phantom")) {
@@ -214,13 +231,19 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
             allAffectedPlayers = [];
         }
         if (sizingAttribute) {
-            vis.changeWeightAttribute({ sizingAttribute,
-                                        setPlayerData,
-                                        affectedTeams: allAffectedTeams,
-                                        affectedPlayers: allAffectedPlayers,
-                                        stepProgress,
-                                        scrollDirection
-                                    })
+            [startState, endState] = vis.changeWeightAttribute({
+                    startState,
+                    endState,
+                    sizingAttribute,
+                    affectedTeams: allAffectedTeams,
+                    affectedPlayers: allAffectedPlayers,
+                    stepProgress,
+                    scrollDirection
+                })
+            
+            // startState = newStartState;
+            setPlayerData(endState);
+            // endState = playerData;
         }
     }, [sizingAttribute]);
 

@@ -1,8 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import TransactionListing from './TransactionListing';
-import PlayerMapContext from '../context/playerMapContext';
-
 
 
 let isMobile = window.matchMedia ? window.matchMedia('(max-width: 1100px)').matches : false;

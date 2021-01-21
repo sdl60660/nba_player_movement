@@ -53,7 +53,10 @@ const formatPlayerData = (playerData, teamData) => {
     salary: player.salary === 0 ? 1 : player.salary,
     start_salary: player.salary === 0 ? 1 : player.salary,
     end_salary: player["2021_salary"] === 0 ? 1 : player["2021_salary"],
-    vorp: player['2020_vorp'] === "" ? "-" : +player['2020_vorp']
+    vorp: player['2020_vorp'] === "" ? "-" : +player['2020_vorp'],
+    bpm: player['2020_bpm'] === "" ? "-" : +player['2020_bpm'],
+    "2020_mp": +player["2020_mp"],
+    "2021_mp": +player["2021_mp"]
   }));
 
   // console.log(playerData.filter(d => d.player_id === "vonleno01"))

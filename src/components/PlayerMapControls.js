@@ -18,8 +18,9 @@ const PlayerMapControls = ({ teamData }) => {
         <div className={"map-control"}>
             <div className="map-control__select">
                 <h4 className="map-control__header">Size Players By</h4>
-                <select className="single-select" value={context.sizingAttribute} onChange={(e) => { onSelectChange(e) }} disabled={true}>
+                <select className="single-select" value={context.sizingAttribute} onChange={(e) => { onSelectChange(e) }} disabled={false}>
                     <option value="salary">Salary</option>
+                    <option value="bpm">BPM (2020)</option>
                     <option value="vorp">VORP (2020)</option>
                     <option value="per">PER (2020)</option>
                 </select>
