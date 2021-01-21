@@ -63,8 +63,6 @@ const formatPlayerData = (playerData, teamData) => {
 
     return playerDict
   });
-
-  console.log(playerData)
   
   return playerData;
 }
@@ -86,6 +84,7 @@ Promise.all(promises).then((allData) => {
     
     const jsx =
       <div>
+        <img id="rotate-prompt" src="images/phone_rotation.svg" />
         <Header />
         <Intro />
         <PlayerMapWrapper

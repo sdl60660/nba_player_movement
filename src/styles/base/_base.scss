@@ -36,6 +36,8 @@ code {
   border-radius: 15px;
 
   z-index: 1;
+  
+  display: block;
 
   @media screen and (min-width: $vertical-breakpoint) {
     display: none;
