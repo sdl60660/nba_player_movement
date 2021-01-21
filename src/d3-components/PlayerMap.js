@@ -208,7 +208,7 @@ class PlayerMap {
                 return (
                     `<div class="d3-tip__grid">
                         <div class="d3-tip__player-name">${playerData.player_name} (${playerData.position})</div>
-                        <div class="d3-tip__player-attr">Salary:</div><div class="d3-tip__player-attr">${playerData.salary > 1 ? d3.format("$,.0f")(playerData.salary) : "-"}</div>
+                        <div class="d3-tip__player-attr">Salary:</div><div class="d3-tip__player-attr">${playerData.salary > 0 ? d3.format("$,.0f")(playerData.salary) : "-"}</div>
                         ${featuredStat}
                     </div>`
                 )
@@ -383,11 +383,16 @@ class PlayerMap {
 
                                 const tipElement = d3.select(".d3-tip");
                                 const top = this.getBoundingClientRect().top;
-                                const offset = tipElement.node().getBoundingClientRect().height;
+                                const vertOffset = tipElement.node().getBoundingClientRect().height;
 
                                 tipElement
                                     .style("position", "fixed")
-                                    .style("top", `${top - offset}px`);
+                                    .style("top", `${top - vertOffset}px`);
+                                
+                                if (tipElement.node().getBoundingClientRect().x < 0) {
+                                    tipElement
+                                        .style("left", 0);
+                                }
                                 
                                 const originalData = d.site.originalObject.data.originalData;
 

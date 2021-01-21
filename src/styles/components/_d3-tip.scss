@@ -45,6 +45,10 @@
     color: rgba(0, 0, 0, 0.8);
     position: absolute;
     pointer-events: none;
+
+    @media screen and (max-width: $mobile-breakpoint) {
+      display: none;
+    }
   }
   
   /* Northward tooltips */

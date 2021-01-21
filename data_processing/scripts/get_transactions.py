@@ -277,8 +277,7 @@ signed_then_waived = []
 with open('../data/players_start.csv', 'r', encoding='utf-8-sig') as f:
     player_dict = {x['player_id']: x for x in csv.DictReader(f)}
     for player_id, player in player_dict.items():
-        # If they went into the season without a salary, technically their salary was 0, but setting it to 1 helps avoid some divide-by-zero issues without meaninfully affecting anything
-        player_dict[player_id]['current_salary'] = (1 if player['2021_preseason_salary'] == '' else player['2021_preseason_salary'])
+        player_dict[player_id]['current_salary'] = (0 if player['2021_preseason_salary'] == '' else player['2021_preseason_salary'])
 
 with open('../data/team_data.csv', 'r', encoding='utf-8-sig') as f:
     team_data = [x for x in csv.DictReader(f)]

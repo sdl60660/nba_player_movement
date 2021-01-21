@@ -51,9 +51,9 @@ const formatPlayerData = (playerData, teamData) => {
       player_id: player.player_id,
       team: teamData.find((team) => team.team_id === player.team_id),
       position: player.position,
-      salary: player.salary === 0 ? 1 : player.salary,
-      start_salary: player.salary === 0 ? 1 : player.salary,
-      end_salary: player["2021_salary"] === 0 ? 1 : player["2021_salary"]
+      salary: player.salary, //=== 0 ? 1 : player.salary,
+      start_salary: player.salary, // === 0 ? 1 : player.salary,
+      end_salary: player["2021_salary"] // === 0 ? 1 : player["2021_salary"]
     };
 
     ['vorp', 'bpm', 'obpm', 'dbpm', 'pts_per_g', 'trb_per_g', 'ast_per_g', 'mp_per_g', 'mp'].forEach(stat => {
