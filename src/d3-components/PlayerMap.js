@@ -308,7 +308,7 @@ class PlayerMap {
             .force("charge", d3.forceManyBody())
             .force("collision", d3.forceCollide(d => {
                 // console.log(d.team_id, d.radius)
-                return Math.max(d.radius, 50) + 10
+                return Math.max(d.radius, 50) + 12
             }))
             .on("tick", tick)
             // .stop()
