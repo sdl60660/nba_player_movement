@@ -84,7 +84,7 @@ Promise.all(promises).then((allData) => {
     
     const jsx =
       <div>
-        <img id="rotate-prompt" src="images/phone_rotation.svg" />
+        <img alt={"rotate phone prompt"} style={{opacity: 0 }} onLoad={(e) => { e.target.style.opacity = 1 }} id="rotate-prompt" src="images/phone_rotation.svg" />
         <Header />
         <Intro />
         <PlayerMapWrapper
