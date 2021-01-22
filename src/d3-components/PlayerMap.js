@@ -139,7 +139,7 @@ class PlayerMap {
 
         dataset.forEach((player) => {
             player.weight = player[vis.attribute] === "-" ? 0 : vis.weightScale(player[vis.attribute]);
-            if (!["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(vis.attribute) && player[`${this.attribute.split('_')[0]}_mp`] < 100) {
+            if (!["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(vis.attribute) && player[`${this.attribute.split('_')[0]}_mp`] < 200) {
                 player.weight = 0;
             }
         });
@@ -736,7 +736,7 @@ class PlayerMap {
         return
     };
 
-    
+
     updateMapColor = ({ opacity, mapColor }) => { 
         this.mapPath
             .transition()
