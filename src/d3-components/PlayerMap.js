@@ -513,6 +513,15 @@ class PlayerMap {
         // This essentially creates a buffer of 1.0 tween position for the last ~10% of the section, without having to
         // adjust anything else or add other thresholds, so that there's some period of stillness between movement periods
         tweenPosition = Math.min(1.0, tweenPosition*1.1);
+        
+        // Calcuate position (from 0 to 1) within threshold stage (e.g. what percentage of the way from traverseThreshold are we to the reshuffleThreshold)
+        // For use on interpolators, which are set up to span between thresholds
+        const stagePosition =   (tweenPosition >= reshuffleThreshold) ?
+                                (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold) :
+                                (tweenPosition <= traverseThreshold) ?
+                                tweenPosition / traverseThreshold :
+                                (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
+
 
         let selection = vis.svg.selectAll(".player-polygon:not(.enter-polygon):not(.exit-polygon)");
 
@@ -526,11 +535,9 @@ class PlayerMap {
                 const shapeFinal = element.attr("shapeFinal");
 
                 if (tweenPosition >= reshuffleThreshold) {
-                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
                     return interpolatePath(midstatePosition, shapeFinal)(stagePosition);
                 }
                 else if (tweenPosition <= traverseThreshold) {
-                    const stagePosition = tweenPosition / traverseThreshold;
                     return interpolatePath(originalShape, midstatePosition)(stagePosition);
                 }
                 else {
@@ -552,7 +559,6 @@ class PlayerMap {
                 const shapeFinal = element.attr("shapeFinal");
 
                 if (tweenPosition < traverseThreshold) {
-                    const stagePosition = tweenPosition / traverseThreshold;
                     // const photoPatternOffset = 8.0*stagePosition - 8.0;
                     // d3.select(`#${d.player_id}-photo-pattern`)
                     //     .attr("x", d => Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight) / photoPatternOffset);
@@ -560,7 +566,6 @@ class PlayerMap {
                     return interpolatePath(startPosition, circleStart)(stagePosition);
                 }
                 else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
-                    const stagePosition = (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
                     // const photoPatternOffset = -8.0*stagePosition;
                     // d3.select(`#${d.player_id}-photo-pattern`)
                     //     .attr("x", d => Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight) / photoPatternOffset);
@@ -570,8 +575,6 @@ class PlayerMap {
                 else {
                     // d3.select(`#${d.player_id}-photo-pattern`)
                     //     .attr("x", 0);
-
-                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
                     return interpolatePath(positionFinal, shapeFinal)(stagePosition);
                 }
             })
@@ -604,11 +607,9 @@ class PlayerMap {
                 const finalPosition = `M${d.join('L')}z`;
 
                 if (tweenPosition <= traverseThreshold) {
-                    const stagePosition = tweenPosition / traverseThreshold;
                     return interpolatePath(startPosition, circlePath)(stagePosition);
                 }
                 else if (tweenPosition >= reshuffleThreshold) {
-                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
                     return interpolatePath(circlePath, finalPosition)(stagePosition);
                 }
                 else {
@@ -617,7 +618,6 @@ class PlayerMap {
             })
             .style("stroke-width", () => {
                 if (tweenPosition <= traverseThreshold) {
-                    const stagePosition = tweenPosition / traverseThreshold;
                     return d3.interpolateNumber(0, 2)(stagePosition);
                 }
                 else {
@@ -637,11 +637,9 @@ class PlayerMap {
                 const endPosition = getCirclePath(d[0], 0.5);
 
                 if (tweenPosition <= traverseThreshold) {
-                    const stagePosition = tweenPosition / traverseThreshold;
                     return interpolatePath(startPosition, middlePosition)(stagePosition);
                 }
                 else if (tweenPosition >= reshuffleThreshold) {
-                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
                     return interpolatePath(middlePosition, endPosition)(stagePosition);
                 }
                 else {
@@ -650,7 +648,6 @@ class PlayerMap {
             })
             .style("stroke-width", () => {
                 if (tweenPosition >= reshuffleThreshold) {
-                    const stagePosition = (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold);
                     return d3.interpolateNumber(2, 0)(stagePosition);
                 }
                 else {
