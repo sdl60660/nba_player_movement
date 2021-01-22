@@ -516,18 +516,17 @@ class PlayerMap {
         
         // Calcuate position (from 0 to 1) within threshold stage (e.g. what percentage of the way from traverseThreshold are we to the reshuffleThreshold)
         // For use on interpolators, which are set up to span between thresholds
-        const stagePosition =   (tweenPosition >= reshuffleThreshold) ?
-                                (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold) :
-                                (tweenPosition <= traverseThreshold) ?
-                                tweenPosition / traverseThreshold :
-                                (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
+        const stagePosition = (tweenPosition >= reshuffleThreshold) ?
+            (tweenPosition - reshuffleThreshold) / (1 - reshuffleThreshold) :
+            (tweenPosition <= traverseThreshold) ?
+            tweenPosition / traverseThreshold :
+            (tweenPosition - traverseThreshold) / (reshuffleThreshold - traverseThreshold);
 
 
         let selection = vis.svg.selectAll(".player-polygon:not(.enter-polygon):not(.exit-polygon)");
 
         selection
             .filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-            // .transition()
             .attr("d", (d,i,n) => {
                 const element = d3.select(n[i]);
                 const originalShape = element.attr("startPosition");
@@ -548,7 +547,6 @@ class PlayerMap {
 
         selection
             .filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-            // .transition()
             .attr('d', (d,i,n) => {
                 const element = d3.select(n[i]);
 
@@ -559,22 +557,12 @@ class PlayerMap {
                 const shapeFinal = element.attr("shapeFinal");
 
                 if (tweenPosition < traverseThreshold) {
-                    // const photoPatternOffset = 8.0*stagePosition - 8.0;
-                    // d3.select(`#${d.player_id}-photo-pattern`)
-                    //     .attr("x", d => Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight) / photoPatternOffset);
-
                     return interpolatePath(startPosition, circleStart)(stagePosition);
                 }
                 else if (traverseThreshold <= tweenPosition && tweenPosition < reshuffleThreshold) {
-                    // const photoPatternOffset = -8.0*stagePosition;
-                    // d3.select(`#${d.player_id}-photo-pattern`)
-                    //     .attr("x", d => Math.sqrt(vis.weightScale(d[vis.attribute]) * vis.maxCircleRadius * vis.maxWeight) / photoPatternOffset);
-                        
                     return interpolatePath(circleStart, positionFinal)(stagePosition);
                 }
                 else {
-                    // d3.select(`#${d.player_id}-photo-pattern`)
-                    //     .attr("x", 0);
                     return interpolatePath(positionFinal, shapeFinal)(stagePosition);
                 }
             })
@@ -654,6 +642,17 @@ class PlayerMap {
                     return 2;
                 }
             })
+        
+        let photoOffsetMultiplier = tweenPosition <= traverseThreshold ?
+                                    d3.interpolateNumber(-0.1, 0.0)(stagePosition) :
+                                    tweenPosition >= reshuffleThreshold ?
+                                    d3.interpolateNumber(0.0, -0.1)(stagePosition) :
+                                    0;
+
+        affectedPlayers.forEach(player_id => {
+            vis.svg.select(`#${player_id}-photo-pattern`)
+                .attr("x", (d) => d[this.attribute] === "-" ? 0 : photoOffsetMultiplier*Math.sqrt(vis.weightScale(d[this.attribute]) * vis.maxCircleRadius * vis.maxWeight));
+        })
 
     };
 
@@ -698,14 +697,7 @@ class PlayerMap {
         // Resize photos
         vis.svg.selectAll(".player-photo-pattern")
             .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
-            .attr("x", d => {
-                if (sizingAttribute === "salary") {
-                    return 0;
-                }
-                else {
-                    return Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight) / -8;
-                }
-            })
+            .attr("x", d => d[sizingAttribute] === "-" ? 0 : -0.1 * Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
 
         vis.svg.selectAll(".exit-polygon").remove();
 
@@ -732,10 +724,19 @@ class PlayerMap {
         })
         
         this.generatePolygons({ polygons: this.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection , midstate: allMidstatePolygons } );
+        
+        this.svg.selectAll(".player-photo-pattern")
+            .attr("x", (d,i,n) => {
+                if (affectedPlayers.includes(d.player_id)) {
+                    return d3.select(n[i]).attr("x");
+                }
+                return d[this.attribute] === "-" ? 0 : -0.1 * Math.sqrt(this.weightScale(d[sizingAttribute]) * this.maxCircleRadius * this.maxWeight);
+            })
+
         return
     };
 
-
+    
     updateMapColor = ({ opacity, mapColor }) => { 
         this.mapPath
             .transition()
