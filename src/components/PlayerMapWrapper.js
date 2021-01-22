@@ -106,7 +106,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         // vis.setTeamLabels(vis.trueTeamData);
     }
 
-    const stepEnterHandler = ( { element, index, direction }) => {                
+    const stepEnterHandler = ({ element, index, direction }) => {                
         if (element.getAttribute("class").includes("phantom")) {
             phantomFlag = true;
             return;
@@ -141,6 +141,19 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         }
 
         scrollDirection = direction;
+    }
+
+    const stepExitHandler = ({ element, index, direction }) => {
+        if ((index === 0 && direction === "up") || (element.getAttribute("class").includes("phantom") && direction === "down")) {
+            vis.tip.hide();
+        }
+        
+        if (scrollDirection === direction) {
+            return d3.selectAll(".exit-polygon").remove();
+        }
+        else {
+            return d3.selectAll(".enter-polygon").remove();
+        }
     }
 
 
@@ -200,14 +213,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 order: true
             })
             .onStepEnter(({ element, index, direction }) => stepEnterHandler({ element, index, direction }))
-            .onStepExit(({ element, index, direction }) => {
-                if (scrollDirection === direction) {
-                    return d3.selectAll(".exit-polygon").remove();
-                }
-                else {
-                    return d3.selectAll(".enter-polygon").remove();
-                }
-            })
+            .onStepExit(({ element, index, direction }) => stepExitHandler({ element, index, direction }))
             .onStepProgress(({ element, index, progress }) => {
                 if (element.getAttribute("class").includes("phantom")) {
                     return;
