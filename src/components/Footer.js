@@ -28,7 +28,7 @@ const Footer = ({ githubLink  }) => {
                 <p>
                     Exhibit 10 and two-way contracts were not included in the listed transactions to avoid some salary complexity. It is possible that there 
                     are inaccuracies in the underlying transaction data (I've found and manually corrected a few missing or inaccurate transactions, so I know that the data&nbsp;
-                    from Basketball Reference isn't perfect).
+                    from Basketball Reference isn't perfect). Advanced Stats (BPM variants, VORP) are minutes-qualified.
                 </p>
             </div>
 

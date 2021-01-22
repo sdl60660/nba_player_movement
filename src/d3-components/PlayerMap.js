@@ -37,6 +37,7 @@ class PlayerMap {
     containerEl;
     props;
   
+
     constructor(containerEl, props) {
         this.containerEl = containerEl;
         const { width, height, mapColor, geoData, teamData, playerData, setPlayerData, sizingAttribute } = props;
@@ -139,7 +140,7 @@ class PlayerMap {
 
         dataset.forEach((player) => {
             player.weight = player[vis.attribute] === "-" ? 0 : vis.weightScale(player[vis.attribute]);
-            if (!["salary", "2020_mp_per_g", "2021_mp_per_g"].includes(vis.attribute) && player[`${this.attribute.split('_')[0]}_mp`] < 200) {
+            if (!vis.attribute.includes('salary') && !vis.attribute.includes('per_g') && player[`${this.attribute.split('_')[0]}_mp`] < 200) {
                 player.weight = 0;
             }
         });
@@ -213,13 +214,7 @@ class PlayerMap {
                     </div>`
                 )
             });
-        
-            // <div class="d3-tip__player-attr">BPM (2020):</div><div class="d3-tip__player-attr">${playerData['2020_bpm'] === "-" ? "-" : d3.format(".1f")(playerData['2020_bpm'])}</div>
-            // <div class="d3-tip__player-attr">BPM (2021):</div><div class="d3-tip__player-attr">${playerData['2021_bpm'] === "-" ? "-" : d3.format(".1f")(playerData['2021_bpm'])}</div>
-            // <div class="d3-tip__player-attr">BPM (2020):</div><div class="d3-tip__player-attr">${playerData.bpm === "-" ? "-" : d3.format(".1f")(playerData.bpm)}</div>
-            // <div class="d3-tip__player-attr">VORP (2020):</div><div class="d3-tip__player-attr">${playerData.vorp === "-" ? "-" : d3.format(".1f")(playerData.vorp)}</div>
-            // <div class="d3-tip__player-attr">PER (2020):</div><div class="d3-tip__player-attr">${playerData.per === "-" ? "-" : d3.format(".1f")(playerData.per)}</div>
-            
+
         this.svg.call(this.tip);
     };
 
@@ -264,8 +259,6 @@ class PlayerMap {
                     .style("stroke", "black")
                     .style('stroke-width', 0.5)
                     .style("fill", mapColor)
-
-                // exit => exit.remove()
             );
     };
     
@@ -356,6 +349,129 @@ class PlayerMap {
     };
 
 
+    enterPolygons = ({ enter, affectedPlayers, polygonAttributes }) => {
+        const vis = this;
+
+        enter.append('path')
+            .raise()
+            .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix} enter-polygon`)
+            .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
+            .on("mouseover", function(e ,d) {
+                vis.tip.show(d, this);
+
+                const tipElement = d3.select(".d3-tip");
+                const top = this.getBoundingClientRect().top;
+                const vertOffset = tipElement.node().getBoundingClientRect().height;
+
+                tipElement
+                    .style("position", "fixed")
+                    .style("top", `${top - vertOffset}px`);
+                
+                if (tipElement.node().getBoundingClientRect().x < 0) {
+                    tipElement
+                        .style("left", 0);
+                }
+                
+                const originalData = d.site.originalObject.data.originalData;
+
+                d3.selectAll(".transaction-card__transaction-item")
+                    .style("opacity", 0.3)
+
+                d3.selectAll(`.transaction-log-${originalData.player_id}`)
+                    .style("opacity", 1.0)
+
+                vis.labelGroup.selectAll(`#${originalData.team.team_id}-label`)
+                    .style("display", "inline-block")
+            })
+            .on("mouseout", function(d) {
+                vis.tip.hide(d, this);
+
+                d3.selectAll(".transaction-card__transaction-item")
+                    .style("opacity", 1.0)
+                
+                vis.labelGroup.selectAll(".team-label")
+                    .style("display", "none")
+            })
+            .style("fill-opacity", 0.95)
+            .style("fill", d => polygonAttributes.fillAccessor(d))
+            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
+            .style("stroke-width", d => d.weight <= 0.001 ? "0px" : "2px")
+            .attr('d', (d,i,n) => {
+                if (affectedPlayers.includes(d.site.originalObject.data.originalData.player_id)) {
+                    const originalData = d.site.originalObject.data.originalData;
+                    const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
+                    const path = getCirclePath(d[0], radius);
+                    d3.select(n[i]).attr("circlePath", path)
+                    return getCirclePath(d[0], 1);
+                }
+                else {
+                    return `M${d.join('L')}z`;
+                }
+            })
+            .attr("lastPosition", (d,i,n) => d3.select(n[i]).attr("d"))
+    }
+
+    
+    updatePolygons = ({ update, affectedPlayers, affectedTeams, polygonAttributes, midstate, attributeTransition }) => {
+        update
+            .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
+            .style("stroke-width", "2px")
+        
+        if (attributeTransition) {
+            update.filter(d => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                .transition()
+                .attrTween("d", (d,i,n) => {
+                    const previous = d3.select(n[i]).attr("d");
+                    const current = `M${d.join('L')}z`;
+                    return interpolatePath(previous, current);
+                }) 
+            
+            update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id) && affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+                .transition()
+                .attrTween("d", (d,i,n) => {
+                    const previous = d3.select(n[i]).attr("d");
+                    const current = d3.select(n[i]).attr("midstatePosition")
+                    return interpolatePath(previous, current);
+                }) 
+        }
+
+        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
+            .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
+            .attr("shapeFinal", (d) => `M${d.join('L')}z`);
+        
+        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+            .attr("midstatePosition", (d,i,n) => {
+                const matchingPolygon = midstate.find(polygon => polygon.site.originalObject.data.originalData.player_id === d.site.originalObject.data.originalData.player_id)
+                return `M${matchingPolygon.join('L')}z`
+            })
+
+        update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+            .style("fill", d => polygonAttributes.fillAccessor(d))
+            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2);
+
+        update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
+            .raise()
+            .attr("startPath", (d,i,n) => {
+                const element = d3.select(n[i]);
+                const originalData = d.site.originalObject.data.originalData;
+                const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
+                const existingPath = element.attr('d'); 
+                const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
+
+                element.attr('radius', radius);
+                return getCirclePath(existingCenter, radius);
+            })
+            .attr("positionFinal", (d,i,n) => {
+                const radius = d3.select(n[i]).attr('radius');
+                return getCirclePath(d[0], radius);
+            })
+            .attr("originalFill", (d,i,n) => d3.select(n[i]).style("fill"))
+            .attr("originalStroke", (d,i,n) => d3.select(n[i]).style("stroke"))
+
+        return update;
+    }
+
+
     generatePolygons = ({ polygons, affectedTeams = [], affectedPlayers = [], direction = "down", attributeTransition = false, midstate = [] }) => {
         const vis = this;
 
@@ -368,135 +484,96 @@ class PlayerMap {
 
         // Create/update both sets of polygons (player image and fill)
         vis.polygonSets.forEach((polygonAttributes) => {
-            vis.g
-                .selectAll(`.${polygonAttributes.class}`)
+            vis.g.selectAll(`.${polygonAttributes.class}`)
                 .data(polygons, d => d.site.originalObject.data.originalData.player_id)
                 .join(
-                    enter => {
-                        enter
-                            .append('path')
-                            .raise()
-                            .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix} enter-polygon`)
-                            .attr("id", d => `${polygonAttributes.suffix}-${d.site.originalObject.data.originalData.player_id}`)
-                            .on("mouseover", function(e ,d) {
-                                vis.tip.show(d, this);
-
-                                const tipElement = d3.select(".d3-tip");
-                                const top = this.getBoundingClientRect().top;
-                                const vertOffset = tipElement.node().getBoundingClientRect().height;
-
-                                tipElement
-                                    .style("position", "fixed")
-                                    .style("top", `${top - vertOffset}px`);
-                                
-                                if (tipElement.node().getBoundingClientRect().x < 0) {
-                                    tipElement
-                                        .style("left", 0);
-                                }
-                                
-                                const originalData = d.site.originalObject.data.originalData;
-
-                                d3.selectAll(".transaction-card__transaction-item")
-                                    .style("opacity", 0.3)
-
-                                d3.selectAll(`.transaction-log-${originalData.player_id}`)
-                                    .style("opacity", 1.0)
-
-                                vis.labelGroup.selectAll(`#${originalData.team.team_id}-label`)
-                                    .style("display", "inline-block")
-                            })
-                            .on("mouseout", function(d) {
-                                vis.tip.hide(d, this);
-
-                                d3.selectAll(".transaction-card__transaction-item")
-                                    .style("opacity", 1.0)
-                                
-                                vis.labelGroup.selectAll(".team-label")
-                                    .style("display", "none")
-                            })
-                            .style("fill-opacity", 0.95)
-                            .style("fill", d => polygonAttributes.fillAccessor(d))
-                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2)
-                            .style("stroke-width", d => d.weight <= 0.001 ? "0px" : "2px")
-                            .attr('d', (d,i,n) => {
-                                if (affectedPlayers.includes(d.site.originalObject.data.originalData.player_id)) {
-                                    const originalData = d.site.originalObject.data.originalData;
-                                    const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
-                                    const path = getCirclePath(d[0], radius);
-                                    d3.select(n[i]).attr("circlePath", path)
-                                    return getCirclePath(d[0], 1);
-                                }
-                                else {
-                                    return `M${d.join('L')}z`;
-                                }
-                            })
-                            .attr("lastPosition", (d,i,n) => d3.select(n[i]).attr("d"))
-                        },
-
-                    update => {  
-                        update
-                            .attr("class", d => `player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
-                            .style("stroke-width", "2px")
-                        
-                        if (attributeTransition) {
-                            update.filter(d => !affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                                .transition()
-                                .attrTween("d", (d,i,n) => {
-                                    const previous = d3.select(n[i]).attr("d");
-                                    const current = `M${d.join('L')}z`;
-                                    return interpolatePath(previous, current);
-                                }) 
-                            
-                            update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id) && affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                                .transition()
-                                .attrTween("d", (d,i,n) => {
-                                    const previous = d3.select(n[i]).attr("d");
-                                    const current = d3.select(n[i]).attr("midstatePosition")
-                                    return interpolatePath(previous, current);
-                                }) 
-                        }
-
-                        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id))
-                            .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
-                            .attr("shapeFinal", (d) => `M${d.join('L')}z`);
-                        
-                        update.filter(d => affectedTeams.includes(d.site.originalObject.data.originalData.team.team_id) && !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                            .attr("midstatePosition", (d,i,n) => {
-                                const matchingPolygon = midstate.find(polygon => polygon.site.originalObject.data.originalData.player_id === d.site.originalObject.data.originalData.player_id)
-                                return `M${matchingPolygon.join('L')}z`
-                            })
-
-                        update.filter(d => !affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                            .style("fill", d => polygonAttributes.fillAccessor(d))
-                            .style("stroke", d => d.site.originalObject.data.originalData.team.color_2);
-
-                        update.filter(d => affectedPlayers.includes(d.site.originalObject.data.originalData.player_id))
-                            .raise()
-                            .attr("startPath", (d,i,n) => {
-                                const element = d3.select(n[i]);
-                                const originalData = d.site.originalObject.data.originalData;
-                                const radius = Math.sqrt(this.weightScale(originalData[this.attribute]) * this.maxCircleRadius * this.maxWeight) / 2;
-                                const existingPath = element.attr('d'); 
-                                const existingCenter = existingPath.slice(1, existingPath.indexOf('L')).split(',');
-
-                                element.attr('radius', radius);
-                                return getCirclePath(existingCenter, radius);
-                            })
-                            .attr("positionFinal", (d,i,n) => {
-                                const radius = d3.select(n[i]).attr('radius');
-                                return getCirclePath(d[0], radius);
-                            })
-                            .attr("originalFill", (d,i,n) => d3.select(n[i]).style("fill"))
-                            .attr("originalStroke", (d,i,n) => d3.select(n[i]).style("stroke"))
-
-                        return update;
-                    },
-
+                    enter => { this.enterPolygons({ enter, affectedPlayers, polygonAttributes }) },
+                    update => this.updatePolygons({ update, affectedPlayers, affectedTeams, polygonAttributes, midstate, attributeTransition }),
                     exit => exit
                         .attr("class", d => `exit-polygon player-polygon polygon-${d.site.originalObject.data.originalData.player_id} ${polygonAttributes.class} ${d.site.originalObject.data.originalData.team.team_id}-${polygonAttributes.suffix}`)
                         .attr("startPosition", (d,i,n) => d3.select(n[i]).attr("d"))
                 )
         })
+    };
+
+
+    runTransactions = (playerData, affectedTeams, affectedPlayers, scrollDirection, sizingAttribute) => {
+
+        let allMidstatePolygons = [];
+        affectedTeams.forEach((team_id) => {
+            this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
+
+            let team = this.teamData.find((t) => t.team_id === team_id)
+            let players = playerData.filter(player => player.team.team_id === team.team_id && player.weight !== 0)            
+            
+            let unaffectedPlayers = players.filter(player => !affectedPlayers.includes(player.player_id))
+            
+            let midstatePolygons = this.addTeamTreemap({ team, players: unaffectedPlayers })
+            let polygons = this.addTeamTreemap({ team, players })
+            
+            this.allPolygons = this.allPolygons.concat(polygons);
+            allMidstatePolygons = allMidstatePolygons.concat(midstatePolygons)
+        })
+        
+        this.generatePolygons({ polygons: this.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection , midstate: allMidstatePolygons } );
+        
+        this.svg.selectAll(".player-photo-pattern")
+            .attr("x", (d,i,n) => {
+                if (affectedPlayers.includes(d.player_id)) {
+                    return d3.select(n[i]).attr("x");
+                }
+                return d[this.attribute] === "-" ? 0 : -0.1 * Math.sqrt(this.weightScale(d[sizingAttribute]) * this.maxCircleRadius * this.maxWeight);
+            })
+
+        return
+    };
+
+
+    changeWeightAttribute = ({ startState, endState, sizingAttribute, affectedTeams, affectedPlayers, stepProgress, scrollDirection }) => {
+        const vis = this;
+
+        // Set new sizing attribute for player polygon weights
+        vis.attribute = sizingAttribute;
+
+        // Switch weightScale domain to new attribute
+        vis.setScales();
+
+        [startState, endState].forEach((dataset) => {
+            if (dataset.length === 0) {
+                return;
+            }
+
+            dataset = this.setPlayerWeights(dataset);
+
+            let allMidstatePolygons = [];
+            vis.allPolygons = [];
+            vis.trueTeamData.forEach((team) => {
+                let players = dataset.filter((player) => player.weight !== 0 && player.team !== undefined && player.team.team_id === team.team_id);
+                let polygons = vis.addTeamTreemap({ team, players })
+                vis.allPolygons = vis.allPolygons.concat(polygons);
+
+                let unaffectedPlayers = players.filter(player => !affectedPlayers.includes(player.player_id))
+            
+                let midstatePolygons = this.addTeamTreemap({ team, players: unaffectedPlayers })
+                allMidstatePolygons = allMidstatePolygons.concat(midstatePolygons)
+            })
+
+            // Draw those polygons
+            vis.generatePolygons({ polygons: vis.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection, attributeTransition: true, midstate: allMidstatePolygons } );
+        })
+        
+        if (affectedTeams.length !== 0) {
+            vis.updatePositions(affectedPlayers, affectedTeams, stepProgress, scrollDirection)
+        }
+
+        // Resize photos
+        vis.svg.selectAll(".player-photo-pattern")
+            .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
+            .attr("x", d => d[sizingAttribute] === "-" ? 0 : -0.1 * Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
+
+        vis.svg.selectAll(".exit-polygon").remove();
+
+        return [startState, endState]
     };
 
 
@@ -654,86 +731,6 @@ class PlayerMap {
                 .attr("x", (d) => d[this.attribute] === "-" ? 0 : photoOffsetMultiplier*Math.sqrt(vis.weightScale(d[this.attribute]) * vis.maxCircleRadius * vis.maxWeight));
         })
 
-    };
-
-
-    changeWeightAttribute = ({ startState, endState, sizingAttribute, affectedTeams, affectedPlayers, stepProgress, scrollDirection }) => {
-        const vis = this;
-
-        // Set new sizing attribute for player polygon weights
-        vis.attribute = sizingAttribute;
-
-        // Switch weightScale domain to new attribute
-        vis.setScales();
-
-        [startState, endState].forEach((dataset) => {
-            if (dataset.length === 0) {
-                return;
-            }
-
-            dataset = this.setPlayerWeights(dataset);
-
-            let allMidstatePolygons = [];
-            vis.allPolygons = [];
-            vis.trueTeamData.forEach((team) => {
-                let players = dataset.filter((player) => player.weight !== 0 && player.team !== undefined && player.team.team_id === team.team_id);
-                let polygons = vis.addTeamTreemap({ team, players })
-                vis.allPolygons = vis.allPolygons.concat(polygons);
-
-                let unaffectedPlayers = players.filter(player => !affectedPlayers.includes(player.player_id))
-            
-                let midstatePolygons = this.addTeamTreemap({ team, players: unaffectedPlayers })
-                allMidstatePolygons = allMidstatePolygons.concat(midstatePolygons)
-            })
-
-            // Draw those polygons
-            vis.generatePolygons({ polygons: vis.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection, attributeTransition: true, midstate: allMidstatePolygons } );
-        })
-        
-        if (affectedTeams.length !== 0) {
-            vis.updatePositions(affectedPlayers, affectedTeams, stepProgress, scrollDirection)
-        }
-
-        // Resize photos
-        vis.svg.selectAll(".player-photo-pattern")
-            .attr("width", d => d[sizingAttribute] === "-" ? 1 : Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
-            .attr("x", d => d[sizingAttribute] === "-" ? 0 : -0.1 * Math.sqrt(vis.weightScale(d[sizingAttribute]) * vis.maxCircleRadius * vis.maxWeight))
-
-        vis.svg.selectAll(".exit-polygon").remove();
-
-        return [startState, endState]
-    };
-
-
-    runTransactions = (playerData, affectedTeams, affectedPlayers, scrollDirection, sizingAttribute) => {
-
-        let allMidstatePolygons = [];
-        affectedTeams.forEach((team_id) => {
-            this.allPolygons = this.allPolygons.filter((polygon) => polygon.site.originalObject.data.originalData.team.team_id !== team_id) 
-
-            let team = this.teamData.find((t) => t.team_id === team_id)
-            let players = playerData.filter(player => player.team.team_id === team.team_id && player.weight !== 0)            
-            
-            let unaffectedPlayers = players.filter(player => !affectedPlayers.includes(player.player_id))
-            
-            let midstatePolygons = this.addTeamTreemap({ team, players: unaffectedPlayers })
-            let polygons = this.addTeamTreemap({ team, players })
-            
-            this.allPolygons = this.allPolygons.concat(polygons);
-            allMidstatePolygons = allMidstatePolygons.concat(midstatePolygons)
-        })
-        
-        this.generatePolygons({ polygons: this.allPolygons, affectedTeams, affectedPlayers, direction: scrollDirection , midstate: allMidstatePolygons } );
-        
-        this.svg.selectAll(".player-photo-pattern")
-            .attr("x", (d,i,n) => {
-                if (affectedPlayers.includes(d.player_id)) {
-                    return d3.select(n[i]).attr("x");
-                }
-                return d[this.attribute] === "-" ? 0 : -0.1 * Math.sqrt(this.weightScale(d[sizingAttribute]) * this.maxCircleRadius * this.maxWeight);
-            })
-
-        return
     };
 
 

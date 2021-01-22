@@ -10,6 +10,7 @@ import PlayerMapControls from './PlayerMapControls';
 import PlayerMap from '../d3-components/PlayerMap';
 import PlayerMapContext from '../context/playerMapContext';
 import TransactionCard from './TransactionCard';
+// import Loader from './Loader'
 
 // import transactionReducer from '../reducers/transactionReducer';
 
@@ -29,16 +30,13 @@ let endState = [];
 const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData }) => {
 
     const [mapColor, setMapColor] = useState(chromatic.schemeCategory10[0]);
-    // const [geoData, setGeoData] = useState(_geoData);
-    // const [teamData, setTeamData] = useState(_teamData);
-    
-    // const [playerStartData, setPlayerStartData] = useState([])
     const [playerData, setPlayerData] = useState(_playerData);
     const [sizingAttribute, setSizingAttribute] = useState("salary");
 
     const [width, setWidth] = useState(1300);
     const [height, setHeight] = useState(700);
     const [opacity, setOpacity] = useState(0.3);
+    // const [display, setDisplay] = useState("none");
 
     const geoData = _geoData;
     const teamData = _teamData;
@@ -101,9 +99,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 
         allAffectedTeams = [...new Set(allAffectedTeams.filter((team) => team !== "FA" && team !== "RET"))];
         allAffectedPlayers = [...new Set(allAffectedPlayers)];
-
-        // vis.runTransactions(playerData, allAffectedTeams, allAffectedPlayers, scrollDirection);
-        // vis.setTeamLabels(vis.trueTeamData);
     }
 
     const stepEnterHandler = ({ element, index, direction }) => {                
@@ -122,8 +117,6 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
             processStepTransactions({ element, index, direction, stateUpdateFunction: setPlayerData })
             startState = playerData;
             vis.runTransactions(endState, allAffectedTeams, allAffectedPlayers, direction, sizingAttribute);
-
-            phantomFlag = false;
         }
 
         else {
@@ -136,11 +129,10 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
             processStepTransactions({ element, index, direction, stateUpdateFunction: setPlayerData })
             endState = playerData;
             vis.runTransactions(endState, allAffectedTeams, allAffectedPlayers, direction, sizingAttribute);
-
-            phantomFlag = false;
         }
 
         scrollDirection = direction;
+        phantomFlag = false;
     }
 
     const stepExitHandler = ({ element, index, direction }) => {
@@ -233,7 +225,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     }, [mapColor, opacity]);
 
     useEffect(() => {
-        console.log("triggered", scrollDirection, sizingAttribute, stepProgress, allAffectedTeams, allAffectedPlayers);
+        // console.log("triggered", scrollDirection, sizingAttribute, stepProgress, allAffectedTeams, allAffectedPlayers);
         if (stepProgress === 0) {
             allAffectedTeams = [];
             allAffectedPlayers = [];
@@ -249,9 +241,8 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                     scrollDirection
                 })
             
-            // startState = newStartState;
             setPlayerData(endState);
-            // endState = playerData;
+            // setDisplay("block");
         }
     }, [sizingAttribute]);
 
@@ -281,13 +272,13 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 }}
         >
             <section id={"scroll"}>
-            <div id={"viz-column"}>
+                <div id={"viz-column"}>
                     <div ref={refElement} id={"viz-tile"}>
                         { !isMobile && <PlayerMapControls teamData={teamData}/> }
                     </div>
                 
-            </div>
-            <div className={"text-column"} id={"annotations"}>
+                </div>
+                <div className={"text-column"} id={"annotations"}>
                     { Object.entries(transactionData).map(
                         (transactionDateData, i) =>
                             <TransactionCard 
@@ -299,8 +290,8 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                         )
                     }
                     <div key={"phantom-end"} className={"transaction-card phantom"} />
-            </div>
-        </section>
+                </div>
+            </section>
       </PlayerMapContext.Provider>
     )
 }
