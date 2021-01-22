@@ -1,9 +1,12 @@
 
 #scroll {
     position: relative;
-    // display: grid;
-    // grid-template-columns: 80% 20%;
-  }
+    display: block;
+
+    @media screen and (max-width: $vertical-breakpoint) {
+        display: none;
+    }
+}
   
 #viz-column {
     position: sticky;

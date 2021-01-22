@@ -11,6 +11,10 @@
     width: 50rem;
     max-width: 55vw;
     // text-align: justify;
+
+    @media screen and (max-width: $vertical-breakpoint) {
+        display: none;
+    }
 }
 
 .footer a {
