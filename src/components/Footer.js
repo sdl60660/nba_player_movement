@@ -32,7 +32,7 @@ const Footer = ({ githubLink  }) => {
                 </p>
             </div>
 
-            <p>Last Updated: January 2021</p>
+            <p>Last Updated: January 22, 2021</p>
         </div>
     )
 }
