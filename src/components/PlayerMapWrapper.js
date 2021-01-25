@@ -1,5 +1,3 @@
-// @flow
-
 import React, { useState, useEffect, useReducer, useRef } from 'react';
 import scrollama from 'scrollama';
 import * as d3 from 'd3';
