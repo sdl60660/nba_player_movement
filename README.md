@@ -2,7 +2,7 @@
 
 Visualization that maps NBA player movement in the 2020-21 offseason/season, triggering signings, trades, waivers, claims, and options on scroll.
 
-Live project here: http://nba-player-movement.samlearner.com/
+Live project here: https://nba-player-movement.samlearner.com/
 
 Project uses:
 * Python to gather and process player stat and transaction data
