@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Footer = ({ githubLink  }) => {
+const Footer = ({ githubLink = "" }) => {
     return (
         <div className={"footer"}>
         <hr />
@@ -11,7 +11,7 @@ const Footer = ({ githubLink  }) => {
                     <a target="_blank" href="https://twitter.com/sam_learner"><img className="icon-img" src="/images/twitter.svg" /></a> |&nbsp;
                     <a target="_blank" href="https://github.com/sdl60660"><img className="icon-img" src="/images/github.png" /></a>
                 </p>
-                <p>Code and data for this project lives <a target="_blank" href="https://github.com/sdl60660/nba_player_movement">here</a>.</p> 
+                <p>Code and data for this project lives <a target="_blank" href={githubLink}>here</a>.</p> 
             </div>
 
             <div className="footer__section">
@@ -32,7 +32,7 @@ const Footer = ({ githubLink  }) => {
                 </p>
             </div>
 
-            <p>Last Updated: January 22, 2021</p>
+            <p>Last Updated: January 25, 2021</p>
         </div>
     )
 }
