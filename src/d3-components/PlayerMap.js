@@ -358,12 +358,17 @@ class PlayerMap {
                 vis.tip.show(d, this);
 
                 const tipElement = d3.select(".d3-tip");
-                const top = this.getBoundingClientRect().top;
+
+                const top = e.clientY - 10;
+                const left = e.clientX;
+
                 const vertOffset = tipElement.node().getBoundingClientRect().height;
+                const horOffset = tipElement.node().getBoundingClientRect().width / 2;
 
                 tipElement
                     .style("position", "fixed")
-                    .style("top", `${top - vertOffset}px`);
+                    .style("top", `${top - vertOffset}px`)
+                    .style("left", `${left - horOffset}px`);
                 
                 if (tipElement.node().getBoundingClientRect().x < 0) {
                     tipElement
@@ -380,6 +385,27 @@ class PlayerMap {
 
                 vis.labelGroup.selectAll(`#${originalData.team.team_id}-label`)
                     .style("display", "inline-block")
+            })
+            .on("mousemove", function(e, d) {
+                // console.log(e);
+                const tipElement = d3.select(".d3-tip");
+
+                const top = e.clientY - 10;
+                const left = e.clientX;
+
+                const vertOffset = tipElement.node().getBoundingClientRect().height;
+                const horOffset = tipElement.node().getBoundingClientRect().width / 2;
+
+                tipElement
+                    .style("position", "fixed")
+                    .style("top", `${top - vertOffset}px`)
+                    .style("left", `${left - horOffset}px`);
+                
+                if (tipElement.node().getBoundingClientRect().x < 0) {
+                    tipElement
+                        .style("left", 0);
+                }
+
             })
             .on("mouseout", function(d) {
                 vis.tip.hide(d, this);

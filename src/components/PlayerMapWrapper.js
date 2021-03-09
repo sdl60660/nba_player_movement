@@ -30,6 +30,8 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
     const [mapColor, setMapColor] = useState(chromatic.schemeCategory10[0]);
     const [playerData, setPlayerData] = useState(_playerData);
     const [sizingAttribute, setSizingAttribute] = useState("salary");
+    const [featuredCardIndex, setFeaturedCardIndex] = useState(0);
+    const cardIndex = useRef(0);
 
     const [width, setWidth] = useState(1300);
     const [height, setHeight] = useState(700);
@@ -99,7 +101,9 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         allAffectedPlayers = [...new Set(allAffectedPlayers)];
     }
 
-    const stepEnterHandler = ({ element, index, direction }) => {                
+    const stepEnterHandler = ({ element, index, direction }) => { 
+        setFeaturedCardIndex(index);
+        
         if (element.getAttribute("class").includes("phantom")) {
             phantomFlag = true;
             return;
@@ -200,6 +204,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                 debug: false,
                 progress: true,
                 threshold: 1,
+                offset: 0.7,
                 order: true
             })
             .onStepEnter(({ element, index, direction }) => stepEnterHandler({ element, index, direction }))
@@ -244,6 +249,10 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
         }
     }, [sizingAttribute]);
 
+    // useEffect(() => {
+    //     console.log(featuredCardIndex);
+    // }, [featuredCardIndex])
+
     
     const teamOptionData = teamData.filter(({ team_id }) => team_id !== "FA" && team_id !== "RET").map(({team_full_name, team_id}) => {
         return { label: team_full_name, value: team_id };
@@ -280,7 +289,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                     { Object.entries(transactionData).map(
                         (transactionDateData, i) =>
                             <TransactionCard 
-                                className={"transaction-card"}
+                                className={`transaction-card${ i === featuredCardIndex ? " transaction-card--featured" : ""}`}
                                 key={i}
                                 transactionDate={transactionDateData[0]}
                                 transactions={transactionDateData[1]}

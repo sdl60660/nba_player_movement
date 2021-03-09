@@ -62,13 +62,16 @@ def format_transaction_id(transaction_type, formatted_date, player_data):
     
 
 def process_bbref_transaction(transaction, transaction_text):
+    # For now, filter out G-League assignments/recalls
+    if ' recalled ' in transaction_text or ' assigned ' in transaction_text:
+        return
+
     for phrase in transaction_types:
         if phrase in transaction_text:
             transaction_type = phrase
             break
     
     player_data = []
-
 
     if transaction_type == "signed" or transaction_type == "claimed" or transaction_type == "contract extension":
         player_id = transaction.find_all("a")[-1]['href'].split('/')[-1].replace('.html', '')
@@ -283,7 +286,7 @@ with open('../data/team_data.csv', 'r', encoding='utf-8-sig') as f:
     team_data = [x for x in csv.DictReader(f)]
 
 with open('../data/supplementary_transaction_data.json', 'r') as f:
-    prosports_transactions = [x for x in json.load(f) if 'waived' in x['notes'] or 'contract option' in x['notes'] or 'signed' in x['notes'] or 'claimed' in x['notes']]
+    prosports_transactions = [x for x in json.load(f) if 'waived' in x['notes'] or 'contract option' in x['notes'] or ' signed' in x['notes'] or 'claimed' in x['notes']]
     prosports_transactions = [x for x in prosports_transactions if '10-day contract' not in x['notes'] and 'Exhibit 10' not in x['notes'] and 'two way contract' not in x['notes'] and 'option for 2021-22' not in x['notes']]
 
 

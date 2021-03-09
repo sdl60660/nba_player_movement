@@ -80,7 +80,8 @@ Promise.all(promises).then((allData) => {
     const geoData = allData[0];
     let teamData = formatTeamData(allData[1]);
     let playerData = formatPlayerData(allData[2], teamData);
-    let transactionData = groupBy(allData[3], d => d.date);
+    let transactions = allData[3].filter(d => d.affected_teams.length > 1 || d.affected_teams[0] !== "FA");
+    let transactionData = groupBy(transactions, d => d.date);
     
     const jsx =
       <div>

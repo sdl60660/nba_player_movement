@@ -4,8 +4,10 @@
     // margin: 0 0 10vh 0.5rem;
     margin: 0 0 0vh 0.5rem;
 
-    min-height: 90vh;
+    min-height: 70vh;
     padding-bottom: 10vh;
+
+    opacity: 0.4;
 
   @media screen and (max-width: $mobile-breakpoint) {
     min-height: 130vh;
@@ -15,6 +17,10 @@
     /* max-width: 40%; */
     /* margin: auto; */
     /* height: 10vh; */
+}
+
+.transaction-card--featured {
+  opacity: 1.0;
 }
 
 .transaction-card__visible-section {
