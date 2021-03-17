@@ -289,7 +289,7 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
                     { Object.entries(transactionData).map(
                         (transactionDateData, i) =>
                             <TransactionCard 
-                                className={`transaction-card${ i === featuredCardIndex ? " transaction-card--featured" : ""}`}
+                                className={`transaction-card`}
                                 key={i}
                                 transactionDate={transactionDateData[0]}
                                 transactions={transactionDateData[1]}
@@ -304,3 +304,5 @@ const PlayerMapWrapper = ({ _geoData, _teamData, _playerData, transactionData })
 }
 
 export { PlayerMapWrapper as default }
+
+// className={`transaction-card${ i === featuredCardIndex ? " transaction-card--featured" : ""}`}

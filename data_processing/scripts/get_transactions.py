@@ -176,6 +176,8 @@ def process_prosports_transaction(transaction):
     affected_teams = [team_id, "FA"]
     transaction_text = transaction['notes'] + '.'
     salary_data = None
+
+    print(player['player'], transaction_type)
     
     if transaction_type == "exercised":
         transaction_type = "exercised option"
@@ -223,15 +225,16 @@ def process_prosports_transaction(transaction):
 
         contract_clause = transaction_text.split(' to a ')[-1]
 
-        if contract_clause[1:6] != '-year':
+        if '-year' not in transaction_text:
             verb = contract_clause.split()[0]
             transaction_text = f"The {team['team_full_name']} {verb} {player['player']}."
         else:
             transaction_text = f"The {team['team_full_name']} signed {player['player']} to a {contract_clause}"
 
             # EX clause: "1-year $2.3M contract." OR "1-year contract." OR "3-year $24.7M contract." (can't tell current annual salary on multi-years like this)
-            if contract_clause[0] == '1' and contract_clause[7] == '$':
-                new_salary = int(1000000*float(contract_clause.split()[1].replace("$", "").replace("M", "").split("-")[0]))
+            if contract_clause[0] == '1' and  '$' in contract_clause[7:]:
+                salary_figure = [x for x in contract_clause.split() if '$' in x][0]
+                new_salary = int(1000000*float(salary_figure.replace("$", "").replace("M", "").split("-")[0]))
                 salary_data = {
                     'start_salary': player_dict[player_id]['current_salary'],
                     'end_salary': new_salary
@@ -286,9 +289,8 @@ with open('../data/team_data.csv', 'r', encoding='utf-8-sig') as f:
     team_data = [x for x in csv.DictReader(f)]
 
 with open('../data/supplementary_transaction_data.json', 'r') as f:
-    prosports_transactions = [x for x in json.load(f) if 'waived' in x['notes'] or 'contract option' in x['notes'] or ' signed' in x['notes'] or 'claimed' in x['notes']]
-    prosports_transactions = [x for x in prosports_transactions if '10-day contract' not in x['notes'] and 'Exhibit 10' not in x['notes'] and 'two way contract' not in x['notes'] and 'option for 2021-22' not in x['notes']]
-
+    prosports_transactions = [x for x in json.load(f) if 'waived' in x['notes'] or 'contract option' in x['notes'] or 'signed' in x['notes'] or 'claimed' in x['notes']]
+    prosports_transactions = [x for x in prosports_transactions if '10-day contract' not in x['notes'] and 'Exhibit 10' not in x['notes'] and 'two way contract' not in x['notes'] and 'option for 2021-22' not in x['notes'] and 're-signed' not in x['notes']]
 
 r = requests.get("https://www.basketball-reference.com/leagues/NBA_2021_transactions.html")
 soup = BeautifulSoup(r.text, 'html.parser')

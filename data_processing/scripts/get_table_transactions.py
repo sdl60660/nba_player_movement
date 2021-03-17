@@ -30,9 +30,15 @@ for page_num in range(0, num_pages):
         or 'promoted' in row_data[4].lower()
         or '2020 NBA draft' in row_data[4]):
             continue
+            
+        # Correcting a mis-dated Blake Griffin transaction
+        if 'notes' == "signed free agent to a 1-year (remainder of the season) $1.23M contract":
+            transaction_date = "2021-03-08"
+        else:
+            transaction_date = row_data[0]
 
         transactions.append({
-            "date": row_data[0],
+            "date": transaction_date,
             "team": row_data[1],
             "acquired": [x.strip() for x in row_data[2].split("• ") if x.strip() != ""],
             "relinquished": [x.strip() for x in row_data[3].split("• ") if x.strip() != ""],
