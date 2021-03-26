@@ -176,8 +176,6 @@ def process_prosports_transaction(transaction):
     affected_teams = [team_id, "FA"]
     transaction_text = transaction['notes'] + '.'
     salary_data = None
-
-    print(player['player'], transaction_type)
     
     if transaction_type == "exercised":
         transaction_type = "exercised option"

@@ -32,7 +32,7 @@ for page_num in range(0, num_pages):
             continue
             
         # Correcting a mis-dated Blake Griffin transaction
-        if 'notes' == "signed free agent to a 1-year (remainder of the season) $1.23M contract":
+        if row_data[4].strip() == "signed free agent to a 1-year (remainder of the season) $1.23M contract":
             transaction_date = "2021-03-08"
         else:
             transaction_date = row_data[0]
