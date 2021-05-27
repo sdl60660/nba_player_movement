@@ -7,4 +7,4 @@ Live project here: https://nba-player-movement.samlearner.com/
 Project uses:
 * Python to gather and process player stat and transaction data
 * React/HTML/SCSS/JS on the front-end
-* D3.js for the map visualization component
+* D3.js for the map visualization component 
